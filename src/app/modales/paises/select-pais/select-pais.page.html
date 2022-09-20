@@ -1,0 +1,34 @@
+<ion-content>
+
+    <ion-list style="border-radius: 10px;">
+        <ion-list-header style="font-weight: 900;">Seleccionar País</ion-list-header>
+        <ion-item (click)="seleccionarPais(1)">
+            <ion-thumbnail slot="start">
+                <img src="/assets/BANDERAS/sv.png">
+            </ion-thumbnail>
+            <ion-label>
+                <h3>El Salvador</h3>
+                <p>USD</p>
+            </ion-label>
+        </ion-item>
+        <ion-item (click)="seleccionarPais(2)">
+            <ion-thumbnail slot="start">
+                <img src="/assets/BANDERAS/gt.png">
+            </ion-thumbnail>
+            <ion-label>
+                <h3>Guatemala</h3>
+                <p>GTQ</p>
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-thumbnail slot="start">
+                <img src="/assets/BANDERAS/cr.png">
+            </ion-thumbnail>
+            <ion-label>
+                <ion-badge color="primary">Próximamente</ion-badge>
+                <h3>Costa Rica</h3>
+                <p>CRC</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

@@ -1,0 +1,61 @@
+
+
+<!--<div id="splashstj" class="animated fadeIn fast" *ngIf="showSplash" style="background-color: rgb(0, 129, 198);width: 100%;height: 100%;text-align: center; margin: 0;position: absolute;z-index: 999;display:flex;align-items: center;justify-content: center;">
+    <img src="/assets/animate/animate.gif" style="height: 15m;width:auto;margin-top:5%;">
+</div>-->
+<ion-app>
+  <ion-menu  contentId="main-content" side="start">
+    <ion-header>
+      <ion-toolbar translucent style="text-align: center;padding-top:20px;padding-bottom: 20px;">
+        <ion-title><img src="/assets/logoEP-reducido-small.png" width="100%"/></ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <p style="text-align: center;font-weight: bold;">
+        <fa-icon [icon]="['fas','user']" ></fa-icon>
+        {{auth.getNombre()}}
+      </p>
+      <ion-list>
+        <ion-menu-toggle auto-hide="false">
+          
+          <ion-item (click)="cerrarSesion()">
+            <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','sign-out-alt']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Cerrar sesión</ion-label>
+          </ion-item>
+
+          <!--<ion-item (click)="goMenu(1)" >
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','tags']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Ordenes</ion-label>
+          </ion-item>
+          <ion-item (click)="goMenu(2)">
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','comments']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Contáctanos</ion-label>
+          </ion-item>
+          <ion-item (click)="goMenu(3)">
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','clipboard-check']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Políticas</ion-label>
+          </ion-item>
+          <ion-item (click)="goMenu(4)">
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','clipboard-check']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Términos y condiciones</ion-label>
+          </ion-item>
+          <ion-item (click)="goMenu(5)">
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','question-circle']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Ayuda</ion-label>
+          </ion-item>
+          <ion-item (click)="goMenu(6)">
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','info-circle']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Acerca de</ion-label>
+          </ion-item>-->
+
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+    <ion-footer>
+      <div style="padding: 5px;text-align: center;font-weight: bold;">
+        {{device.getInfo()}}
+      </div>
+    </ion-footer>
+  </ion-menu>
+  <ion-router-outlet  id="main-content"></ion-router-outlet>
+</ion-app>

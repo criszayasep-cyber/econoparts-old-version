@@ -1,0 +1,55 @@
+.iconos{
+    margin-right: 20px;
+}
+
+span{
+    font-weight: 500;
+    color:darkgray;
+    font-size: 14px;
+    display: block;
+}
+
+
+
+.customers {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  .customers tr:nth-child(even){background-color: lightgray;}
+  
+  .customers tr:hover {background-color: #ddd;}
+  
+  .customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: gray;
+    color: white;
+  }
+
+  table.datos{
+    width: 100%;
+  }
+  table.datos tr td{
+    padding: 5px;
+  }
+  table.datos tr td:first-child{
+    width: 20%;
+  }
+
+  table.datos tr td input{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+  }
+  textarea{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+  }

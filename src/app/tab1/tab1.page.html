@@ -1,0 +1,147 @@
+<ion-header>
+    <ion-toolbar class="background-yellow">
+        <ion-row style="align-items: center;">
+            <ion-col size="7" style="vertical-align: middle;padding-left: 1em;">
+                <img src="/assets/logoEP-reducido-small.png" alt="" style="display: inline-block;width: 100px;" />
+                <h1 style="display: inline-block;padding-left: 30px;">Gestión Comercial</h1>
+            </ion-col>
+            <ion-col size="5" style="text-align: right;padding-right: 1em;">
+                <ion-menu-toggle>
+                    <fa-icon [icon]="['fas','bars']" style="font-size:18px;margin-left: 15px;"></fa-icon>
+                </ion-menu-toggle>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content #container>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingText="Deslizar para actualizar" refreshingSpinner="circles" refreshingText="Actualizando...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+
+    <div style="padding: 20px;">
+        <ion-row>
+            <!--<ion-col size="5">
+                <div class="chart-card-body bar-vertical">
+                    <ngx-charts-bar-vertical 
+                    [scheme]="colorScheme"
+                    [results]="countriesData"
+                    [gradient]="verticalBarOptions.gradient"
+                    [xAxis]="verticalBarOptions.showXAxis"
+                    [yAxis]="verticalBarOptions.showYAxis"
+                    [legend]="verticalBarOptions.showLegend"
+                    [showXAxisLabel]="verticalBarOptions.showXAxisLabel"
+                    [showYAxisLabel]="verticalBarOptions.showYAxisLabel"
+                    [xAxisLabel]="verticalBarOptions.xAxisLabel"
+                    [yAxisLabel]="verticalBarOptions.yAxisLabel"
+                    [barPadding]="verticalBarOptions.barPadding"
+                    [showGridLines]="verticalBarOptions.showGridLines">
+                    </ngx-charts-bar-vertical>
+                </div>
+            </ion-col>-->
+            <ion-col size="6">
+                <!--<ion-card>
+                    <ion-card-header>
+                      <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+                      <ion-card-title>Card Title</ion-card-title>
+                    </ion-card-header>
+                  
+                    <ion-card-content>
+                      Keep close to Nature's heart... and break clear away, once in awhile,
+                      and climb a mountain or spend a week in the woods. Wash your spirit clean.
+                    </ion-card-content>
+                  </ion-card>-->
+                  
+                  
+                  <ion-card style="margin-top: 0px;">
+                    <ion-card-header>
+                        <ion-card-title>KPI Acumulado</ion-card-title>
+                    </ion-card-header>
+                    <ion-item>
+                      <ion-icon src="assets/icon/money.svg" style="font-size: 50px;" slot="start"></ion-icon>
+                      <ion-label>Cumplimiento de <br/>venta a la fecha</ion-label>
+                      <ion-badge slot="end">{{kpiAcumulado?.venta | number: '1.2-2'}}%</ion-badge>
+                    </ion-item>
+                  
+                    <ion-item>
+                      <ion-icon src="assets/icon/proyeccion.svg" style="font-size: 50px;" slot="start"></ion-icon>
+                      <ion-label>Proyección de venta</ion-label>
+                      <ion-badge slot="end">{{kpiAcumulado?.proyeccion | number: '1.2-2'}}K</ion-badge>
+                    </ion-item>
+                  
+                    <ion-item>
+                      <ion-icon src="assets/icon/success.svg" style="font-size: 50px;" slot="start"></ion-icon>
+                      <ion-label>Efectividad de visitas</ion-label>
+                      <ion-badge slot="end">{{kpiAcumulado?.efectividad | number: '1.2-2'}}%</ion-badge>
+                    </ion-item>
+                  
+                    <ion-item>
+                      <ion-icon src="assets/icon/route.svg" style="font-size: 50px;" slot="start"></ion-icon>
+                      <ion-label>Cumplimiento de <br/>visitas</ion-label>
+                      <ion-badge slot="end">{{kpiAcumulado?.cumplimiento | number: '1.2-2'}}%</ion-badge>
+                    </ion-item>
+                  </ion-card>
+
+            </ion-col>
+            <ion-col size="6">
+                <ion-card style="margin-top: 0px;">
+                  <ion-card-header>
+                      <ion-card-title>KPI del día</ion-card-title>
+                  </ion-card-header>
+                
+                  <ion-item>
+                    <ion-icon src="assets/icon/success.svg" style="font-size: 50px;" slot="start"></ion-icon>
+                    <ion-label>Efectividad de <br/>visitas</ion-label>
+                    <ion-badge slot="end">{{kpiDia?.efectividad | number: '1.2-2'}}%</ion-badge>
+                  </ion-item>
+                
+                  <ion-item>
+                    <ion-icon src="assets/icon/route.svg" style="font-size: 50px;" slot="start"></ion-icon>
+                    <ion-label>Cumplimiento de <br/>visitas</ion-label>
+                    <ion-badge slot="end">{{kpiDia?.cumplimiento | number: '1.2-2'}}%</ion-badge>
+                  </ion-item>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="6">
+            <h3>Clientes a visitar {{hoy | date: 'd/M/y'}}: {{clientes?.length}}</h3>
+          </ion-col>
+          <ion-col size="6" style="text-align: right;">
+            <ion-button color="primary" (click)="searchCliente()">Agregar cliente a gestión del día</ion-button>
+          </ion-col>
+        </ion-row>
+        
+  <ion-progress-bar type="indeterminate" *ngIf="loading.clientes"></ion-progress-bar>
+  <table id="customers" style="width: 100%;">
+    <tr>
+      <th>No. Cliente</th>
+      <th>Razon Social</th>
+      <th>Nombre comercial</th>
+      <th>Dirección</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let item of clientes; let i = index">
+      <td>{{item.cliente.codigo}}</td>
+      <td>{{item.cliente.nombre_social}}</td>
+      <td>{{item.cliente.nombre_comercial}}</td>
+      <td><ion-icon name="location-outline"></ion-icon> {{item.cliente.direccion}}</td>
+      <td style="text-align: right">
+        <ion-badge style="font-weight: 100;" color="secondary" *ngIf="configuracion.getCodigoActivo()==item.cliente.codigo">En gestión</ion-badge>
+        <fa-icon  (click)="opciones($event, item, i)" [icon]="['fas','ellipsis-v']" style="font-size:18px;margin-left: 15px;"></fa-icon>
+      </td>
+    </tr>
+    
+  </table>
+    </div>
+
+
+
+
+
+
+</ion-content>

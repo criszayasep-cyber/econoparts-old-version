@@ -1,0 +1,36 @@
+<ion-content>
+
+  <div style="background: white;border-radius: 10px;padding: 5px;">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>
+          Nuevo Conteo
+        </ion-label>
+      </ion-list-header>
+    
+      <ion-item>
+        <ion-label>Categoría</ion-label>
+        <ion-select interface="action-sheet" [(ngModel)]="entity.categoria" (ionChange)="seleccionarCategoria()">
+          <ion-select-option *ngFor="let item of categorias" [value]="item">{{item.Code + ' - ' + item.Description}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label>SubCategoría</ion-label>
+        <ion-select interface="action-sheet" [(ngModel)]="entity.subCategoria" >
+          <ion-select-option *ngFor="let item of subCategorias" [value]="item">{{item.Code + ' - ' + item.Description}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <br/>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button color="primary" expand="full" (click)="crear()">Crear</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="secondary" expand="full" (click)="cancelar()">Cancelar</ion-button>
+      </ion-col>
+    </ion-row>
+    <br/>
+  </div>
+</ion-content>

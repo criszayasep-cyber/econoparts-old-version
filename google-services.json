@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "133001365807",
+    "project_id": "gestion-comercial-bae30",
+    "storage_bucket": "gestion-comercial-bae30.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133001365807:android:7cbd2017c225139f3f39da",
+        "android_client_info": {
+          "package_name": "com.ep.gestioncomercial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133001365807-4hotkm7deq0d5ffebr2jke362nkk7vib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj5bXSjOXnHx7llgVw_jZ88-YsbkvkvXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133001365807-4hotkm7deq0d5ffebr2jke362nkk7vib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

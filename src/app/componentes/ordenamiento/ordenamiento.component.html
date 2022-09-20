@@ -1,0 +1,22 @@
+<ion-list>
+  <ion-item>
+      <ion-button expand="block" style="width: 100%;" color="primary" (click)="seleccionar(4)" >
+        Ver cliente
+      </ion-button>
+  </ion-item>
+  <ion-item *ngIf="configuracion.getCodigoActivo()==item.cliente.codigo">
+      <ion-button expand="block" style="width: 100%;" color="primary" (click)="seleccionar(1)" >
+        Cancelar Gestión
+      </ion-button>
+  </ion-item>
+  <ion-item *ngIf="!configuracion.getEstatusGestion()">
+      <ion-button expand="block" style="width: 100%;" color="secondary" (click)="seleccionar(2)" >
+        Iniciar Gestión
+      </ion-button>
+  </ion-item>
+  <ion-item >
+      <ion-button expand="block" style="width: 100%;" color="secondary" (click)="seleccionar(3)" >
+        Cambiar día
+      </ion-button>
+  </ion-item>
+</ion-list>

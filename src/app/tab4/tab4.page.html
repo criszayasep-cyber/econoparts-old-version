@@ -1,0 +1,216 @@
+<ion-header>
+    <ion-toolbar class="background-yellow">
+        <ion-row style="align-items: center;">
+            <ion-col size="7" style="vertical-align: middle;padding-left: 1em;">
+                <img src="/assets/logoEP-reducido-small.png" alt="" style="display: inline-block;width: 100px;" />
+                <h1 style="display: inline-block;padding-left: 30px;"> | Pedidos</h1>
+            </ion-col>
+            <ion-col size="5" style="text-align: right;padding-right: 1em;">
+                <ion-menu-toggle>
+                    <fa-icon [icon]="['fas','bars']" style="font-size:18px;margin-left: 15px;"></fa-icon>
+                </ion-menu-toggle>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
+  </ion-header>
+  
+    
+    <ion-content>
+    
+  
+  
+                
+  
+    <div style="padding-top: 5px">
+        <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="first">
+              Pedidos en proceso
+            </ion-segment-button>
+            <ion-segment-button value="second">
+              Cotizaciones
+            </ion-segment-button>
+            <ion-segment-button value="third">
+              Historico
+            </ion-segment-button>
+          </ion-segment>
+        
+        
+          <div [ngSwitch]="segment">
+            <ion-card *ngSwitchCase="'first'">
+              <ion-card-content>
+                <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+                  <ion-refresher-content pullingText="Deslizar para actualizar" refreshingSpinner="circles" refreshingText="Actualizando...">
+                  </ion-refresher-content>
+                </ion-refresher>
+                <br/>
+                <ion-progress-bar type="indeterminate" *ngIf="loading.proceso"></ion-progress-bar>
+                <table class="customers">
+                  <tr>
+                    <th>No. Cliente</th>
+                    <th>Nombre</th>
+                    <th>Comercial</th>
+                    <th>Tipo venta</th>
+                    <th>Cantidad</th>
+                    <th>Venta</th>
+                    <th>Venta+IVA</th>
+                  </tr>
+                  <tr *ngFor="let item of listado.proceso" (click)="detallePedido(item)">
+                    <td>{{item.ped_cliente_codigo}}</td>
+                    <td>{{item.ped_cliente_nombre}}</td>
+                    <td>{{item.ped_cliente_comercial}}</td>
+                    <td>{{item.ped_tipo_pago}}</td>
+                    <td>{{item.ped_cantidad}}</td>
+                    <td>{{item.ped_monto | number: '1.2-2'}}</td>
+                    <td>{{item.ped_monto_iva | number: '1.2-2'}}</td>
+                  </tr>
+                  <tr *ngIf="registros.proceso!=-1 && listado.proceso.length==0">
+                    <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+                  </tr>
+                </table>
+              </ion-card-content>
+            </ion-card>
+        
+            <ion-card *ngSwitchCase="'second'">
+              <ion-card-content>
+                <div style="padding: 20px;background:whitesmoke;">
+                    <form style="background: transparent;margin-top: 0px;">
+                    <ion-row>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">No Cliente</ion-label>
+                            <ion-input autofocus="true" type="text" name="cliente" [(ngModel)]="filtros.cotizaciones.cliente"></ion-input>
+                        </ion-item>
+                        </ion-col>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">Razon Social</ion-label>
+                            <ion-input type="text" name="razon_social" [(ngModel)]="filtros.cotizaciones.razon_social"></ion-input>
+                        </ion-item>
+                        </ion-col>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">Nombre Comercial</ion-label>
+                            <ion-input type="text" name="nombre_comercial" [(ngModel)]="filtros.cotizaciones.nombre_comercial"></ion-input>
+                        </ion-item>
+                        </ion-col>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">No. Registro</ion-label>
+                            <ion-input type="text" ></ion-input>
+                        </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    
+                    <ion-row>
+                        <ion-col size="12" style="text-align: right;">
+                            <ion-button style="text-transform: capitalize;" (click)="buscar()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                            <ion-button style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+                        </ion-col>
+                    </ion-row>
+                    </form>
+                </div>
+                <ion-progress-bar type="indeterminate" *ngIf="loading.cotizaciones"></ion-progress-bar>
+                <table class="customers">
+                  <tr>
+                    <th>Fecha Cotización</th>
+                    <th>No. Cliente</th>
+                    <th>Razon Social</th>
+                    <th>Nombre Comercial</th>
+                    <th>Tipo Pago</th>
+                    <th>Productos</th>
+                    <th>Venta</th>
+                    <th>Venta+IVA</th>
+                  </tr>
+                  <tr *ngFor="let item of listado.cotizaciones">
+                    <td>{{item.ped_fecha | date: 'd/M/y'}}</td>
+                    <td>{{item.ped_cliente_codigo}}</td>
+                    <td>{{item.ped_cliente_nombre}}</td>
+                    <td>{{item.ped_cliente_comercial}}</td>
+                    <td>{{item.ped_tipo_pago}}</td>
+                    <td>{{item.ped_cantidad}}</td>
+                    <td>{{item.ped_monto | number: '1.2-2'}}</td>
+                    <td>{{item.ped_monto_iva | number: '1.2-2'}}</td>
+                  </tr>
+                  <tr *ngIf="registros.cotizaciones!=-1 && listado.cotizaciones.length==0">
+                    <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+                  </tr>
+                </table>
+              </ion-card-content>
+            </ion-card>
+        
+            <ion-card *ngSwitchCase="'third'">
+              <ion-card-content>
+                <div style="padding: 20px;background:whitesmoke;">
+                    <form style="background: transparent;margin-top: 0px;">
+                    <ion-row>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">No Cliente</ion-label>
+                            <ion-input autofocus="true" type="text" name="cliente" [(ngModel)]="filtros.historico.cliente"></ion-input>
+                        </ion-item>
+                        </ion-col>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">Razon Social</ion-label>
+                            <ion-input type="text" name="razon_social" [(ngModel)]="filtros.historico.razon_social"></ion-input>
+                        </ion-item>
+                        </ion-col>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">Nombre Comercial</ion-label>
+                            <ion-input type="text" name="nombre_comercial" [(ngModel)]="filtros.historico.nombre_comercial"></ion-input>
+                        </ion-item>
+                        </ion-col>
+                        <ion-col size="3">
+                        <ion-item>
+                            <ion-label position="floating">No. Registro</ion-label>
+                            <ion-input type="text"></ion-input>
+                        </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    
+                    <ion-row>
+                        <ion-col size="12" style="text-align: right;">
+                            <ion-button style="text-transform: capitalize;" (click)="buscar()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                            <ion-button style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+                        </ion-col>
+                    </ion-row>
+                    </form>
+                </div>
+                <ion-progress-bar type="indeterminate" *ngIf="loading.historico"></ion-progress-bar>
+                <table class="customers">
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>No. Cliente</th>
+                    <th>Razon Social</th>
+                    <th>Nombre Comercial</th>
+                    <th>Tipo Factura</th>
+                    <th>Productos</th>
+                    <th>Venta</th>
+                    <th>Venta+IVA</th>
+                  </tr>
+                  <tr *ngFor="let item of listado.historico">
+                    <td>{{item.ped_fecha | date: 'd/M/y'}}</td>
+                    <td>{{item.ped_estado}}</td>
+                    <td>{{item.ped_cliente_codigo}}</td>
+                    <td>{{item.ped_cliente_nombre}}</td>
+                    <td>{{item.ped_cliente_comercial}}</td>
+                    <td>{{item.ped_tipo_pago}}</td>
+                    <td>{{item.ped_cantidad}}</td>
+                    <td>{{item.ped_monto | number: '1.2-2'}}</td>
+                    <td>{{item.ped_monto_iva | number: '1.2-2'}}</td>
+                  </tr>
+                  <tr *ngIf="registros.historico!=-1 && listado.historico.length==0">
+                    <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+                  </tr>
+                </table>
+              </ion-card-content>
+            </ion-card>
+          </div>
+    </div>
+  
+  
+  
+  </ion-content>
+  

@@ -1,0 +1,234 @@
+<ion-header>
+  <ion-toolbar class="background-yellow">
+      <ion-row style="align-items: center;">
+          <ion-col size="7" style="vertical-align: middle;padding-left: 1em;">
+              <img src="/assets/logoEP-reducido-small.png" alt="" style="display: inline-block;width: 100px;" />
+              <h1 style="display: inline-block;padding-left: 30px;"> | Catálogo</h1>
+          </ion-col>
+          <ion-col size="5" style="text-align: right;padding-right: 1em;">
+              <ion-menu-toggle>
+                  <fa-icon [icon]="['fas','bars']" style="font-size:18px;margin-left: 15px;"></fa-icon>
+              </ion-menu-toggle>
+          </ion-col>
+      </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+  
+  <ion-content>
+  
+    <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="busqueda">
+        Búsqueda
+      </ion-segment-button>
+      <ion-segment-button value="equivalentes">
+        Equivalentes
+      </ion-segment-button>
+    </ion-segment>
+    
+    <div [ngSwitch]="segment">
+      <ion-card *ngSwitchCase="'busqueda'">
+        <ion-card-content>
+
+          <div style="background:whitesmoke;">
+            <form style="background: transparent;margin-top: 0px;">
+              <ion-row>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Grupo</ion-label>
+                      <ion-input autofocus="true" type="text" name="grupo" [(ngModel)]="filtros.grupo"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Sub Grupo</ion-label>
+                      <ion-input type="text" name="subGrupo" [(ngModel)]="filtros.subGrupo"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">No. Básico</ion-label>
+                      <ion-input type="text" name="numero" [(ngModel)]="filtros.numero"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Familia</ion-label>
+                      <ion-input type="text" name="familia" [(ngModel)]="filtros.familia"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Descripcion</ion-label>
+                      <ion-input type="text" name="descripcion" [(ngModel)]="filtros.descripcion"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Marca</ion-label>
+                      <ion-input type="text" name="marca" [(ngModel)]="filtros.marca"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Modelo</ion-label>
+                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.modelo"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Fabricante</ion-label>
+                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.fabricante"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Chasis</ion-label>
+                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.chasis"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Año</ion-label>
+                      <ion-input type="number" name="modelo" [(ngModel)]="filtros.anio"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">No. Motor</ion-label>
+                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.motor"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Tracción</ion-label>
+                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.traccion"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Versión</ion-label>
+                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.version"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">Aplicación</ion-label>
+                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.aplicacion"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              
+              <ion-row>
+                  <ion-col size="12" style="text-align: right;">
+                      <ion-button [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="buscar()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                      <ion-button [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+                  </ion-col>
+              </ion-row>
+            </form>
+          </div>
+        
+          <ion-progress-bar type="indeterminate" *ngIf="loading.busqueda"></ion-progress-bar>
+          <ion-row>
+            <ion-col size="6">
+              <h3>Cliente en gestión: <b>{{configuracion.getClienteNombre()}}</b></h3>
+            </ion-col>
+            <ion-col size="3" style="text-align: right;">
+              <h3>Inventario: <b>CD2</b></h3>
+            </ion-col>
+            <ion-col size="3" style="text-align: right;">
+              Registros: {{total}}
+            </ion-col>
+          </ion-row>
+          
+          <table class="customers">
+            <tr>
+              <th>No. Básico</th>
+              <th>Descripción</th>
+              <th>Mayoreo</th>
+              <th>Mayoreo+IVA</th>
+              <th>Existencia</th>
+              <th></th>
+            </tr>
+            <tr *ngFor="let item of productos">
+              <td style="color: blue;text-decoration: underline;" (click)="verEquivalentes(item)">{{item.pro_number}}</td>
+              <td>{{item.pro_descripcion}}</td>
+              <td>{{item.preciou | number: '1.2-2'}}</td>
+              <td>{{item.preciou*1.13 | number: '1.2-2'}}</td>
+              <td>{{item.existencia}}</td>
+              <td>
+                <ion-button color="primary" (click)="verProducto(item)">
+                  <fa-icon [icon]="['fas','eye']"></fa-icon>
+                </ion-button>
+                <ion-button color="primary" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
+                  <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+                </ion-button>
+              </td>
+            </tr>
+            <tr *ngIf="registros.busqueda!=-1 && productos.length==0">
+              <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+            </tr>
+          </table>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngSwitchCase="'equivalentes'">
+        <ion-card-content>
+          <form style="background: transparent;margin-top: 0px;">
+            <ion-row>
+              <ion-col size="8">
+                <ion-item>
+                    <ion-label position="floating">No. Básico</ion-label>
+                    <ion-input autofocus="true" type="text" name="grupo" [(ngModel)]="codigo"></ion-input>
+                </ion-item>
+              </ion-col>
+                <ion-col size="4" style="text-align: right;align-self: end;">
+                    <ion-button [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="buscarEquivalentes()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                    <ion-button [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="limpiarEquivalentes()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+                </ion-col>
+            </ion-row>
+          </form>
+          
+          <br/>
+          <br/>
+          <ion-progress-bar type="indeterminate" *ngIf="loading.equivalentes"></ion-progress-bar>
+          <table class="customers">
+            <tr>
+              <th>No. Básico</th>
+              <th>No. Original</th>
+              <th>Grupo</th>
+              <th>SubGrupo</th>
+              <th>Descripción</th>
+              <th>Mayoreo</th>
+              <th>Mayoreo+IVA</th>
+              <th>Existencia</th>
+              <th></th>
+            </tr>
+            <tr *ngFor="let item of productosEquivalentes">
+              <td>{{item.pro_number}}</td>
+              <td>{{item.pro_number_2}}</td>
+              <td>{{item.pro_categoria}}</td>
+              <td>{{item.pro_sub_categoria}}</td>
+              <td>{{item.pro_descripcion}}</td>
+              <td>{{item.preciou | number: '1.2-2'}}</td>
+              <td>{{item.preciou*1.13 | number: '1.2-2'}}</td>
+              <td>{{item.existencia}}</td>
+              <td>
+                <ion-button color="primary" (click)="verProducto(item)">
+                  <fa-icon [icon]="['fas','eye']"></fa-icon>
+                </ion-button>
+                <ion-button color="primary" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
+                  <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+                </ion-button>
+              </td>
+            </tr>
+            <tr *ngIf="registros.equivalentes!=-1 && productosEquivalentes?.length==0">
+              <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+            </tr>
+          </table>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+
+
+</ion-content>

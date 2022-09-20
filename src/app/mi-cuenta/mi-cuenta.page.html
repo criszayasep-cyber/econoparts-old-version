@@ -1,0 +1,155 @@
+<ion-header>
+    <ion-toolbar>
+        <h2>Detalle de pedido</h2>
+
+        <!--<ion-segment color="primary" scrollable style="display: none;">
+        <ion-segment-button>
+          <ion-label>Favoritos</ion-label>
+          <ion-icon name="heart"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button checked>
+          <ion-label>Cupones</ion-label>
+          <ion-icon name="pricetags"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button>
+          <ion-label>Historial</ion-label>
+          <ion-icon name="clock"></ion-icon>
+        </ion-segment-button>
+      </ion-segment>-->
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="padding">
+    <div style="padding: 10px;">
+        <table class="datos">
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
+                <td>{{pedido.ped_cliente_nombre}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
+                <td>{{pedido.ped_cliente_comercial}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
+                <td>{{pedido.ped_cliente_direccion}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
+                <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_cliente_correo"/></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
+                <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_celular"/></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">LIMITE:</td>
+                <td>{{cliente.limite | number: '1.2-2'}}</td> 
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">SALDO:</td>
+                <td>{{cliente.saldo | number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">DISPONIBLE:</td>
+                <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
+            </tr>
+        </table>
+
+        <br/>
+        <ion-row>
+            <ion-col size="12" style="padding-top: 1px;">
+                <ion-list>
+                    <ion-radio-group  [(ngModel)]="pedido.ped_tipo_pago">
+                        <ion-list-header>
+                          <ion-label>CONDICIÓN</ion-label>
+                        </ion-list-header>
+                    
+                      <ion-item>
+                        <ion-label>Crédito</ion-label>
+                        <ion-radio slot="start" value="CREDITO" [disabled]="cliente.tipo_pago=='0D' || cliente.tipo_pago=='CEN' || facturado"></ion-radio>
+                      </ion-item>
+                  
+                      <ion-item>
+                        <ion-label>Contado</ion-label>
+                        <ion-radio slot="start" value="CONTADO" [disabled]="facturado"></ion-radio>
+                      </ion-item>
+                    </ion-radio-group>
+                  </ion-list>
+            </ion-col>
+            <ion-col size="12">
+                <ion-list-header>
+                  <ion-label>COMENTARIO</ion-label>
+                </ion-list-header>
+                <textarea [(ngModel)]="pedido.ped_comentario" [disabled]="facturado" rows="4" style="width: 100%;border:1px solid lightgray"></textarea>
+            </ion-col>
+        </ion-row>
+        <h2>Productos</h2>
+        <ion-progress-bar type="indeterminate" *ngIf="loading.detalle"></ion-progress-bar>
+        <table class="customers">
+            <tr>
+                <th>SKU</th>
+                <th>DESCRIPCION</th>
+                <th>PRECIO U.</th>
+                <th style="text-align: right;">CANTIDAD</th>
+                <th style="text-align: right;">SUB TOTAL</th>
+                <th style="text-align: right;">SUB TOTAL + IVA</th>
+                <th></th>
+            </tr>
+            <tr *ngFor="let item of pedido.vmo_pedido_detalle; let i = index">
+                <td>{{item.pde_producto}}</td>
+                <td>{{item.pde_descripcion}}</td>
+                <td>{{item.pde_precio_unitario | number: '1.2-2'}}</td>
+                <td style="text-align: right;"><input type="number" style="text-align: right;" [(ngModel)]="item.pde_cantidad" [disabled]="facturado" /></td>
+                <td style="text-align: right;">{{item.pde_precio_unitario*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{(item.pde_precio_unitario*1.13)*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td style="width: 50px;">
+                    <ion-button color="primary" [disabled]="facturado" (click)="deleteProducto(item, i)">
+                      <fa-icon [icon]="['fas','trash-alt']"></fa-icon>
+                    </ion-button>
+                </td>
+            </tr>
+            <tr *ngIf="pedido.vmo_pedido_detalle?.length>0">
+                <th colspan="3" style="text-align: right;">TOTAL</th>
+                <th style="text-align: right;">{{totalUnidades() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>
+                <th></th>
+            </tr>
+        </table>
+
+    </div>
+
+</ion-content>
+
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-row>
+            <ion-col size="3">
+                <ion-button expand="full" color="primary" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="guardar()">
+                    <fa-icon [icon]="['fas','save']" style="margin-right: 1em;"></fa-icon>
+                    Guardar
+                </ion-button>
+            </ion-col>
+            <ion-col size="3">
+                <ion-button expand="full" color="success" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="facturar()">
+                    <fa-icon [icon]="['fas','cash-register']" style="margin-right: 1em;"></fa-icon>
+                    Facturar
+                </ion-button>
+            </ion-col>
+            <ion-col size="3">
+                <ion-button expand="full" color="tertiary" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="cotizar()">
+                    <fa-icon [icon]="['fas','envelope']" style="margin-right: 1em;"></fa-icon>
+                    Crear Cotización
+                </ion-button>
+            </ion-col>
+            <ion-col size="3">
+                <ion-button expand="full" color="secondary" (click)="atras()" >
+                    <fa-icon [icon]="['fas','times-circle']" style="margin-right: 1em;"></fa-icon>
+                    Cerrar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
+</ion-footer>

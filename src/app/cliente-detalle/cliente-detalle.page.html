@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{cliente.nombre_social}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="padding: 20px;">
+
+    <table style="width: 100%;text-align: center;" class="saldos">
+      <tr>
+        <td>LIMITE</td>
+        <td>SALDO</td>
+        <td>DISPONIBLE</td>
+      </tr>
+      <tr>
+        <td>{{cliente.limite | number: '1.2-2'}}</td>
+        <td>{{cliente.saldo | number: '1.2-2'}}</td>
+        <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
+      </tr>
+    </table>
+    <br/>
+
+    
+    <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="first">
+        Información general
+      </ion-segment-button>
+      <ion-segment-button value="second">
+        Facturas pendientes
+      </ion-segment-button>
+    </ion-segment>
+    
+    <div [ngSwitch]="segment">
+      <ion-card *ngSwitchCase="'first'">
+        <ion-card-content>
+          <table style="width: 100%;" class="resumen" >
+            <tr>
+              <td>CODIGO:</td>
+              <td>{{cliente.codigo}}</td>
+            </tr>
+            <tr>
+              <td>DUI:</td>
+              <td>{{cliente.dui}}</td>
+            </tr>
+            <tr>
+              <td>NRC:</td>
+              <td>{{cliente.nrc}}</td>
+            </tr>
+            <tr>
+              <td>NIT:</td>
+              <td>{{cliente.nit}}</td>
+            </tr>
+            <tr>
+              <td>CORREO:</td>
+              <td>{{cliente.correo}}</td>
+            </tr>
+            <tr>
+              <td>DIRECCIÓN:</td>
+              <td>{{cliente.direccion}}</td>
+            </tr>
+            <tr>
+              <td>DIRECCIÓN 2:</td>
+              <td>{{cliente.direccion2}}</td>
+            </tr>
+            <tr>
+              <td>RAZÓN SOCIAL:</td>
+              <td>{{cliente.nombre_social}}</td>
+            </tr>
+            <tr>
+              <td>NOMBRE COMERCIAL:</td>
+              <td>{{cliente.nombre_comercial}}</td>
+            </tr>
+            <tr>
+              <td>GIRO:</td>
+              <td>{{cliente.giro}}</td>
+            </tr>
+            <tr>
+              <td>TELÉFONO:</td>
+              <td>{{cliente.telefono}}</td>
+            </tr>
+            <tr>
+              <td>DESPACHO:</td>
+              <td>{{cliente.area_despacho}}</td>
+            </tr>
+            <tr>
+              <td>TIPO PAGO:</td>
+              <td>{{cliente.tipo_pago}}</td>
+            </tr>
+            <tr>
+              <td>GRUPO:</td>
+              <td>{{cliente.grupo}}</td>
+            </tr>
+          </table>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngSwitchCase="'second'">
+        <ion-card-content>
+          Facturas vencidas o próximas a vencer.<br/><br/>
+          <ion-progress-bar type="indeterminate" *ngIf="loading.facturas"></ion-progress-bar>
+          <table class="customers">
+            <tr>
+              <!--<th>Tipo<br/>Documento</th>-->
+              <th>Número</th>
+              <th>Número<br/>Externo</th>
+              <th>Documento</th>
+              <th>Fecha<br/>Compra</th>
+              <th>Fecha<br/>Vencimiento</th>
+              <th>Descripción</th>
+              <th>Pendiente</th>
+            </tr>
+            <tr *ngFor="let item of facturasPendientes" [ngClass]="{'vencido': validarEstado(item)}">
+              <!--<td>{{item.tipo_documento}}</td>-->
+              <td>{{item.numero}}</td>
+              <td>{{item.numero_externo}}</td>
+              <td>{{item.documento}}</td>
+              <td>{{item.fecha_registro | date: 'd/M/y'}}</td>
+              <td>{{item.fecha_vencimiento | date: 'd/M/y'}}</td>
+              <td>{{item.descripcion}}</td>
+              <td>{{item.saldo | number:'1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="registros!=-1 && facturasPendientes.length==0">
+              <td style="text-align: center;" colspan="7">No se encontraron registros</td>
+            </tr>
+          </table>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

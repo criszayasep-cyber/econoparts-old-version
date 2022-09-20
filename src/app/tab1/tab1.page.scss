@@ -1,0 +1,85 @@
+.welcome-card img {
+  max-height: 35vh;
+  overflow: hidden;
+}
+
+
+/*ion-badge {
+  color: #fff;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border-radius: 100%;
+}*/
+
+
+.category-banner {
+  background: #008cd1;
+  height: 40px;
+  padding: 10px;
+  font-weight: 900;
+  font-family: 'Suntea';
+  font-size: 1.8em;
+  padding-top: 0px;
+  margin-top:0.5em;
+  color:white;
+}
+
+
+.botonesLinea ion-col{
+  text-align: center;
+  font-size: 10px;
+  font-family: 'WesBold';
+  color: var(--ion-color-stjazul);
+}
+
+.botonesLinea ion-col span{
+  display: block;
+}
+
+
+.chart-card-body {
+  &.bar-vertical {
+   min-height: 400px;
+  }
+  &.bar-horizontal {
+   min-height: 300px;
+  }
+  &.pie-grid {
+   min-height: 250px;
+  }
+  &.line-chart {
+   min-height: 300px;
+  }
+}
+
+.example-card {
+  max-width: 400px;
+  margin-bottom: 8px;
+}
+
+
+
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: lightgray;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: gray;
+  color: white;
+}

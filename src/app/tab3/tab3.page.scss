@@ -1,0 +1,55 @@
+
+.fila{
+    border-radius: 0.5em;
+    background: white;
+    margin-bottom: 10px;
+}
+
+.detalle p{
+    padding: 0px;
+    margin:0px;
+    display: block;
+}
+
+.nombrePrenda{
+    font-weight: 900;
+    font-size: 12px;
+}
+
+.botonComprar{
+    text-transform: initial;
+    font-size: 18px;
+    font-family: 'Wes';
+    font-weight: 900;
+}
+
+.totalCompra{
+    font-family: 'WesBold';
+    font-size: 20px;
+    color:black;
+}
+
+#customers {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #customers tr:nth-child(even){background-color: lightgray;}
+  
+  #customers tr:hover {background-color: #ddd;}
+  
+  #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: gray;
+    color: white;
+  }
+

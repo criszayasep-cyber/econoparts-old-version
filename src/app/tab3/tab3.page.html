@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar class="background-yellow">
+      <ion-row style="align-items: center;">
+          <ion-col size="7" style="vertical-align: middle;padding-left: 1em;">
+              <img src="/assets/logoEP-reducido-small.png" alt="" style="display: inline-block;width: 100px;" />
+              <h1 style="display: inline-block;padding-left: 30px;"> | Clientes</h1>
+          </ion-col>
+          <ion-col size="5" style="text-align: right;padding-right: 1em;">
+              <ion-menu-toggle>
+                  <fa-icon [icon]="['fas','bars']" style="font-size:18px;margin-left: 15px;"></fa-icon>
+              </ion-menu-toggle>
+          </ion-col>
+      </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+  
+  <ion-content>
+  
+
+  <div style="padding: 20px;background:whitesmoke;">
+    <form style="background: transparent;margin-top: 0px;">
+      <ion-row>
+        <ion-col size="3">
+          <ion-item>
+              <ion-label position="floating">No Cliente</ion-label>
+              <ion-input autofocus="true" type="email" [(ngModel)]="filtros.cliente" name="cliente"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+          <ion-item>
+              <ion-label position="floating">Razon Social</ion-label>
+              <ion-input type="text" [(ngModel)]="filtros.razon_social" name="razon_social"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+          <ion-item>
+              <ion-label position="floating">Nombre Comercial</ion-label>
+              <ion-input type="text" [(ngModel)]="filtros.nombre_comercial" name="nombre_comercial"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+          <ion-item>
+              <ion-label position="floating">No. Registro</ion-label>
+              <ion-input type="text" [(ngModel)]="filtros.registro" name="registro"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      
+      <ion-row>
+          <ion-col size="12" style="text-align: right;">
+              <ion-button style="text-transform: capitalize;" [disabled]="loading" (click)="buscar()">
+                <fa-icon [icon]="['fas','search']"></fa-icon> Buscar
+              </ion-button>
+              <ion-button [disabled]="loading" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+          </ion-col>
+      </ion-row>
+    </form>
+  </div>
+
+
+  <div style="padding: 10px">
+    <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+    <table id="customers">
+      <tr>
+        <th>No. Cliente</th>
+        <th>Razon Social</th>
+        <th>Nombre Comercial</th>
+        <th>Dirección</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let item of clientes; let i = index">
+        <td>{{item.codigo}}</td>
+        <td>{{item.nombre_social}}</td>
+        <td>{{item.nombre_comercial}}</td>
+        <td>{{item.direccion}}</td>
+        <td>
+          <ion-button color="primary" (click)="add(item, i)">
+            <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+          </ion-button>
+          <ion-button color="primary" (click)="show(item)">
+            <fa-icon [icon]="['fas','eye']"></fa-icon>
+          </ion-button>
+        </td>
+      </tr>
+      <tr *ngIf="registros!=-1 && clientes.length==0">
+        <td style="text-align: center;" colspan="5">No se encontraron registros</td>
+      </tr>
+    </table>
+  </div>
+
+
+
+</ion-content>

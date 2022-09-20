@@ -1,0 +1,86 @@
+
+<ion-header>
+
+</ion-header>
+<ion-content>
+
+  <div style="padding: 10px;">
+    
+    <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="info">
+        Información
+      </ion-segment-button>
+      <ion-segment-button value="aplicaciones">
+        Aplicaciones
+      </ion-segment-button>
+    </ion-segment>
+    
+    <div [ngSwitch]="segment">
+      <ion-card *ngSwitchCase="'info'">
+        <ion-card-content>
+          <ion-row>
+            <ion-col size="12">
+              <img [src]="imagen"/>
+            </ion-col>
+            <ion-col size="12">
+              <table class="resumen" style="width: 100%;">
+                <tr>
+                  <td>No.</td>
+                  <td>{{producto.pro_number}}</td>
+                </tr>
+                <tr>
+                  <td>Descripción</td>
+                  <td>{{producto.pro_descripcion}}</td>
+                </tr>
+                <tr>
+                  <td>Marca</td>
+                  <td>{{producto.pro_marca}}</td>
+                </tr>
+                <tr>
+                  <td>Modelo</td>
+                  <td>{{producto.pro_modelo}}</td>
+                </tr>
+                <tr>
+                  <td>Familia</td>
+                  <td>{{producto.pro_familia}}</td>
+                </tr>
+                <tr>
+                  <td>Categoria</td>
+                  <td>{{producto.pro_categoria}}</td>
+                </tr>
+                <tr>
+                  <td>SubCategoria</td>
+                  <td>{{producto.pro_sub_categoria}}</td>
+                </tr>
+              </table>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngSwitchCase="'aplicaciones'">
+        <ion-card-content>
+          <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+          <table  class="customers" style="width: 100%;">
+            <tr>
+              <th>Item No_</th>
+              <th>Item No_ Source</th>
+              <th>Aplicación</th>
+            </tr>
+            <tr *ngFor="let item of aplicaciones">
+              <td>{{item.no}}</td>
+              <td>{{item.noSource}}</td>
+              <td>{{item.aplicacion}}</td>
+            </tr>
+          </table>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+
+</ion-content>
+<ion-footer>
+
+  <ion-button expand="block" (click)="close()">Ok</ion-button>
+</ion-footer>
+
