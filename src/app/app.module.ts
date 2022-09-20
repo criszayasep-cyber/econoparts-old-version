@@ -32,12 +32,11 @@ import { environment } from 'src/environments/environment';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    IonicModule.forRoot(),
+    NgxMaskIonicModule.forRoot(), 
     IonicModule.forRoot({
       mode: 'ios'
     }),
-     BrowserModule,BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule, 
-    FontAwesomeModule, HttpClientModule, HtmlModalPageModule,
-    NgxMaskIonicModule.forRoot(), 
     LazyLoadImageModule.forRoot({
       preset: intersectionObserverPreset // <-- tell LazyLoadImage that you want to use IntersectionObserver
     }),
@@ -53,7 +52,13 @@ import { environment } from 'src/environments/environment';
           return "Bearer ";
         },
       },
-    })
+    }),
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule, 
+    FontAwesomeModule,
+    HttpClientModule,
+    HtmlModalPageModule
   ],
   providers: [
     StatusBar,
