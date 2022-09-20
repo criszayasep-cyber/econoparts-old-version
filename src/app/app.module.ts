@@ -27,6 +27,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { JwtModule } from "@auth0/angular-jwt";
 import { ConfiguracionService } from './services/default/configuracion.service';
 import { environment } from 'src/environments/environment';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [AppComponent],
@@ -58,7 +59,8 @@ import { environment } from 'src/environments/environment';
     AppRoutingModule, 
     FontAwesomeModule,
     HttpClientModule,
-    HtmlModalPageModule
+    HtmlModalPageModule,
+    MatPaginatorModule
   ],
   providers: [
     StatusBar,

@@ -155,7 +155,7 @@
               <td>{{item.pro_descripcion}}</td>
               <td>{{item.preciou | number: '1.2-2'}}</td>
               <td>{{item.preciou*1.13 | number: '1.2-2'}}</td>
-              <td>{{item.existencia}}</td>
+              <td>{{item.existencia | number: '1.0-0'}}</td>
               <td>
                 <ion-button color="primary" (click)="verProducto(item)">
                   <fa-icon [icon]="['fas','eye']"></fa-icon>
@@ -169,6 +169,15 @@
               <td style="text-align: center;" colspan="9">No se encontraron registros</td>
             </tr>
           </table>
+          
+          <mat-paginator #paginator class="table-paginator" *ngIf="productos.length>0"
+            showFirstLastButtons
+            [length]="total"
+            [pageSizeOptions]="[5, 10, 15, 25, 50]" 
+            [pageSize]="5"
+            [pageIndex]="filtros.pageIndex"
+            (page)="paginar($event)">
+          </mat-paginator>
         </ion-card-content>
       </ion-card>
       <ion-card *ngSwitchCase="'equivalentes'">

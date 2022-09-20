@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Tab2Page } from './tab2.page';
 import { LazyLoadImageModule,intersectionObserverPreset } from 'ng-lazyload-image';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CommonModule,
     FormsModule,
     FontAwesomeModule,
+    MatPaginatorModule,
     RouterModule.forChild([{ path: '', component: Tab2Page }]),
     LazyLoadImageModule.forRoot({
       preset: intersectionObserverPreset // <-- tell LazyLoadImage that you want to use IntersectionObserver

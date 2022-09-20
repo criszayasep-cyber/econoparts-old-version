@@ -20,7 +20,6 @@ export class Tab2Page  implements OnInit{
   productosEquivalentes = [];
   total = 0;
 
-
   codigo = "";
   segment = "busqueda";
   registros = {
@@ -57,6 +56,21 @@ export class Tab2Page  implements OnInit{
     this.filtros = new FilterEntity(ConfiguracionService.paginacion);
     
   }
+
+  
+  paginar(pag): void{
+    if(this.filtros.items!=pag.pageSize){
+      this.filtros.pageIndex = 0;
+      this.filtros.items = pag.pageSize;
+      this.filtros.offset = 0;
+    }else{
+      this.filtros.pageIndex = pag.pageIndex;
+      this.filtros.items = pag.pageSize;
+      this.filtros.offset = pag.pageIndex * pag.pageSize;
+    }
+    this.buscar();
+  }
+
 
   limpiar(){
     this.total = 0;
