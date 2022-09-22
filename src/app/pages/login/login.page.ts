@@ -1,11 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NavController, LoadingController, IonSegment, IonSlides, AlertController, PickerController, ToastController } from '@ionic/angular';
-import { CASService } from '../services/default/cas.service';
+import { CASService } from '../../services/default/cas.service';
 import { FormGroup, FormBuilder, Validators, EmailValidator } from '@angular/forms';
-import { LoginService } from '../services/default/login.service';
-import { ToolsService } from '../services/default/tools.service';
-import { ConfiguracionService } from '../services/default/configuracion.service';
-import { DeviceService } from '../services/default/device.service';
+import { LoginService } from '../../services/default/login.service';
+import { ToolsService } from '../../services/default/tools.service';
+import { ConfiguracionService } from '../../services/default/configuracion.service';
+import { DeviceService } from '../../services/default/device.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -19,6 +19,8 @@ export class LoginPage implements OnInit {
   verError = false;
   formLogin: FormGroup;
   mensajeError: any;
+  showPassword = false;
+  passwordToggleIcon = "eye";
 
   constructor( private casServices : CASService,
     public navCtrl: NavController, 
@@ -54,6 +56,14 @@ export class LoginPage implements OnInit {
     
   }
 
+  togglePassword(){
+    this.showPassword = !this.showPassword;
+    if(this.showPassword){
+      this.passwordToggleIcon = "eye-off";
+    }else{
+      this.passwordToggleIcon = "eye";
+    }
+  }
 
 
   async login(){    

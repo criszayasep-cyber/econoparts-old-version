@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClienteEntity } from '../entity/cliente-entity';
-import { FacturaPendienteEntity } from '../entity/factura-pendiente';
-import { ClienteService } from '../services/cliente.service';
-import { ToolsService } from '../services/default/tools.service';
+import { ClienteEntity } from '../../entity/cliente-entity';
+import { FacturaPendienteEntity } from '../../entity/factura-pendiente';
+import { ClienteService } from '../../services/cliente.service';
+import { ToolsService } from '../../services/default/tools.service';
 
 @Component({
   selector: 'app-cliente-detalle',

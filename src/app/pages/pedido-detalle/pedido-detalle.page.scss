@@ -53,3 +53,11 @@ span{
     border: 1px solid lightgray;
     border-radius: 5px;
   }
+
+  ::ng-deep {
+    .coupon-alert {
+    --min-width: 400px;
+    --max-width: 400px;
+    --width: 400px;
+  }
+}

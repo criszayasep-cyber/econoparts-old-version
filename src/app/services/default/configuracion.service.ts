@@ -25,6 +25,14 @@ export class ConfiguracionService {
     
   }
 
+  public getPaginacion(){
+    return ConfiguracionService.paginacion;
+  }
+
+  public setPaginacion(cant){
+    ConfiguracionService.paginacion = cant;
+  }
+
   public static getBearer(){
     return ConfiguracionService.bearer;
   }

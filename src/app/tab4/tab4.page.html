@@ -121,7 +121,7 @@
                     <th>Venta</th>
                     <th>Venta+IVA</th>
                   </tr>
-                  <tr *ngFor="let item of listado.cotizaciones">
+                  <tr *ngFor="let item of listado.cotizaciones" (click)="detalleCotizacion(item)">
                     <td>{{item.ped_fecha | date: 'd/M/y'}}</td>
                     <td>{{item.ped_cliente_codigo}}</td>
                     <td>{{item.ped_cliente_nombre}}</td>

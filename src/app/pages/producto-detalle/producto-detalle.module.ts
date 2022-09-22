@@ -2,14 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
+
 import { IonicModule } from '@ionic/angular';
-import { MiCuentaPage } from './mi-cuenta.page';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import { ProductoDetallePage } from './producto-detalle.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: MiCuentaPage
+    component: ProductoDetallePage
   }
 ];
 
@@ -17,10 +18,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    FontAwesomeModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MiCuentaPage]
+  declarations: [ProductoDetallePage]
 })
-export class MiCuentaPageModule {}
+export class ProductoDetallePageModule {}

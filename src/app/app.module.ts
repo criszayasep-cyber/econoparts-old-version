@@ -17,7 +17,7 @@ import { faCoffee, fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { LazyLoadImageModule,intersectionObserverPreset } from 'ng-lazyload-image'; // <-- import it
-import { HtmlModalPageModule } from './html-modal/html-modal.module';
+import { ProductoDetallePageModule } from './pages/producto-detalle/producto-detalle.module';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import {NgxMaskIonicModule} from 'ngx-mask-ionic'
@@ -59,7 +59,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     AppRoutingModule, 
     FontAwesomeModule,
     HttpClientModule,
-    HtmlModalPageModule,
+    ProductoDetallePageModule,
     MatPaginatorModule
   ],
   providers: [

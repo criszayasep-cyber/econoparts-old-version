@@ -95,6 +95,20 @@ export class PedidoService {
   }//fin facturar
 
   
+  async facturarCotizacion(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}facturar-cotizacion`, pedido);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin facturarCotizacion
+
+  
   async cotizar(pedido, gestion, tipo){
     let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}cotizar?gestion=${gestion}&tipo=${tipo}`, pedido);
     if(httpResponse.ok){
@@ -107,6 +121,19 @@ export class PedidoService {
       return error;
     }
   }//fin cotizar
+  
+  async cotizarReenviar(pedido, tipo){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}cotizar-reenviar?tipo=${tipo}`, pedido);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin cotizarReenviar
 
 
 

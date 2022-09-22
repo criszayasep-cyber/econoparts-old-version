@@ -138,7 +138,16 @@ export class Tab4Page implements OnInit {
           pedido: JSON.stringify(item)
       }
     };
-    this.navCtrl.navigateForward(['tabs/tab4/mi-cuenta'], navigationExtras);
+    this.navCtrl.navigateForward(['tabs/tab4/detalle-pedido'], navigationExtras);
+  }
+  
+  detalleCotizacion(item){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          pedido: JSON.stringify(item)
+      }
+    };
+    this.navCtrl.navigateForward(['tabs/tab4/detalle-cotizacion'], navigationExtras);
   }
   
   

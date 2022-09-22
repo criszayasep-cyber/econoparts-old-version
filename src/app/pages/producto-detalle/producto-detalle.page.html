@@ -1,19 +1,18 @@
 
 <ion-header>
-
+    
+  <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="info">
+      Información
+    </ion-segment-button>
+    <ion-segment-button value="aplicaciones">
+      Aplicaciones
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 <ion-content>
 
   <div style="padding: 10px;">
-    
-    <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
-      <ion-segment-button value="info">
-        Información
-      </ion-segment-button>
-      <ion-segment-button value="aplicaciones">
-        Aplicaciones
-      </ion-segment-button>
-    </ion-segment>
     
     <div [ngSwitch]="segment">
       <ion-card *ngSwitchCase="'info'">

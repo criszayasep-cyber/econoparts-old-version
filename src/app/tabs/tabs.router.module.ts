@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { AuthGuardService as AuthGuard } from '../services/auth/auth-guard.service';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+              import('../tab1/tab1.module').then(m => m.Tab1PageModule),
+              canActivate: [AuthGuard] 
           }
         ]
       },
@@ -23,7 +25,8 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../tab2/tab2.module').then(m => m.Tab2PageModule),
+              canActivate: [AuthGuard] 
           }
         ]
       },
@@ -33,7 +36,8 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+              import('../tab3/tab3.module').then(m => m.Tab3PageModule),
+              canActivate: [AuthGuard] 
           }
         ]
       },
@@ -43,7 +47,8 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../cliente-detalle/cliente-detalle.module').then(m => m.ClienteDetallePageModule)
+              import('../pages/cliente-detalle/cliente-detalle.module').then(m => m.ClienteDetallePageModule),
+              canActivate: [AuthGuard] 
           }
         ]
       },
@@ -53,17 +58,30 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-            import('../tab4/tab4.module').then(m => m.Tab4PageModule)
+            import('../tab4/tab4.module').then(m => m.Tab4PageModule),
+            canActivate: [AuthGuard] 
           }
         ]
       },
       {
-        path: 'tab4/mi-cuenta',
+        path: 'tab4/detalle-pedido',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule)
+              import('../pages/pedido-detalle/pedido-detalle.module').then(m => m.PedidoDetallePageModule),
+              canActivate: [AuthGuard] 
+          }
+        ]
+      },
+      {
+        path: 'tab4/detalle-cotizacion',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/cotizacion-detalle/cotizacion-detalle.module').then(m => m.CotizacionDetallePageModule),
+              canActivate: [AuthGuard] 
           }
         ]
       },

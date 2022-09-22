@@ -7,7 +7,7 @@ import { ProductoService } from '../services/producto.service';
 import { ToolsService } from '../services/default/tools.service';
 import { FilterEntity } from '../entity/default/filter-entity';
 import { PedidoService } from '../services/pedido.service';
-import { HtmlModalPage } from '../html-modal/html-modal.page';
+import { ProductoDetallePage } from '../pages/producto-detalle/producto-detalle.page';
 
 @Component({
   selector: 'app-tab2',
@@ -68,7 +68,8 @@ export class Tab2Page  implements OnInit{
       this.filtros.items = pag.pageSize;
       this.filtros.offset = pag.pageIndex * pag.pageSize;
     }
-    this.buscar();
+    this.configuracion.setPaginacion(pag.pageSize);
+    this.buscar(false);
   }
 
 
@@ -79,7 +80,16 @@ export class Tab2Page  implements OnInit{
     this.filtros = new FilterEntity(ConfiguracionService.paginacion);
   }
 
-  async buscar(){
+  async buscar(primera:boolean){
+    this.filtros.primera = primera;
+    if(primera){
+      this.total = 0;
+      this.filtros.pageIndex = 0;
+      this.filtros.offset = 0;
+    }else{
+      this.filtros.total = this.total;
+    }
+
     this.registros.busqueda = -1;
     this.productos = [];
     this.loading.busqueda = true;
@@ -96,7 +106,7 @@ export class Tab2Page  implements OnInit{
 
   verProducto(item){
     this.modalController.create({
-      component: HtmlModalPage,
+      component: ProductoDetallePage,
       cssClass: 'my-modal-class',
       backdropDismiss: false,
       componentProps:{

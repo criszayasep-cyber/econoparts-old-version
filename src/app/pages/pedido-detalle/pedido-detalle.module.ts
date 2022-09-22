@@ -2,15 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-
 import { IonicModule } from '@ionic/angular';
-
-import { HtmlModalPage } from './html-modal.page';
+import { PedidoDetallePage } from './pedido-detalle.page';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const routes: Routes = [
   {
     path: '',
-    component: HtmlModalPage
+    component: PedidoDetallePage
   }
 ];
 
@@ -18,9 +17,10 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    FontAwesomeModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [HtmlModalPage]
+  declarations: [PedidoDetallePage]
 })
-export class HtmlModalPageModule {}
+export class PedidoDetallePageModule {}

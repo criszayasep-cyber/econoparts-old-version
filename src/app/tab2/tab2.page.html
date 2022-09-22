@@ -121,7 +121,7 @@
               
               <ion-row>
                   <ion-col size="12" style="text-align: right;">
-                      <ion-button [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="buscar()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                      <ion-button [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="buscar(true)"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
                       <ion-button [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
                   </ion-col>
               </ion-row>
@@ -174,7 +174,7 @@
             showFirstLastButtons
             [length]="total"
             [pageSizeOptions]="[5, 10, 15, 25, 50]" 
-            [pageSize]="5"
+            [pageSize]="configuracion.getPaginacion()"
             [pageIndex]="filtros.pageIndex"
             (page)="paginar($event)">
           </mat-paginator>

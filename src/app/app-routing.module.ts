@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule),
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule),
     canActivate: [AuthGuardNone]
   },
   { 
@@ -21,20 +21,12 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'tab3/detalle', 
-    loadChildren: () => import('./cliente-detalle/cliente-detalle.module').then(m => m.ClienteDetallePageModule),
-    canActivate: [AuthGuard] 
-  },
-  { 
     path: 'tab4', 
     loadChildren: () => import('./tab4/tab4.module').then(m => m.Tab4PageModule),
     canActivate: [AuthGuard] 
   },
-  { 
-    path: 'tab4/mi-cuenta', 
-    loadChildren: () => import('./mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule),
-    canActivate: [AuthGuard] 
-  }
+
+
 ];
 @NgModule({ 
   imports: [

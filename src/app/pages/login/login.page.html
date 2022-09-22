@@ -33,7 +33,8 @@
                             </ion-item>
                             <ion-item>
                                 <ion-label position="floating">Contraseña</ion-label>
-                                <ion-input formControlName="Password" type="password"></ion-input>
+                                <ion-input formControlName="Password" [type]="showPassword?'text':'password'"></ion-input>
+                                <ion-icon slot="end" [name]="passwordToggleIcon" style="align-self: flex-end;" (click)="togglePassword()"></ion-icon>
                                 <p class="errores" *ngIf="!formLogin.controls.Password.valid  && (formLogin.controls.Password.dirty )">Ingrese una contraseña valida.</p>
                             </ion-item>
                         </div>

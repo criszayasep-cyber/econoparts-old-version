@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams, ModalController, NavController } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigationExtras } from '@angular/router';
-import { ConfiguracionService } from '../services/default/configuracion.service';
-import { ProductoService } from '../services/producto.service';
-import { ToolsService } from '../services/default/tools.service';
-import { AplicacionEntity } from '../entity/aplicaciones-entity';
+import { ConfiguracionService } from '../../services/default/configuracion.service';
+import { ProductoService } from '../../services/producto.service';
+import { ToolsService } from '../../services/default/tools.service';
+import { AplicacionEntity } from '../../entity/aplicaciones-entity';
 
 @Component({
-  selector: 'app-html-modal',
-  templateUrl: './html-modal.page.html',
-  styleUrls: ['./html-modal.page.scss'],
+  selector: 'app-producto-detalle',
+  templateUrl: './producto-detalle.page.html',
+  styleUrls: ['./producto-detalle.page.scss'],
 })
-export class HtmlModalPage implements OnInit {
+export class ProductoDetallePage implements OnInit { 
 
   loading = false;
   segment = "info";
@@ -32,7 +32,7 @@ export class HtmlModalPage implements OnInit {
   ngOnInit() {
     this.producto = this.navParams.get("producto");
 
-    if(this.producto.imagen.length>10){
+    if(this.producto.imagen!=null && this.producto.imagen.length>10){
       this.imagen = 'data:image/jpeg;base64,'+this.producto.imagen
     }
   }
