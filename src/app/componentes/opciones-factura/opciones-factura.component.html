@@ -1,0 +1,21 @@
+
+<ion-list>
+  <ion-list-header>
+    <ion-label style="margin: 0px;font-size: 15px;">Documento: {{item.documento}}</ion-label>
+  </ion-list-header>
+  <ion-item *ngIf="item.tipo_documento=='Factura'" >
+      <ion-button expand="block" style="width: 100%;" color="primary" (click)="seleccionar(1)" >
+        Ver productos
+      </ion-button>
+  </ion-item>
+  <ion-item *ngIf="item.tipo_documento=='Factura'" >
+      <ion-button expand="block" style="width: 100%;" color="secondary" (click)="seleccionar(2)" >
+        Ver notas de credito
+      </ion-button>
+  </ion-item>
+  <ion-item>
+      <ion-button expand="block" style="width: 100%;" color="tertiary" (click)="seleccionar(3)" >
+        Reportar a Créditos
+      </ion-button>
+  </ion-item>
+</ion-list>

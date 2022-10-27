@@ -16,6 +16,8 @@ import { ClienteEntity } from '../../entity/cliente-entity';
 })
 export class CotizacionDetallePage implements OnInit {
 
+  diasFaltantes = 0;
+  vencido = false;
   facturado = false;
   registros = -1;
   loading = {
@@ -43,6 +45,22 @@ export class CotizacionDetallePage implements OnInit {
       this.pedido = JSON.parse(params["pedido"]);
       this.loadDetalle();
       this.loadInfoCliente();
+
+      
+      let hoy = new Date();
+      let vencimiento = new Date(this.pedido.ped_fecha);
+      vencimiento.setDate(vencimiento.getDate()+15);
+      /*console.log(vencimiento)
+      console.log(hoy)*/
+
+      this.vencido = (hoy > vencimiento);
+      //console.log(this.vencido)
+      
+      if(!this.vencido){
+        this.diasFaltantes = Math.ceil((Math.abs(vencimiento.getTime()-hoy.getTime()))/ (1000 * 3600 * 24));
+        //console.log("DIAS FALTANTES:",this.diasFaltantes)
+      }
+
     });
   }
   

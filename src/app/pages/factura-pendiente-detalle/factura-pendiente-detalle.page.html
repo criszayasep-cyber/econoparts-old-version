@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar class="background-yellow" mode="md">
+    <ion-title>Detalle de Factura - {{factura}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="padding: 20px;">
+
+    <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+    <table class="customers">
+      <tr>
+          <th>#</th>
+          <th>SKU</th>
+          <th>DESCRIPCION</th>
+          <th style="text-align: right;">PRECIO U.</th>
+          <th style="text-align: right;">CANTIDAD</th>
+          <th style="text-align: right;">SUB TOTAL</th>
+          <th style="text-align: right;">SUB TOTAL + IVA</th>
+      </tr>
+      <tr *ngFor="let item of productos; let i = index">
+          <td>{{i+1}}</td>
+          <td>{{item.codigo}}</td>
+          <td>{{item.descripcion}}</td>
+          <td style="text-align: right;">{{item.precio | number: '1.2-2'}}</td>
+          <td style="text-align: right;">{{item.cantidad}}</td>
+          <td style="text-align: right;">{{item.precio*item.cantidad | number: '1.2-2'}}</td>
+          <td style="text-align: right;">{{(item.precio*1.13)*item.cantidad | number: '1.2-2'}}</td>
+      </tr>
+      <tr *ngIf="productos?.length>0">
+          <th colspan="4" style="text-align: right;">TOTAL</th>
+          <th style="text-align: right;">{{totalUnidades()}}</th>
+          <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
+          <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>
+      </tr>
+  </table>
+
+  </div>
+</ion-content>

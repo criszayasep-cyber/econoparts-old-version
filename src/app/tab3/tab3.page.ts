@@ -16,6 +16,7 @@ import { RutaService } from '../services/ruta.service';
 })
 export class Tab3Page  implements OnInit{
 
+  total = 0;
   registros = -1;
   clientes: Array<ClienteEntity> = [];
   loading = false;
@@ -37,6 +38,12 @@ export class Tab3Page  implements OnInit{
       this.categorias = JSON.parse(window.localStorage["categorias"]);
     }*/
     
+  }
+
+  paginar(pag): void{
+    this.tools.paginar(this.filtros,pag);
+    this.config.setPaginacion(pag.pageSize);
+    this.buscar(false);
   }
 
   async add(item:ClienteEntity, indice){
@@ -68,7 +75,16 @@ export class Tab3Page  implements OnInit{
     this.filtros = new FilterEntity(ConfiguracionService.paginacion);
   }
 
-  async buscar(){
+  async buscar(primera){
+    this.filtros.primera = primera;
+    if(primera){
+      this.total = 0;
+      this.filtros.pageIndex = 0;
+      this.filtros.offset = 0;
+    }else{
+      this.filtros.total = this.total;
+    }
+
     this.registros = -1;
     this.clientes = [];
     this.loading = true;
@@ -76,6 +92,7 @@ export class Tab3Page  implements OnInit{
     if(http.ok){
         this.clientes = http.registros;
         this.registros = this.clientes.length;
+        this.total = http.total;
     }else{
       this.tools.showNotification("Error", http.mensaje,"Ok");
     }

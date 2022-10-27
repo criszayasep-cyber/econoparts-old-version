@@ -24,7 +24,19 @@ const routes: Routes = [
     path: 'tab4', 
     loadChildren: () => import('./tab4/tab4.module').then(m => m.Tab4PageModule),
     canActivate: [AuthGuard] 
+  },  {
+    path: 'historico-detalle',
+    loadChildren: () => import('./pages/historico-detalle/historico-detalle.module').then( m => m.HistoricoDetallePageModule)
   },
+  {
+    path: 'notas-credito-relacionadas',
+    loadChildren: () => import('./pages/notas-credito-relacionadas/notas-credito-relacionadas.module').then( m => m.NotasCreditoRelacionadasPageModule)
+  },
+  {
+    path: 'factura-pendiente-detalle',
+    loadChildren: () => import('./pages/factura-pendiente-detalle/factura-pendiente-detalle.module').then( m => m.FacturaPendienteDetallePageModule)
+  },
+
 
 
 ];

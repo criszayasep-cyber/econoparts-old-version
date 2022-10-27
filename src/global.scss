@@ -493,3 +493,42 @@
     -webkit-animation-name: flipInY;
     animation-name: flipInY;
 }
+
+
+/* ALERT */
+
+.alert{
+    border-radius: 10px;
+    padding: 5px;
+    border-width: 5px;
+    border-style:outset;
+    border-top: none;
+    border-left: none;
+  }
+  
+  .alert ion-text:first-child{
+    font-size: 30px;
+    vertical-align: top;
+    margin-right: 5px;
+  }
+  .alert ion-text:last-child{
+    font-size: 18px;
+    font-style: italic;
+  }
+  
+  .alert.info{
+    background: #e0e0e3;
+    border-color:#c1c2c7;
+  }
+  .alert.warning{
+    background: #fff0b2;
+    border-color: #ffe166;
+  }
+  .alert.success{
+    background: #b7f4cf;
+    border-color:#6fea9f;
+  }
+  .alert.danger{
+    background: #fac6c6;
+    border-color:#f68d8d;
+  }

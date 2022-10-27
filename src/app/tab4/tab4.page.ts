@@ -17,6 +17,10 @@ export class Tab4Page implements OnInit {
 
   segment = "first";
 
+  totales = {
+    cotizaciones: 0,
+    historico: 0
+  }
   filtros = {
     cotizaciones: null,
     historico: null
@@ -48,8 +52,8 @@ export class Tab4Page implements OnInit {
       this.listado.cotizaciones = new Array<VmoPedidoEntityEntity>();
       this.listado.historico = new Array<VmoPedidoEntityEntity>();
       
-      this.filtros.cotizaciones = new FilterEntity(25);
-      this.filtros.historico = new FilterEntity(25);
+      this.filtros.cotizaciones = new FilterEntity(ConfiguracionService.paginacion);
+      this.filtros.historico = new FilterEntity(ConfiguracionService.paginacion);
     }
   
   ngOnInit(){
@@ -82,7 +86,12 @@ export class Tab4Page implements OnInit {
     this.registros.proceso = -1;
     this.loading.proceso = true;
     let dataPost = {
-      estado: "EN PROCESO"
+      estado: "EN PROCESO",
+      primera: true,
+      items: 100,
+      offset: 0,
+      total: 0,
+      pageIndex: 0
     }
     var response = await this.pedidoService.filter(dataPost);
     if(response){
@@ -150,6 +159,15 @@ export class Tab4Page implements OnInit {
     this.navCtrl.navigateForward(['tabs/tab4/detalle-cotizacion'], navigationExtras);
   }
   
+  detalleHistorico(item){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          pedido: JSON.stringify(item)
+      }
+    };
+    this.navCtrl.navigateForward(['tabs/tab4/detalle-historico'], navigationExtras);
+  }
+  
   
   async segmentChanged(event){
     /*switch(event.detail.value){
@@ -164,9 +182,34 @@ export class Tab4Page implements OnInit {
     }*/
   }
 
-  async buscar(){
+  paginar(pag): void{
+    
     switch(this.segment){
       case "second":
+        this.tools.paginar(this.filtros.cotizaciones,pag);
+        this.configuracion.setPaginacion(pag.pageSize);
+        break;
+      case "third":
+        this.tools.paginar(this.filtros.historico,pag);
+        this.configuracion.setPaginacion(pag.pageSize);
+        break;
+    }
+    this.buscar(false);
+  }
+
+  async buscar(primera){
+
+    switch(this.segment){
+      case "second":
+        this.filtros.cotizaciones.primera = primera;
+        if(primera){
+          this.totales.cotizaciones = 0;
+          this.filtros.cotizaciones.pageIndex = 0;
+          this.filtros.cotizaciones.offset = 0;
+        }else{
+          this.filtros.cotizaciones.total = this.totales.cotizaciones;
+        }
+
         this.registros.cotizaciones = -1;
         this.loading.cotizaciones = true;
         this.filtros.cotizaciones.estado = "COTIZACION";
@@ -175,6 +218,7 @@ export class Tab4Page implements OnInit {
           if(response.ok){
             this.listado.cotizaciones = response.registros;
             this.registros.cotizaciones = this.listado.historico.length;
+            this.totales.cotizaciones = response.total;
           }else{
             this.tools.showNotification("Error", response.mensaje,"Ok");
           }
@@ -182,6 +226,15 @@ export class Tab4Page implements OnInit {
         this.loading.cotizaciones = false;
       break;
       case "third":
+        this.filtros.historico.primera = primera;
+        if(primera){
+          this.totales.historico = 0;
+          this.filtros.historico.pageIndex = 0;
+          this.filtros.historico.offset = 0;
+        }else{
+          this.filtros.historico.total = this.totales.historico;
+        }
+
         this.registros.historico = -1;
         this.loading.historico = true;
         this.filtros.historico.estado = "HISTORICO";
@@ -190,6 +243,7 @@ export class Tab4Page implements OnInit {
           if(response.ok){
             this.listado.historico = response.registros;
             this.registros.historico = this.listado.historico.length;
+            this.totales.historico = response.total;
           }else{
             this.tools.showNotification("Error", response.mensaje,"Ok");
           }

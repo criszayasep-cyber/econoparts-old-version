@@ -176,12 +176,42 @@ export class PedidoDetallePage implements OnInit {
   async deleteProducto(item:VmoPedidoDetalleEntityEntity, indice){
     var r = await this.tools.showConfirm("¿Realmente desea eliminar este producto \""+item.pde_producto+"\"?", "", "");
     if(r=="confirm"){
+      this.tools.presentLoading("Eliminando producto...")
       var response = await this.pedidoService.removeProducto(this.pedido.ped_id, item.pde_id);
+      this.tools.destroyLoading();
       if(response.ok){
         this.pedido.vmo_pedido_detalle.splice(indice,1);
+        this.pedido.vmo_pedido_detalle = response.registros;
       }else{
         this.tools.showNotification("Error", response.mensaje,"Ok");
       }
+    }
+  }
+
+  actualizandoProducto = false;
+  async onInputTime(event){
+    console.log(event)
+    if(event>0 && !this.actualizandoProducto){
+      this.actualizandoProducto = true;
+      setTimeout(async () => 
+      {
+        this.actualizandoProducto = false;
+        var pds = this.pedido.vmo_pedido_detalle.filter(f => f.pde_cantidad==null);
+        if(pds.length==0){
+          this.tools.presentLoading("Actualizando precios...")
+          var response = await this.pedidoService.updatePedidoDetalle(this.pedido);
+          if(response){
+            if(response.ok){
+              //this.tools.showNotification("Exito!", "Pedido actualizado","Ok");
+              this.pedido.vmo_pedido_detalle = response.registros;
+            }else{
+              this.tools.showNotification("Error", response.mensaje,"Ok");
+            }
+          }
+          this.tools.destroyLoading();
+        }
+      },
+      1500);
     }
   }
   
@@ -306,7 +336,7 @@ export class PedidoDetallePage implements OnInit {
   totalMonto(){
     if(this.pedido.vmo_pedido_detalle?.length>0){
       return this.pedido.vmo_pedido_detalle.reduce((accumulator, obj) => {
-        return accumulator + (obj.pde_precio_unitario*obj.pde_cantidad);
+        return accumulator + (obj.pde_precio_unitario_final*obj.pde_cantidad);
       }, 0);
     }else{
       return 0;
@@ -316,7 +346,7 @@ export class PedidoDetallePage implements OnInit {
   totalMontoIVA(){
     if(this.pedido.vmo_pedido_detalle?.length>0){
       return this.pedido.vmo_pedido_detalle.reduce((accumulator, obj) => {
-        return accumulator + ((obj.pde_precio_unitario*1.13)*obj.pde_cantidad);
+        return accumulator + ((obj.pde_precio_unitario_final*1.13)*obj.pde_cantidad);
       }, 0);
     }else{
       return 0;

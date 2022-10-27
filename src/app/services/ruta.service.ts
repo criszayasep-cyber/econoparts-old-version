@@ -91,6 +91,19 @@ export class RutaService {
     }
   }//fin iniciarGestion
   
+  async iniciarGestionClienteNuevo(data){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}iniciar-gestion-cliente-nuevo`, data);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin iniciarGestionClienteNuevo
+  
   async getGestionActiva(){
     let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}get-gestion-activa`, null);
     if(httpResponse.ok){

@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ClienteDetallePage } from './cliente-detalle.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router'; 
+import { OpcionesFacturaComponent } from 'src/app/componentes/opciones-factura/opciones-factura.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ClienteDetallePage]
+  declarations: [ClienteDetallePage, OpcionesFacturaComponent]
 })
 export class ClienteDetallePageModule {}

@@ -67,6 +67,20 @@ export class PedidoService {
   }//fin getDetalle
 
   
+  async getFactura(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}facturacion-informacion/${pedido}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin getFactura
+
+  
   async updatePedido(pedido){
     let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}update`, pedido);
     if(httpResponse.ok){
@@ -79,6 +93,20 @@ export class PedidoService {
       return error;
     }
   }//fin updatePedido
+
+  
+  async updatePedidoDetalle(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}update-detalle`, pedido);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin updatePedidoDetalle
 
   
   async facturar(pedido, gestion){
@@ -137,6 +165,33 @@ export class PedidoService {
 
 
 
+  
+  async getFacturaPendiente(numero){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}facturacion-pendiente-detalle/${numero}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin getFacturaPendiente
 
+
+  
+  async getFacturaPendienteSuc(numero){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}facturacion-pendiente-suc-detalle/${numero}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin getFacturaPendienteSuc
 
 }

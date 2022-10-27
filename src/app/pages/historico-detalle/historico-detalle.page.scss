@@ -42,22 +42,19 @@ span{
     padding: 5px;
   }
   table.datos tr td:first-child{
-    width: 20%;
+    width: 30%;
   }
 
   table.datos tr td input{
     border: 1px solid lightgray;
     border-radius: 5px;
   }
-  textarea{
-    border: 1px solid lightgray;
-    border-radius: 5px;
-  }
 
-  ::ng-deep {
-    .coupon-alert {
-    --min-width: 400px;
-    --max-width: 400px;
-    --width: 400px;
+
+  .legend-information{
+    position: absolute;
+    z-index: 999;
+    right: 20px;
+    top: 2px;
+    font-weight: bold;
   }
-}

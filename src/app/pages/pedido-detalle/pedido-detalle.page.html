@@ -1,6 +1,6 @@
 <ion-header>
-    <ion-toolbar class="background-yellow">
-        <h2>Detalle de pedido</h2>
+    <ion-toolbar class="background-yellow" mode="md">
+        <ion-title>Detalle de Pedido</ion-title>
 
         <!--<ion-segment color="primary" scrollable style="display: none;">
         <ion-segment-button>
@@ -21,44 +21,47 @@
 
 <ion-content class="padding">
     <div style="padding: 10px;">
-        <table class="datos">
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
-                <td>{{pedido.ped_cliente_nombre}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
-                <td>{{pedido.ped_cliente_comercial}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
-                <td>{{pedido.ped_cliente_direccion}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
-                <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_cliente_correo"/></td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
-                <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_celular"/></td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">LIMITE:</td>
-                <td>{{cliente.limite | number: '1.2-2'}}</td> 
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">SALDO:</td>
-                <td>{{cliente.saldo | number: '1.2-2'}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">DISPONIBLE:</td>
-                <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
-            </tr>
-        </table>
+        <ion-card>
+          <ion-card-content>
+            <table class="datos">
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
+                    <td>{{pedido.ped_cliente_nombre}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
+                    <td>{{pedido.ped_cliente_comercial}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
+                    <td>{{pedido.ped_cliente_direccion}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
+                    <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_cliente_correo"/></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
+                    <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_celular"/></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">LIMITE:</td>
+                    <td>{{cliente.limite | number: '1.2-2'}}</td> 
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">SALDO:</td>
+                    <td>{{cliente.saldo | number: '1.2-2'}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;padding-right: 5px;text-align: right;">DISPONIBLE:</td>
+                    <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
+                </tr>
+            </table>
+          </ion-card-content>
+        </ion-card>
 
-        <br/>
         <ion-row>
-            <ion-col size="12" style="padding-top: 1px;">
+            <ion-col size="4" style="padding-top: 1px;">
                 <ion-list>
                     <ion-radio-group  [(ngModel)]="pedido.ped_tipo_pago">
                         <ion-list-header>
@@ -77,11 +80,11 @@
                     </ion-radio-group>
                   </ion-list>
             </ion-col>
-            <ion-col size="12">
+            <ion-col size="8">
                 <ion-list-header>
                   <ion-label>COMENTARIO</ion-label>
                 </ion-list-header>
-                <textarea [(ngModel)]="pedido.ped_comentario" [disabled]="facturado" rows="4" style="width: 100%;border:1px solid lightgray"></textarea>
+                <textarea [(ngModel)]="pedido.ped_comentario" [disabled]="facturado" rows="5" style="width: 100%;border:1px solid lightgray"></textarea>
             </ion-col>
         </ion-row>
         <h2>Productos</h2>
@@ -90,6 +93,8 @@
             <tr>
                 <th>SKU</th>
                 <th>DESCRIPCION</th>
+                <th>PROMOCIÓN</th>
+                <th>LISTA DE PRECIO</th>
                 <th>PRECIO U.</th>
                 <th style="text-align: right;">CANTIDAD</th>
                 <th style="text-align: right;">SUB TOTAL</th>
@@ -99,10 +104,12 @@
             <tr *ngFor="let item of pedido.vmo_pedido_detalle; let i = index">
                 <td>{{item.pde_producto}}</td>
                 <td>{{item.pde_descripcion}}</td>
-                <td>{{item.pde_precio_unitario | number: '1.2-2'}}</td>
-                <td style="text-align: right;"><input type="number" style="text-align: right;" [(ngModel)]="item.pde_cantidad" [disabled]="facturado" /></td>
-                <td style="text-align: right;">{{item.pde_precio_unitario*item.pde_cantidad | number: '1.2-2'}}</td>
-                <td style="text-align: right;">{{(item.pde_precio_unitario*1.13)*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td>{{item.pde_lp_promocion}}</td>
+                <td>{{item.pde_lp_lista}}</td>
+                <td>{{item.pde_precio_unitario_final | number: '1.2-2'}}</td>
+                <td style="text-align: right;"><input type="number" style="text-align: right;width: 50px;" (input)='onInputTime($event.target.value)' [(ngModel)]="item.pde_cantidad" [disabled]="facturado" /></td>
+                <td style="text-align: right;">{{item.pde_precio_unitario_final*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{(item.pde_precio_unitario_final*1.13)*item.pde_cantidad | number: '1.2-2'}}</td>
                 <td style="width: 50px;">
                     <ion-button color="primary" [disabled]="facturado" (click)="deleteProducto(item, i)">
                       <fa-icon [icon]="['fas','trash-alt']"></fa-icon>
@@ -110,7 +117,7 @@
                 </td>
             </tr>
             <tr *ngIf="pedido.vmo_pedido_detalle?.length>0">
-                <th colspan="3" style="text-align: right;">TOTAL</th>
+                <th colspan="5" style="text-align: right;">TOTAL</th>
                 <th style="text-align: right;">{{totalUnidades() | number:'1.2-2'}}</th>
                 <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
                 <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>

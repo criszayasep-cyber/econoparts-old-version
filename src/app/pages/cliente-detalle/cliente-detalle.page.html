@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="background-yellow" mode="md">
+    <ion-title>{{cliente.nombre_social}}</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{cliente.nombre_social}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -30,7 +30,7 @@
         Información general
       </ion-segment-button>
       <ion-segment-button value="second">
-        Facturas pendientes
+        Documentos pendientes
       </ion-segment-button>
     </ion-segment>
     
@@ -83,6 +83,10 @@
               <td>{{cliente.telefono}}</td>
             </tr>
             <tr>
+              <td>CELULAR:</td>
+              <td>{{cliente.celular}}</td>
+            </tr>
+            <tr>
               <td>DESPACHO:</td>
               <td>{{cliente.area_despacho}}</td>
             </tr>
@@ -99,31 +103,55 @@
       </ion-card>
       <ion-card *ngSwitchCase="'second'">
         <ion-card-content>
-          Facturas vencidas o próximas a vencer.<br/><br/>
+          <ion-row>
+            <ion-col size="6" style="align-self: center;">
+              Documentos pendientes.<br/>
+              Total: {{facturasPendientes.length}}
+            </ion-col>
+            <ion-col size="6" style="text-align: right;">
+              <ion-button [disabled]="facturasPendientes.length==0" style="text-transform: capitalize;" (click)="enviarEC()">
+                <fa-icon [icon]="['fas','file-alt']" style="margin-right: 5px;"></fa-icon> 
+                Enviar estado de cuenta
+              </ion-button>
+            </ion-col>
+          </ion-row>
           <ion-progress-bar type="indeterminate" *ngIf="loading.facturas"></ion-progress-bar>
           <table class="customers">
             <tr>
-              <!--<th>Tipo<br/>Documento</th>-->
-              <th>Número</th>
+              <th>Tipo<br/>Documento</th>
+              <th>Sucursal</th>
+              <th>Vendedor</th>
+              <th>SubTipo</th>
+              <!--<th>Número</th>-->
               <th>Número<br/>Externo</th>
               <th>Documento</th>
-              <th>Fecha<br/>Compra</th>
+              <th>Fecha<br/>Documento</th>
               <th>Fecha<br/>Vencimiento</th>
-              <th>Descripción</th>
-              <th>Pendiente</th>
+              <!--<th>Descripción</th>-->
+              <th>Importe<br/>Inicial</th>
+              <th>Importe<br/>Pendiente</th>
+              <th>Días<br/>Mora</th>
             </tr>
             <tr *ngFor="let item of facturasPendientes" [ngClass]="{'vencido': validarEstado(item)}">
-              <!--<td>{{item.tipo_documento}}</td>-->
-              <td>{{item.numero}}</td>
+              <td style="font-weight: bold;">
+                <fa-icon (click)="opciones($event, item)" [icon]="['fas','ellipsis-v']" style="font-size:18px;margin-right: 5px;"></fa-icon>
+                {{item.tipo_documento}}
+              </td>
+              <td>{{item.ubicacion}}</td>
+              <td>{{item.codigo_vendedor}}</td>
+              <td>{{item.sub_tipo}}</td>
+              <!--<td>{{item.numero}}</td>-->
               <td>{{item.numero_externo}}</td>
               <td>{{item.documento}}</td>
               <td>{{item.fecha_registro | date: 'd/M/y'}}</td>
               <td>{{item.fecha_vencimiento | date: 'd/M/y'}}</td>
-              <td>{{item.descripcion}}</td>
+              <!--<td>{{item.descripcion}}</td>-->
+              <td>{{item.inicial | number:'1.2-2'}}</td>
               <td>{{item.saldo | number:'1.2-2'}}</td>
+              <td>{{item.dias_mora}}</td>
             </tr>
             <tr *ngIf="registros!=-1 && facturasPendientes.length==0">
-              <td style="text-align: center;" colspan="7">No se encontraron registros</td>
+              <td style="text-align: center;" colspan="11">No se encontraron registros</td>
             </tr>
           </table>
         </ion-card-content>

@@ -49,7 +49,7 @@
       
       <ion-row>
           <ion-col size="12" style="text-align: right;">
-              <ion-button style="text-transform: capitalize;" [disabled]="loading" (click)="buscar()">
+              <ion-button style="text-transform: capitalize;" [disabled]="loading" (click)="buscar(true)">
                 <fa-icon [icon]="['fas','search']"></fa-icon> Buscar
               </ion-button>
               <ion-button [disabled]="loading" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
@@ -60,16 +60,26 @@
 
 
   <div style="padding: 10px">
+    <ion-row>
+      <ion-col size="6">
+        
+      </ion-col>
+      <ion-col size="6" style="text-align: right;">
+        Registros: {{total}}
+      </ion-col>
+    </ion-row>
     <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
     <table id="customers">
       <tr>
+        <th>#</th>
         <th>No. Cliente</th>
         <th>Razon Social</th>
         <th>Nombre Comercial</th>
         <th>Dirección</th>
-        <th></th>
+        <th style="width: 140px;"></th>
       </tr>
       <tr *ngFor="let item of clientes; let i = index">
+        <td>{{(filtros.offset+1)+i}}</td>
         <td>{{item.codigo}}</td>
         <td>{{item.nombre_social}}</td>
         <td>{{item.nombre_comercial}}</td>
@@ -84,9 +94,17 @@
         </td>
       </tr>
       <tr *ngIf="registros!=-1 && clientes.length==0">
-        <td style="text-align: center;" colspan="5">No se encontraron registros</td>
+        <td style="text-align: center;" colspan="6">No se encontraron registros</td>
       </tr>
     </table>
+    <mat-paginator #paginator class="table-paginator" *ngIf="clientes.length>0"
+      showFirstLastButtons
+      [length]="total"
+      [pageSizeOptions]="[5, 10, 15, 25, 50]" 
+      [pageSize]="config.getPaginacion()"
+      [pageIndex]="filtros.pageIndex"
+      (page)="paginar($event)">
+    </mat-paginator>
   </div>
 
 

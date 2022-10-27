@@ -104,6 +104,17 @@
                     <ion-badge slot="end">{{kpiDia?.cumplimiento | number: '1.2-2'}}%</ion-badge>
                   </ion-item>
                 </ion-card>
+                <ion-card style="margin-top: 0px;display: none;">
+                  <ion-card-header>
+                      <ion-card-title>KPI Créditos y Cobros</ion-card-title>
+                  </ion-card-header>
+                
+                  <ion-item>
+                    <ion-icon src="assets/icon/collect.svg" style="font-size: 50px;" slot="start"></ion-icon>
+                    <ion-label>Cobranza</ion-label>
+                    <ion-badge slot="end">{{55.2 | number: '1.2-2'}}%</ion-badge>
+                  </ion-item>
+                </ion-card>
             </ion-col>
         </ion-row>
 
@@ -112,7 +123,14 @@
             <h3>Clientes a visitar {{hoy | date: 'd/M/y'}}: {{clientes?.length}}</h3>
           </ion-col>
           <ion-col size="6" style="text-align: right;">
-            <ion-button color="primary" (click)="searchCliente()">Agregar cliente a gestión del día</ion-button>
+            <ion-button color="primary" (click)="searchCliente()">
+              <fa-icon [icon]="['fas','plus-circle']" style="margin-right: 5px;"></fa-icon>
+              Agregar cliente a gestión del día
+            </ion-button>
+            <ion-button color="primary" (click)="addClienteNuevo()">
+              <fa-icon [icon]="['fas','address-card']" style="margin-right: 5px;"></fa-icon>
+              Gestión cliente nuevo
+            </ion-button>
           </ion-col>
         </ion-row>
         

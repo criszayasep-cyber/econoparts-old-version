@@ -1,53 +1,84 @@
 <ion-header>
-  <ion-toolbar class="background-yellow">
-      <h2>Detalle de Cotización</h2>
+  <ion-toolbar class="background-yellow" mode="md">
+      <ion-title>Detalle de Cotización</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="padding">
   <div style="padding: 10px;">
-      <table class="datos">
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">FECHA DE COTIZACIÓN:</td>
-              <td>{{pedido.ped_fecha | date:'d/M/y'}}</td>
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
-              <td>{{pedido.ped_cliente_nombre}}</td>
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
-              <td>{{pedido.ped_cliente_comercial}}</td>
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
-              <td>{{pedido.ped_cliente_direccion}}</td>
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
-              <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_cliente_correo"/></td>
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
-              <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_celular"/></td>
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">LIMITE:</td>
-              <td>{{cliente.limite | number: '1.2-2'}}</td> 
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">SALDO:</td>
-              <td>{{cliente.saldo | number: '1.2-2'}}</td>
-          </tr>
-          <tr>
-              <td style="font-weight: bold;padding-right: 5px;text-align: right;">DISPONIBLE:</td>
-              <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
-          </tr>
-      </table>
+    <ion-card>
+      <ion-card-content>
+        <p class="alert info" *ngIf="!vencido">
+            <ion-text color="medium"><fa-icon [icon]="['fas','info-circle']"></fa-icon></ion-text>
+            <ion-text>Periodo de validez de esta cotización es de: {{diasFaltantes}} día{{diasFaltantes>1?'s':''}}</ion-text>
+        </p>
+        <p class="alert warning" *ngIf="vencido">
+            <ion-text color="warning"><fa-icon [icon]="['fas','exclamation-triangle']"></fa-icon></ion-text>
+            <ion-text>La cotización ya no es válida.</ion-text>
+        </p>
+        <!--<p class="alert info">
+            <ion-text color="medium"><fa-icon [icon]="['fas','info-circle']"></fa-icon></ion-text>
+            <ion-text>La cotización ya no es válida.</ion-text>
+        </p>
+        <p class="alert warning">
+            <ion-text color="warning"><fa-icon [icon]="['fas','exclamation-triangle']"></fa-icon></ion-text>
+            <ion-text>La cotización ya no es válida.</ion-text>
+        </p>
+        <p class="alert success">
+            <ion-text color="success"><fa-icon [icon]="['fas','check-circle']"></fa-icon></ion-text>
+            <ion-text>La cotización ya no es válida.</ion-text>
+        </p>
+        <p class="alert danger">
+            <ion-text color="danger"><fa-icon [icon]="['fas','times']"></fa-icon></ion-text>
+            <ion-text>La cotización ya no es válida.</ion-text>
+        </p>-->
+        <table class="datos">
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">FECHA DE COTIZACIÓN:</td>
+                <td>{{pedido.ped_fecha | date:'d/M/y'}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO. CLIENTE:</td>
+                <td>{{pedido.ped_cliente_codigo}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
+                <td>{{pedido.ped_cliente_nombre}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
+                <td>{{pedido.ped_cliente_comercial}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
+                <td>{{pedido.ped_cliente_direccion}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
+                <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_cliente_correo" [disabled]="vencido"/></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
+                <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_celular" [disabled]="vencido"/></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">LIMITE:</td>
+                <td>{{cliente.limite | number: '1.2-2'}}</td> 
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">SALDO:</td>
+                <td>{{cliente.saldo | number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">DISPONIBLE:</td>
+                <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
+            </tr>
+        </table>
+      </ion-card-content>
+    </ion-card>
 
-      <br/>
       <ion-row>
-          <ion-col size="12" style="padding-top: 1px;">
+          <ion-col size="4" style="padding-top: 1px;">
               <ion-list>
                   <ion-radio-group  [(ngModel)]="pedido.ped_tipo_pago">
                       <ion-list-header>
@@ -56,21 +87,21 @@
                   
                     <ion-item>
                       <ion-label>Crédito</ion-label>
-                      <ion-radio slot="start" value="CREDITO" [disabled]="cliente.tipo_pago=='0D' || cliente.tipo_pago=='CEN' || facturado"></ion-radio>
+                      <ion-radio slot="start" value="CREDITO" [disabled]="cliente.tipo_pago=='0D' || cliente.tipo_pago=='CEN' || facturado || vencido"></ion-radio>
                     </ion-item>
                 
                     <ion-item>
                       <ion-label>Contado</ion-label>
-                      <ion-radio slot="start" value="CONTADO" [disabled]="facturado"></ion-radio>
+                      <ion-radio slot="start" value="CONTADO" [disabled]="facturado || vencido"></ion-radio>
                     </ion-item>
                   </ion-radio-group>
                 </ion-list>
           </ion-col>
-          <ion-col size="12">
+          <ion-col size="8">
               <ion-list-header>
                 <ion-label>COMENTARIO</ion-label>
               </ion-list-header>
-              <textarea [(ngModel)]="pedido.ped_comentario" [disabled]="facturado" rows="4" style="width: 100%;border:1px solid lightgray"></textarea>
+              <textarea [(ngModel)]="pedido.ped_comentario" [disabled]="facturado || vencido" rows="5" style="width: 100%;border:1px solid lightgray"></textarea>
           </ion-col>
       </ion-row>
       <h2>Productos</h2>
@@ -89,11 +120,11 @@
               <td>{{item.pde_producto}}</td>
               <td>{{item.pde_descripcion}}</td>
               <td>{{item.pde_precio_unitario | number: '1.2-2'}}</td>
-              <td style="text-align: right;"><input type="number" style="text-align: right;" [(ngModel)]="item.pde_cantidad" [disabled]="facturado" /></td>
+              <td style="text-align: right;"><input type="number" style="text-align: right;" [(ngModel)]="item.pde_cantidad" [disabled]="facturado || vencido" /></td>
               <td style="text-align: right;">{{item.pde_precio_unitario*item.pde_cantidad | number: '1.2-2'}}</td>
               <td style="text-align: right;">{{(item.pde_precio_unitario*1.13)*item.pde_cantidad | number: '1.2-2'}}</td>
               <td style="width: 50px;">
-                  <ion-button color="primary" [disabled]="facturado" (click)="deleteProducto(item, i)">
+                  <ion-button color="primary" [disabled]="facturado || vencido" (click)="deleteProducto(item, i)">
                     <fa-icon [icon]="['fas','trash-alt']"></fa-icon>
                   </ion-button>
               </td>
@@ -116,13 +147,13 @@
   <ion-toolbar>
       <ion-row>
           <ion-col size="3">
-              <ion-button expand="full" color="success" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="facturar()">
+              <ion-button expand="full" color="success" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado || vencido" (click)="facturar()">
                   <fa-icon [icon]="['fas','cash-register']" style="margin-right: 1em;"></fa-icon>
                   Facturar
               </ion-button>
           </ion-col>
           <ion-col size="3">
-              <ion-button expand="full" color="tertiary" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="cotizar()">
+              <ion-button expand="full" color="tertiary" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado || vencido" (click)="cotizar()">
                   <fa-icon [icon]="['fas','envelope']" style="margin-right: 1em;"></fa-icon>
                   Reenviar Cotización
               </ion-button>

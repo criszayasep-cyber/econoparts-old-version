@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { FilterEntity } from 'src/app/entity/default/filter-entity';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,18 @@ export class ToolsService {
     private toastCtrl: ToastController
     ) { }
 
+  public paginar(filtros: FilterEntity, pag){
+    if(filtros.items!=pag.pageSize){
+      filtros.pageIndex = 0;
+      filtros.items = pag.pageSize;
+      filtros.offset = 0;
+    }else{
+      filtros.pageIndex = pag.pageIndex;
+      filtros.items = pag.pageSize;
+      filtros.offset = pag.pageIndex * pag.pageSize;
+    }
+  }
+  
   async showNotification($titulo, $mensaje, $boton){
     const alert = await this.alertController.create({
       header: $titulo,

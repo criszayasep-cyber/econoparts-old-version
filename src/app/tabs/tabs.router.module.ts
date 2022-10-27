@@ -53,6 +53,28 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'tab3/notas-credito-relacionadas',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/notas-credito-relacionadas/notas-credito-relacionadas.module').then(m => m.NotasCreditoRelacionadasPageModule),
+              canActivate: [AuthGuard] 
+          }
+        ]
+      },
+      {
+        path: 'tab3/facturas-pendientes-detalle',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/factura-pendiente-detalle/factura-pendiente-detalle.module').then(m => m.FacturaPendienteDetallePageModule),
+              canActivate: [AuthGuard] 
+          }
+        ]
+      },
+      {
         path: 'tab4',
         children: [
           {
@@ -81,6 +103,17 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../pages/cotizacion-detalle/cotizacion-detalle.module').then(m => m.CotizacionDetallePageModule),
+              canActivate: [AuthGuard] 
+          }
+        ]
+      },
+      {
+        path: 'tab4/detalle-historico',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/historico-detalle/historico-detalle.module').then(m => m.HistoricoDetallePageModule),
               canActivate: [AuthGuard] 
           }
         ]

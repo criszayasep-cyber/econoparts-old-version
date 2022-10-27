@@ -1,0 +1,202 @@
+<ion-header>
+  <ion-toolbar class="background-yellow" mode="md">
+    <ion-buttons slot="end">
+      <ion-button (click)="atras()" style="border:1px solid gray;background: black;color:white;text-transform: capitalize;">
+          <fa-icon [icon]="['fas','times-circle']" style="margin-right: 4px;"></fa-icon>
+          Cerrar
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Detalle de Pedido</ion-title>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="pedido"> <!-- layout="icon-start"-->
+      <fa-icon [icon]="['fas','shopping-cart']" style="font-size: 20px;"></fa-icon>
+      <ion-label>Pedido</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="factura" [disabled]="!facturado">
+      <fa-icon [icon]="['fas','receipt']" style="font-size: 20px;"></fa-icon>
+      <ion-label>Factura</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content class="padding">
+
+  <div [ngSwitch]="segment">
+    <p *ngIf="facturado" class="legend-information" style="color: green;">
+      <fa-icon [icon]="['fas','check-circle']" style="font-size: 20px;"></fa-icon> FACTURADO
+    </p>
+    <p *ngIf="!facturado" class="legend-information" style="color: orange;">
+      <fa-icon [icon]="['fas','user-clock']" style="font-size: 20px;"></fa-icon> PENDIENTE DE FACTURAR
+    </p>
+    <ion-card *ngSwitchCase="'pedido'">
+      <ion-card-content>
+        <table class="datos">
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">FECHA DE PEDIDO:</td>
+                <td>{{pedido.ped_fecha | date:'d/M/y'}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO. CLIENTE:</td>
+                <td>{{pedido.ped_cliente_codigo}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
+                <td>{{pedido.ped_cliente_nombre}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
+                <td>{{pedido.ped_cliente_comercial}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
+                <td>{{pedido.ped_cliente_direccion}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
+                <td>{{pedido.ped_cliente_correo}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
+                <td>{{pedido.ped_celular}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">MONTO:</td>
+                <td>{{pedido.ped_monto | number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">UNIDADES:</td>
+                <td>{{pedido.ped_cantidad}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CONDICION:</td>
+                <td>{{pedido.ped_tipo_pago}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">COMENTARIO:</td>
+                <td>{{pedido.ped_comentario}}</td>
+            </tr>
+        </table>
+        <br/>
+        <h2>Productos</h2>
+        <ion-progress-bar type="indeterminate" *ngIf="loading.detalle"></ion-progress-bar>
+        <table class="customers">
+            <tr>
+                <th>#</th>
+                <th>SKU</th>
+                <th>DESCRIPCION</th>
+                <th>PRECIO U.</th>
+                <th style="text-align: right;">CANTIDAD</th>
+                <th style="text-align: right;">SUB TOTAL</th>
+                <th style="text-align: right;">SUB TOTAL + IVA</th>
+                <th style="text-align: right;">CANTIDAD<br/>FACTURADA</th>
+            </tr>
+            <tr *ngFor="let item of pedido.vmo_pedido_detalle; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{item.pde_producto}}</td>
+                <td>{{item.pde_descripcion}}</td>
+                <td>{{item.pde_precio_unitario | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{item.pde_cantidad}}</td>
+                <td style="text-align: right;">{{item.pde_precio_unitario*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{(item.pde_precio_unitario*1.13)*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td style="text-align: right;">
+                  {{item.facturado}} 
+                  <fa-icon [icon]="['fas','check-circle']" *ngIf="item.facturado==item.pde_cantidad"></fa-icon>
+                  <fa-icon [icon]="['fas','exclamation-triangle']" *ngIf="item.facturado!=item.pde_cantidad"></fa-icon>
+                </td>
+            </tr>
+            <tr *ngIf="pedido.vmo_pedido_detalle?.length>0">
+                <th colspan="4" style="text-align: right;">TOTAL</th>
+                <th style="text-align: right;">{{totalUnidades()}}</th>
+                <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalUnidadesFacturadas()}}</th>
+            </tr>
+        </table>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-card *ngSwitchCase="'factura'">
+      <ion-card-content>
+        <table class="datos">
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">FECHA DE FACTURACION:</td>
+                <td>{{facturaEncabezado.fecha | date:'d/M/y'}} {{facturaEncabezado.hora | date:'h:mm a' }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO. CLIENTE:</td>
+                <td>{{facturaEncabezado.cliente_codigo}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CLIENTE:</td>
+                <td>{{facturaEncabezado.cliente_nombre}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO FACTURA:</td>
+                <td>{{facturaEncabezado.no_factura}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">MONTO FACTURA:</td>
+                <td>{{facturaEncabezado.monto | number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">MONTO:</td>
+                <td>{{totalMontoFacturado() | number: '1.2-2'}}</td>
+            </tr>
+        </table>
+
+        <table class="customers">
+          <tr>
+            <th>VENDEDOR</th>
+            <th>APROBACIÓN CREDITOS</th>
+            <th>FACTURADOR</th>
+          </tr>
+          <tr>
+            <td>{{facturaEncabezado.vendedor}}</td>
+            <td>{{facturaEncabezado.creditos}}</td>
+            <td>{{facturaEncabezado.facturador}}</td>
+          </tr>
+        </table>
+        <br/>
+        <br/>
+        <h2>Productos</h2>
+        <table class="customers">
+            <tr>
+                <th>#</th>
+                <th>SKU</th>
+                <th>DESCRIPCION</th>
+                <th>PRECIO U.</th>
+                <th style="text-align: right;">CANTIDAD</th>
+                <th style="text-align: right;">SUB TOTAL</th>
+                <th style="text-align: right;">SUB TOTAL + IVA</th>
+            </tr>
+            <tr *ngFor="let item of facturaDetalle; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{item.codigo}}</td>
+                <td>{{item.descripcion}}</td>
+                <td>{{item.precio | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{item.cantidad}}</td>
+                <td style="text-align: right;">{{item.monto | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{item.monto_iva | number: '1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="facturaDetalle?.length>0">
+                <th colspan="4" style="text-align: right;">TOTAL</th>
+                <th style="text-align: right;">{{totalUnidadesFacturadas()}}</th>
+                <th style="text-align: right;">{{totalMontoFacturado() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalMontoIVAFacturado() | number:'1.2-2'}}</th>
+            </tr>
+        </table>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+
+
+
+</ion-content>
+
+
+<!--<ion-footer>
+  <ion-toolbar>
+  </ion-toolbar>
+</ion-footer>-->

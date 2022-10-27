@@ -54,4 +54,46 @@ export class ClienteService {
     }
   }//fin getByID
 
+  
+  async sendEstadoCuenta(data){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}send-estado-cuenta`, data);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin sendEstadoCuenta
+
+  async getNotasCreidto(codigo: string){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}notas-credito-relacionadas/${codigo}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity(); 
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin getNotasCreidto
+
+  
+
+  async ReportarDocumento(entity){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}reportar-documento`, entity);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin ReportarDocumento
+
 }

@@ -7,6 +7,7 @@ import { KPIService } from '../services/kpi.service';
 import { RutaService } from '../services/ruta.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GestionDiariaEntity } from '../entity/gestion-diaria-entity';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-tab1',
@@ -82,6 +83,85 @@ export class Tab1Page implements OnInit{
 
   searchCliente(){
     this.navCtrl.navigateForward(['tabs/tab3']);
+  }
+
+  async addClienteNuevo(){
+    const alertMedio = await this.alertController.create({
+      header: 'Ingrese los datos del cliente',
+      subHeader: '',
+      cssClass: 'coupon-alert',
+      message: '',
+      backdropDismiss: false,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },{
+          text: 'OK',
+          role: 'ok'
+        }],
+        inputs: [
+          {
+            placeholder: 'Nombre',
+            type: 'text',
+            value: ''
+          },
+          {
+            placeholder: 'NIT',
+            type: 'text',
+            value: ''
+          },
+          {
+            placeholder: 'Correo',
+            type: 'text',
+            value: ''
+          },
+          {
+            placeholder: 'Teléfono',
+            type: 'text',
+            value: ''
+          }
+        ]
+      });
+
+    await alertMedio.present();
+    var { data, role } = await alertMedio.onDidDismiss();
+
+    if(role=="ok"){
+      var completo = true;
+      for(var i=0; i<3; i++){
+        if(data.values[i].replaceAll(' ','') == ''){
+          completo = false;
+        }
+      };
+
+      if(completo){
+        //Enviamos agregar una gestión
+          this.tools.presentLoading("Iniciando gestión...")
+          var dataPost = {
+            nombre: data.values[0],
+            nit: data.values[1],
+            correo: data.values[2],
+            telefono: data.values[3]
+          }
+          var response = await this.rutaService.iniciarGestionClienteNuevo(dataPost);
+          this.tools.destroyLoading();
+          if(response.ok){
+            var item = {
+              ruta: response.registros["ruta"],
+              cliente: response.registros["cliente"]
+            }
+            ConfiguracionService.setSelectedCliente(item, response.registros["pedido"]);
+            this.loadAll();
+            this.navCtrl.navigateForward(['tabs/tab2']);
+          }else{
+            this.tools.showNotification("Error", response.mensaje,"Ok");
+          }
+      }else{
+        this.tools.showNotification("Error", "Debe de completar todos los datos","Ok");
+      }
+
+    }
   }
 
   async opciones(ev, item:GestionDiariaEntity, indice){

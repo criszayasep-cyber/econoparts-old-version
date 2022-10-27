@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { Tab4Page } from './tab4.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    MatPaginatorModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     RouterModule.forChild(routes)
