@@ -1,0 +1,43 @@
+
+table.info tr td{
+    text-align: center;
+}
+table.info tr:first-child td{
+    font-weight: bold;
+}
+
+table.productosADD tbody tr td{
+  border-bottom: 1px solid lightgray;
+}
+
+.example-container {
+    height: 500px;
+    overflow: auto;
+  }
+  
+  .mat-mdc-table-sticky {
+    background: #59abfd;
+    opacity: 1;
+  }
+  
+  .example-sticky-toggle-group {
+    margin: 8px;
+  }
+  
+  .w-50{
+    max-width: 125px;
+  }
+  .mat-column-imagen {
+    padding: 0 8px;
+    text-align: center;
+  }
+  
+  .mat-mdc-header-cell, .mat-mdc-footer-cell, .mat-mdc-cell {
+    min-width: 80px;
+    box-sizing: border-box;
+  }
+  
+  .mat-mdc-header-row, .mat-mdc-footer-row, .mat-mdc-row {
+    min-width: 1920px; /* 24 columns, 80px each */
+  }
+  

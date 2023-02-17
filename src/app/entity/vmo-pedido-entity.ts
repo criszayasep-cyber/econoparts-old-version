@@ -29,5 +29,14 @@ export class VmoPedidoEntityEntity {
     ped_ruta: string;
     ped_dimension_id: number;
     ped_celular: string;
+    ped_ubicacion: string;
+    ped_ruta_txt: string;
+    ped_sucursal: string;
+    ped_sucursal_txt: string;
+    ped_complemento: number;
+    ped_comentario_cc: string;
+    ped_fecha_envio_nav: Date;
+    ped_requiere_aut_creditos: number;
+
     vmo_pedido_detalle: Array<VmoPedidoDetalleEntityEntity>;
 }

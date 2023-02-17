@@ -61,3 +61,88 @@ span{
     --width: 400px;
   }
 }
+
+.bg-transparent {
+  background: transparent;
+}
+
+.fake-select{
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  padding: 2px;
+  width: 100%;
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  margin-top: 0px;
+  padding-right: 28px;
+  word-break: break-all;
+}
+
+.fake-select::after{
+  content: '🔽';
+  position: absolute;
+  right: 14px;
+  margin-top: -2px;
+}
+
+.picker-opt{
+  font-size: 12px !important;  //change size depend your Requirement
+}
+
+
+
+
+
+/* Styles go here */
+
+
+.toggle-text > .track {
+
+  width: auto;
+  padding-left: 25px;
+  padding-right: 25px;
+
+}
+
+.toggle-text .handle {
+  left: 7px;
+}
+
+.toggle-text .handle-text {
+  font-size: 24px;
+  color: white;
+
+  position: absolute;
+  top: -4px;
+  
+}
+
+.toggle-text .handle-text-false {
+  left: 36px;
+}
+
+.toggle-text input:checked + .track .handle {
+  -webkit-transform: none;
+  -moz-transform: none;
+  transform: none;
+  left: calc(100% - 34px);
+  
+/*  -webkit-transform: translate3d(0, 0,0);*/
+}
+.track-text {
+  line-height: 26px;
+  color: white;
+  font-size: 24px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+
+ion-picker.prueba .picker-columns .picker-opts{
+  --background: yellow;
+  font-weight: bold;
+  color: blue !important;
+}

@@ -21,38 +21,34 @@
 
 <ion-content class="padding">
     <div style="padding: 10px;">
-        <ion-card>
+        <ion-card style="margin-bottom: 0px;margin-top:0px;">
           <ion-card-content>
             <table class="datos">
                 <tr>
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
                     <td>{{pedido.ped_cliente_nombre}}</td>
-                </tr>
-                <tr>
+                    
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
                     <td>{{pedido.ped_cliente_comercial}}</td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
-                    <td>{{pedido.ped_cliente_direccion}}</td>
+                    <td colspan="5">{{pedido.ped_cliente_direccion}}</td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
                     <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_cliente_correo"/></td>
-                </tr>
-                <tr>
+                
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
                     <td><input type="email" style="width: 100%" [(ngModel)]="pedido.ped_celular"/></td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">LIMITE:</td>
                     <td>{{cliente.limite | number: '1.2-2'}}</td> 
-                </tr>
-                <tr>
+                
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">SALDO:</td>
                     <td>{{cliente.saldo | number: '1.2-2'}}</td>
-                </tr>
-                <tr>
+                
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">DISPONIBLE:</td>
                     <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
                 </tr>
@@ -61,11 +57,11 @@
         </ion-card>
 
         <ion-row>
-            <ion-col size="4" style="padding-top: 1px;">
-                <ion-list>
+            <ion-col size="2">
+                <ion-list style="background: none;">
                     <ion-radio-group  [(ngModel)]="pedido.ped_tipo_pago">
                         <ion-list-header>
-                          <ion-label>CONDICIÓN</ion-label>
+                          <ion-label>Condición</ion-label>
                         </ion-list-header>
                     
                       <ion-item>
@@ -80,14 +76,66 @@
                     </ion-radio-group>
                   </ion-list>
             </ion-col>
-            <ion-col size="8">
-                <ion-list-header>
-                  <ion-label>COMENTARIO</ion-label>
-                </ion-list-header>
-                <textarea [(ngModel)]="pedido.ped_comentario" [disabled]="facturado" rows="5" style="width: 100%;border:1px solid lightgray"></textarea>
+            <ion-col size="2">
+                <ion-list style="background: none;">
+                    <ion-radio-group  [(ngModel)]="pedido.ped_ubicacion">
+                        <ion-list-header>
+                          <ion-label>Facturación</ion-label>
+                        </ion-list-header>
+                    
+                      <ion-item>
+                        <ion-label>CD</ion-label>
+                        <ion-radio slot="start" value="CD" [disabled]="facturado"></ion-radio>
+                      </ion-item>
+                  
+                      <ion-item>
+                        <ion-label>Sucursal</ion-label>
+                        <ion-radio slot="start" value="SUCURSAL" [disabled]="facturado"></ion-radio>
+                      </ion-item>
+                    </ion-radio-group>
+                  </ion-list>
+            </ion-col>
+            <ion-col size="3">
+                <ion-list class="bg-transparent">
+                    <ion-item  color="none" lines="none" style="margin-top: 20px;">
+                        <ion-label>Complemento</ion-label>
+                        <ion-toggle [checked]="pedido.ped_complemento==1" (ionChange)="pedido.ped_complemento=$event.detail.checked?1:0"></ion-toggle>
+                    </ion-item>
+                    <ion-list-header>
+                      <ion-label style="margin-top: 0px;">{{pedido.ped_ubicacion=='CD'?'Ruta de entrega':'Sucursal'}}</ion-label>
+                    </ion-list-header>
+                    <ion-item color="none" lines="none" *ngIf="pedido.ped_ubicacion=='CD'">
+                      <p class="fake-select" (click)="openPickerRutas()">{{pedido.ped_ruta_txt}}</p>
+                    </ion-item>
+                    <ion-item color="none" lines="none" *ngIf="pedido.ped_ubicacion=='SUCURSAL'">
+                      <p class="fake-select" (click)="openPickerSucursales()">{{pedido.ped_sucursal_txt}}</p>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+            <ion-col size="5">
+                <ion-segment [(ngModel)]="segment" scrollable>
+                    <ion-segment-button value="precios">
+                        Precios/Promociones
+                    </ion-segment-button>
+                    <ion-segment-button value="creditos">
+                        Créditos y Cobros
+                    </ion-segment-button>
+                </ion-segment>
+                <div [ngSwitch]="segment">
+                  <ion-card *ngSwitchCase="'precios'" style="margin: 0px;">
+                    <ion-card-content>
+                        <textarea [(ngModel)]="pedido.ped_comentario" [disabled]="facturado" rows="5" style="width: 100%;border:1px solid lightgray"></textarea>
+                    </ion-card-content>
+                  </ion-card>
+                  <ion-card *ngSwitchCase="'creditos'" style="margin: 0px;">
+                    <ion-card-content>
+                        <textarea [(ngModel)]="pedido.ped_comentario_cc" [disabled]="facturado || pedido.ped_tipo_pago=='CONTADO' " rows="5" style="width: 100%;border:1px solid lightgray"></textarea>
+                    </ion-card-content>
+                  </ion-card>
+                </div>
             </ion-col>
         </ion-row>
-        <h2>Productos</h2>
+        <!--<h2>Productos</h2>-->
         <ion-progress-bar type="indeterminate" *ngIf="loading.detalle"></ion-progress-bar>
         <table class="customers">
             <tr>
@@ -118,7 +166,7 @@
             </tr>
             <tr *ngIf="pedido.vmo_pedido_detalle?.length>0">
                 <th colspan="5" style="text-align: right;">TOTAL</th>
-                <th style="text-align: right;">{{totalUnidades() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalUnidades()}}</th>
                 <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
                 <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>
                 <th></th>
@@ -126,6 +174,34 @@
         </table>
 
     </div>
+
+    
+    <!--<ion-row>
+        <ion-col size="3">
+            <ion-button expand="full" color="primary" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="guardar()">
+                <fa-icon [icon]="['fas','save']" style="margin-right: 1em;"></fa-icon>
+                Guardar
+            </ion-button>
+        </ion-col>
+        <ion-col size="3">
+            <ion-button expand="full" color="success" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="facturar()">
+                <fa-icon [icon]="['fas','cash-register']" style="margin-right: 1em;"></fa-icon>
+                Facturar
+            </ion-button>
+        </ion-col>
+        <ion-col size="3">
+            <ion-button expand="full" color="tertiary" [disabled]="pedido.vmo_pedido_detalle?.length==0 || facturado" (click)="cotizar()">
+                <fa-icon [icon]="['fas','envelope']" style="margin-right: 1em;"></fa-icon>
+                Crear Cotización
+            </ion-button>
+        </ion-col>
+        <ion-col size="3">
+            <ion-button expand="full" color="secondary" (click)="atras()" >
+                <fa-icon [icon]="['fas','times-circle']" style="margin-right: 1em;"></fa-icon>
+                Cerrar
+            </ion-button>
+        </ion-col>
+    </ion-row>-->
 
 </ion-content>
 

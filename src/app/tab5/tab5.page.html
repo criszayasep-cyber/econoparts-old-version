@@ -1,0 +1,109 @@
+
+<app-encabezado [titulo]="'| Promociones'"></app-encabezado>
+<ion-segment [(ngModel)]="segment" [scrollable]="true">
+    <ion-segment-button style="min-width: auto;" value={{i}} *ngFor="let item of promocionesCustom; let i = index">
+        {{item.Nombre}}
+    </ion-segment-button>
+    <ion-segment-button style="min-width: auto;" value={{promocionesCodigos[i]}} *ngFor="let item of promociones; let i = index">
+        {{item}}
+    </ion-segment-button>
+</ion-segment>
+<ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+
+<ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingText="Deslizar para actualizar" refreshingSpinner="circles" refreshingText="Actualizando...">
+      </ion-refresher-content>
+    </ion-refresher>
+    
+    <div [ngSwitch]="segment">
+        <div *ngFor="let item of promocionesCustom; let i = index">
+            <ion-card *ngSwitchCase=i style="margin: 0px;overflow-x: hidden;" >
+                <ion-card-content>
+                    Vigencia: del <b>{{item.Inicio | date:'d LLL yyyy'}}</b> al <b>{{item.Fin | date:'d LLL yyyy'}}</b>
+                    <br/><br/><br/>
+                    <table style="width: 100%;" class="productosADD">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Código</th>
+                                <th style="text-align: left;">Descripción</th>
+                                <th>Existencia</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of item.Productos">
+                                <td>{{p.Codigo}}</td>
+                                <td>{{p.Descripcion}}</td>
+                                <td style="text-align: center;">{{p.Existencia}}</td>
+                                <td>
+                                    <ion-button color="primary" (click)="agregarProducto(p)" *ngIf="configuracion.getEstatusGestion() && p.Existencia>0">
+                                      <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+                                    </ion-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ion-card-content>
+            </ion-card>
+        </div>
+        <div *ngFor="let item of promocionesCodigos">
+            <ion-card *ngSwitchCase=item style="margin: 0px;overflow-x: hidden;" >
+              <ion-card-content>
+                <table class="info" style="width: 100%">
+                    <tr>
+                        <td></td>
+                        <td>Código de promoción</td>
+                        <td>Total de productos</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Filter</mat-label>
+                                <input autocomplete="off" [(ngModel)]="search[item]" matInput (keyup)="applyFilter(item,$event)" placeholder="Búscar por código o descripción" #input>
+                                <button *ngIf="search[item]" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter(item)">
+                                  <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </td>
+                        <td>{{item}}</td>
+                        <td>{{dataSource[item].length}}</td>
+                    </tr>
+                </table>
+
+                <section class="example-container mat-elevation-z8">
+                    <mat-table [dataSource]="dataSource[item]">
+                    <ng-container matColumnDef="sku" [sticky]="true">
+                        <mat-header-cell [ngClass]="'w-50'" *matHeaderCellDef> Código </mat-header-cell>
+                        <mat-cell [ngClass]="'w-50'" *matCellDef="let element"> <span (click)="buscarProducto(element.sku)" style="color: blue;text-decoration: underline;">{{element.sku}}</span> </mat-cell>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="descripcion" >
+                        <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.descripcion}} </mat-cell>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="imagen" >
+                        <mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> <img [src]="buildImg(element.imagen)" style="width: 100px;"/> </mat-cell>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="{{c.minimo}}" *ngFor="let c of listaPrecios[item]">
+                        <mat-header-cell *matHeaderCellDef> 
+                            {{c.minimo}} <br/>
+                            {{c.descuento}}%<br/>
+                            {{c.lista}}
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> ${{buscarPrecio(element.sku, item, c.lista) | number:'1.2-2'}} </mat-cell>
+                    </ng-container>
+                
+                    <mat-header-row *matHeaderRowDef="displayedColumns[item]; sticky: true"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns[item];"></mat-row>
+                
+                    </mat-table>
+                </section>
+              </ion-card-content>
+            </ion-card>
+        </div>
+    </div>
+</ion-content>

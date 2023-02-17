@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Tab3Page } from './tab3.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     CommonModule,
     FormsModule,
     MatPaginatorModule,
+    EncabezadoModule,
     FontAwesomeModule,
     RouterModule.forChild([{ path: '', component: Tab3Page }])
   ],

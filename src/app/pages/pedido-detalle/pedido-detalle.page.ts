@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController, ToastController } from '@ionic/angular';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { NavController, AlertController, ToastController, PickerController } from '@ionic/angular';
 import { ActivatedRoute, NavigationExtras } from '@angular/router';
 import { ConfiguracionService } from '../../services/default/configuracion.service';
 import { VmoPedidoEntityEntity } from '../../entity/vmo-pedido-entity';
@@ -8,6 +8,7 @@ import { ToolsService } from '../../services/default/tools.service';
 import { VmoPedidoDetalleEntityEntity } from '../../entity/vmo-pedido-detalle-entity';
 import { ClienteService } from '../../services/cliente.service';
 import { ClienteEntity } from '../../entity/cliente-entity';
+import { NavService } from 'src/app/services/nav.service';
 
 @Component({
   selector: 'app-pedido-detalle',
@@ -23,6 +24,9 @@ export class PedidoDetallePage implements OnInit {
   }
   usuario: any;
   historial= null;
+  sucursales: any[];
+  rutas: any[];
+  segment = "precios";
 
   pedido: VmoPedidoEntityEntity;
   cliente: ClienteEntity;
@@ -34,6 +38,9 @@ export class PedidoDetallePage implements OnInit {
     private pedidoService: PedidoService,
     private tools: ToolsService,
     private clienteService: ClienteService,
+    private pickerCtrl: PickerController,
+    private navService: NavService,
+    private ref: ChangeDetectorRef,
     private toastCtrl: ToastController) { 
       this.cliente = new ClienteEntity();
   }
@@ -45,6 +52,9 @@ export class PedidoDetallePage implements OnInit {
       this.pedido = JSON.parse(params["pedido"]);
       this.loadDetalle();
       this.loadInfoCliente();
+
+      this.loadRutas();
+      this.loadSucursales();
     });
   }
   
@@ -230,7 +240,19 @@ export class PedidoDetallePage implements OnInit {
   }
   
   async facturar(){
-    var r = await this.tools.showConfirm("¿Realmente desea facturar este pedido?", "", "");
+
+    var rutSuc = "";
+    if(this.pedido.ped_ubicacion=="CD"){
+      rutSuc = `<span class="c-no-margin">Ruta:</span> ${this.pedido.ped_ruta_txt}<br/>`;
+    }else{
+      rutSuc = `<span class="c-no-margin">Sucursal:</span> ${this.pedido.ped_sucursal_txt}<br/>`;
+    }
+
+    var html = `<span class="c-no-margin">Complemento:</span> ${this.pedido.ped_complemento?'Si':'No'}<br/>
+                <span class="c-no-margin">Condición:</span> ${this.pedido.ped_tipo_pago}<br/>
+                <span class="c-no-margin">Facturación:</span> ${this.pedido.ped_ubicacion}<br/>
+                ${rutSuc}`;
+    var r = await this.tools.showConfirm("¿Realmente desea facturar este pedido?", "", html);
     if(r=="confirm"){
       this.tools.presentLoading("Facturando...")
       var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
@@ -352,5 +374,131 @@ export class PedidoDetallePage implements OnInit {
       return 0;
     }
   }
+
   
+
+  async loadRutas(){
+    var response = await this.navService.getRutas();
+    if(response){
+      if(response.ok){
+        this.rutas = response.registros;
+      }else{
+        this.tools.showNotification("Error", response.mensaje,"Ok");
+      }
+    }
+  }
+
+  async loadSucursales(){
+    var response = await this.navService.getSucursales();
+    if(response){
+      if(response.ok){
+        this.sucursales = response.registros;
+      }else{
+        this.tools.showNotification("Error", response.mensaje,"Ok");
+      }
+    }
+  }
+
+  async openPickerRutas(){
+    
+    var opciones = [];
+
+    this.rutas.forEach(s => {
+      opciones.push({
+        text: s.Codigo+"-"+s.Nombre+" ("+s.DeliveryCodigo+": "+s.DeliveryNombre+")",
+        value: s.Codigo
+      })
+    });
+
+    var seleccion = 0;
+    if(this.pedido.ped_ruta.length>0){
+      seleccion = this.rutas.findIndex(s => s.Codigo==this.pedido.ped_ruta)
+    }
+
+    const picker = await this.pickerCtrl.create({
+      columns: [
+        {
+          name: 'rutas',
+          selectedIndex: seleccion,
+          options: opciones,
+        },
+      ],
+      cssClass: 'prueba',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'OK',
+          handler: (value) => {
+            //window.alert(`You selected: ${value.languages.value}`);
+            var obj = this.obtenerKeyValue(this.rutas, 'Codigo', value.rutas.value);
+            this.pedido.ped_ruta = value.rutas.value;
+            this.pedido.ped_ruta_txt = obj.Codigo+" - "+obj.Nombre;
+
+            this.ref.detectChanges();
+          },
+        },
+      ],
+    });
+
+    await picker.present();
+  }
+
+
+
+
+  async openPickerSucursales(){
+    var opciones = [];
+
+    this.sucursales.forEach(s => {
+      opciones.push({
+        text: s.Nombre,
+        value: s.Codigo
+      })
+    });
+
+    var seleccion = 0;
+    if(this.pedido.ped_sucursal.length>0 && this.pedido.ped_sucursal!='Seleccionar'){
+      seleccion = this.sucursales.findIndex(s => s.Codigo==this.pedido.ped_sucursal)
+    }
+
+    const picker = await this.pickerCtrl.create({
+      columns: [
+        {
+          name: 'sucursales',
+          selectedIndex: seleccion,
+          options: opciones,
+        },
+      ],
+      cssClass: 'prueba',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'OK',
+          handler: (value) => {
+            //window.alert(`You selected: ${value.languages.value}`);
+            this.pedido.ped_sucursal = value.sucursales.value;
+            this.pedido.ped_sucursal_txt = value.sucursales.text;
+            this.ref.detectChanges();
+          },
+        },
+      ],
+    });
+
+    await picker.present();
+  }
+
+
+  obtenerKeyValue(array, buscar, valor){
+    return array.find(s => s[buscar]==valor);
+  }
+  
+  hola(x){
+    console.log(x.detail.checked)
+  }
 }

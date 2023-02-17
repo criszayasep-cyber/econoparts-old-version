@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule,LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -28,6 +28,12 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { ConfiguracionService } from './services/default/configuracion.service';
 import { environment } from 'src/environments/environment';
 import {MatPaginatorModule} from '@angular/material/paginator';
+
+import localeEs from '@angular/common/locales/es';
+import { DatePipe, registerLocaleData } from '@angular/common';
+
+
+registerLocaleData(localeEs, 'es');
 
 @NgModule({
   declarations: [AppComponent],
@@ -69,7 +75,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     BarcodeScanner,
-    Keyboard
+    Keyboard,
+    {provide: LOCALE_ID, useValue: 'es'},
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

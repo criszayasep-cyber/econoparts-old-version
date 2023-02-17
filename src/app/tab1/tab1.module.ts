@@ -7,12 +7,14 @@ import { Tab1Page } from './tab1.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LazyLoadImageModule,intersectionObserverPreset } from 'ng-lazyload-image';
 import { OrdenamientoComponent } from '../componentes/ordenamiento/ordenamiento.component';
+import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
+    EncabezadoModule,
     FontAwesomeModule,
     RouterModule.forChild([{ path: '', component: Tab1Page }]),
     LazyLoadImageModule.forRoot({

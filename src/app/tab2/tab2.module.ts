@@ -7,6 +7,7 @@ import { Tab2Page } from './tab2.page';
 import { LazyLoadImageModule,intersectionObserverPreset } from 'ng-lazyload-image';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     CommonModule,
     FormsModule,
     FontAwesomeModule,
+    EncabezadoModule,
     MatPaginatorModule,
     RouterModule.forChild([{ path: '', component: Tab2Page }]),
     LazyLoadImageModule.forRoot({

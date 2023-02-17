@@ -36,6 +36,10 @@ const routes: Routes = [
     path: 'factura-pendiente-detalle',
     loadChildren: () => import('./pages/factura-pendiente-detalle/factura-pendiente-detalle.module').then( m => m.FacturaPendienteDetallePageModule)
   },
+  {
+    path: 'tab5',
+    loadChildren: () => import('./tab5/tab5.module').then( m => m.Tab5PageModule)
+  },
 
 
 

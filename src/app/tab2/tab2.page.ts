@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConfiguracionService } from '../services/default/configuracion.service';
@@ -16,6 +16,7 @@ import { ProductoDetallePage } from '../pages/producto-detalle/producto-detalle.
 })
 export class Tab2Page  implements OnInit{
 
+  titulo = "| Catálogo";
   productos = [];
   productosEquivalentes = [];
   total = 0;
@@ -36,7 +37,7 @@ export class Tab2Page  implements OnInit{
   cargado = window.localStorage['contador']==1?true:false;
   someDefaultImage = 'assets/default-img.jpg';
   categorias: any = [];
-  constructor(private route: Router,
+  constructor(private router: Router,
     private sanitizer: DomSanitizer,
     private alertController: AlertController, 
     public configuracion: ConfiguracionService,
@@ -45,6 +46,7 @@ export class Tab2Page  implements OnInit{
     private pedidoService: PedidoService,
     public navCtrl: NavController,
     private modalController: ModalController,
+    private activeRoute: ActivatedRoute,
     private tools: ToolsService) {}
   
   ngOnInit(){
@@ -55,6 +57,21 @@ export class Tab2Page  implements OnInit{
     }*/
     
     this.filtros = new FilterEntity(ConfiguracionService.paginacion);
+    
+  }
+
+  
+  async ionViewWillEnter() {
+
+
+    await this.activeRoute.queryParams.subscribe( params => {
+      if(params["basico"]!=undefined){
+        var cod = params["basico"];
+        this.router.navigate([], {queryParams: null});
+        this.filtros.numero = cod;
+        this.buscar(true);
+      }
+    });
     
   }
 

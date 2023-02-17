@@ -17,7 +17,7 @@ import { element } from 'protractor';
 export class Tab1Page implements OnInit{
 
   
-
+  titulo = "Gestión Comercial";
   fechasDisponibles: Array<Date> = window.localStorage["fechasDisponibles"]?JSON.parse(window.localStorage["fechasDisponibles"]):[];
   hoy = window.localStorage["hoy"]?window.localStorage["hoy"]:new Date();
   kpiAcumulado: any;

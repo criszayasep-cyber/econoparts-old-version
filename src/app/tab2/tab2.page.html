@@ -1,18 +1,5 @@
-<ion-header>
-  <ion-toolbar class="background-yellow">
-      <ion-row style="align-items: center;">
-          <ion-col size="7" style="vertical-align: middle;padding-left: 1em;">
-              <img src="/assets/logoEP-reducido-small.png" alt="" style="display: inline-block;width: 100px;" />
-              <h1 style="display: inline-block;padding-left: 30px;"> | Catálogo</h1>
-          </ion-col>
-          <ion-col size="5" style="text-align: right;padding-right: 1em;">
-              <ion-menu-toggle>
-                  <fa-icon [icon]="['fas','bars']" style="font-size:18px;margin-left: 15px;"></fa-icon>
-              </ion-menu-toggle>
-          </ion-col>
-      </ion-row>
-  </ion-toolbar>
-</ion-header>
+
+<app-encabezado [titulo]="titulo"></app-encabezado>
 
   
   <ion-content>
@@ -36,85 +23,85 @@
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Grupo</ion-label>
-                      <ion-input autofocus="true" type="text" name="grupo" [(ngModel)]="filtros.grupo" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input  [clearInput]="true" autofocus="true" type="text" name="grupo" [(ngModel)]="filtros.grupo" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
-                      <ion-label position="floating">Sub Grupo</ion-label>
-                      <ion-input type="text" name="subGrupo" [(ngModel)]="filtros.subGrupo" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-label  position="floating">Sub Grupo</ion-label>
+                      <ion-input  [clearInput]="true" type="text" name="subGrupo" [(ngModel)]="filtros.subGrupo" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">No. Básico</ion-label>
-                      <ion-input type="text" name="numero" [(ngModel)]="filtros.numero" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="numero" [(ngModel)]="filtros.numero" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Familia</ion-label>
-                      <ion-input type="text" name="familia" [(ngModel)]="filtros.familia" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="familia" [(ngModel)]="filtros.familia" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Descripcion</ion-label>
-                      <ion-input type="text" name="descripcion" [(ngModel)]="filtros.descripcion" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="descripcion" [(ngModel)]="filtros.descripcion" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Marca</ion-label>
-                      <ion-input type="text" name="marca" [(ngModel)]="filtros.marca" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="marca" [(ngModel)]="filtros.marca" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Modelo</ion-label>
-                      <ion-input type="text" name="modelo" [(ngModel)]="filtros.modelo" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="modelo" [(ngModel)]="filtros.modelo" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Fabricante</ion-label>
-                      <ion-input type="text" name="fabricante" [(ngModel)]="filtros.fabricante" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="fabricante" [(ngModel)]="filtros.fabricante" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Aplicación</ion-label>
-                      <ion-input type="text" name="aplicacion" [(ngModel)]="filtros.aplicacion" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="aplicacion" [(ngModel)]="filtros.aplicacion" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3" *ngIf="verMas">
                   <ion-item>
                       <ion-label position="floating">Chasis</ion-label>
-                      <ion-input type="text" name="chasis" [(ngModel)]="filtros.chasis" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="chasis" [(ngModel)]="filtros.chasis" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3" *ngIf="verMas">
                   <ion-item>
                       <ion-label position="floating">Año</ion-label>
-                      <ion-input type="number" name="anio" [(ngModel)]="filtros.anio"></ion-input>
+                      <ion-input [clearInput]="true" type="number" name="anio" [(ngModel)]="filtros.anio"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3" *ngIf="verMas">
                   <ion-item>
                       <ion-label position="floating">No. Motor</ion-label>
-                      <ion-input type="text" name="motor" [(ngModel)]="filtros.motor"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="motor" [(ngModel)]="filtros.motor"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3" *ngIf="verMas">
                   <ion-item>
                       <ion-label position="floating">Tracción</ion-label>
-                      <ion-input type="text" name="traccion" [(ngModel)]="filtros.traccion"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="traccion" [(ngModel)]="filtros.traccion"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3" *ngIf="verMas">
                   <ion-item>
                       <ion-label position="floating">Versión</ion-label>
-                      <ion-input type="text" name="version" [(ngModel)]="filtros.version"></ion-input>
+                      <ion-input [clearInput]="true" type="text" name="version" [(ngModel)]="filtros.version"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="1" style="align-self: center;font-size: 50px;text-align:center;">

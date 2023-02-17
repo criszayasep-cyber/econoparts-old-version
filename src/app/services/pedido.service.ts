@@ -22,7 +22,20 @@ export class PedidoService {
       
       return error;
     }
-  }//fin getAll
+  }//fin addProducto
+
+  async addProductoPromocion(data,pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}add-producto-promocion?pedido=${pedido}`, data);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin addProductoPromocion
 
   
   async removeProducto(pedido, producto){
