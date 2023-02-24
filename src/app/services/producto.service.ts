@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ResultadoHttpEntity } from '../entity/default/resultado-http-entity';
 import { HttpService } from './default/http.service';
+import { Network } from '@capacitor/network';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +13,23 @@ export class ProductoService {
   constructor(private httpService: HttpService) { }
 
   async filter(entity){
-    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}filtrar`, entity);
-    if(httpResponse.ok){
-      return httpResponse.data;
+    const status = await Network.getStatus();
+    if(status.connected){
+      let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}filtrar`, entity);
+      if(httpResponse.ok){
+        return httpResponse.data;
+      }else{
+        let error  = new  ResultadoHttpEntity();
+        error.ok = false;
+        error.mensaje = httpResponse.msj;
+        
+        return error;
+      }
     }else{
+      
       let error  = new  ResultadoHttpEntity();
       error.ok = false;
-      error.mensaje = httpResponse.msj;
+      error.mensaje = "No esta conectado a internet";
       
       return error;
     }

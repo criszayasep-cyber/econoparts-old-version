@@ -8,6 +8,7 @@ import { RutaService } from '../services/ruta.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GestionDiariaEntity } from '../entity/gestion-diaria-entity';
 import { element } from 'protractor';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-tab1',
@@ -46,30 +47,40 @@ export class Tab1Page implements OnInit{
     this.loadAll();
   }
 
-  loadAll(){
-    this.loadClientes();
-    this.loadKPI();
-    this.loadGestionActiva();
+  async loadAll(){
+    const status = await Network.getStatus();
+    if(status.connected){
+      this.loadClientes();
+      this.loadKPI();
+      this.loadGestionActiva();
+    }else{
+      this.tools.showNotification("Error", "No esta conectado a internet","Ok");
+    }
   }
 
   
   async ionViewWillEnter() {
 
-    let necesarioActualizar = false;
+    const status = await Network.getStatus();
+      if(status.connected){
+        let necesarioActualizar = false;
 
-    await this.activeRoute.queryParams.subscribe( params => {
-      if(params["actualizarLista"]!=undefined){
-        necesarioActualizar = true;
+        await this.activeRoute.queryParams.subscribe( params => {
+          if(params["actualizarLista"]!=undefined){
+            necesarioActualizar = true;
+          }
+        });
+        
+        if(necesarioActualizar || ConfiguracionService.actualizarTab1){
+          this.loadAll();
+          
+          ConfiguracionService.actualizarTab1 = false;
+          window.localStorage["actualizarTab1"] = JSON.stringify(false);
+          this.router.navigate([], {queryParams: null});
+        }
+      }else{
+        this.tools.showNotification("Error", "No esta conectado a internet","Ok");
       }
-    });
-    
-    if(necesarioActualizar || ConfiguracionService.actualizarTab1){
-      this.loadAll();
-      
-      ConfiguracionService.actualizarTab1 = false;
-      window.localStorage["actualizarTab1"] = JSON.stringify(false);
-      this.router.navigate([], {queryParams: null});
-    }
   }
   
   

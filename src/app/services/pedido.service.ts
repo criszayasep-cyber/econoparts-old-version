@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './default/http.service';
 import { ResultadoHttpEntity } from '../entity/default/resultado-http-entity';
+import { Network } from '@capacitor/network';
 
 @Injectable({
   providedIn: 'root'
@@ -53,13 +54,23 @@ export class PedidoService {
 
   
   async filter(data){
-    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}filtrar`, data);
-    if(httpResponse.ok){
-      return httpResponse.data;
+    const status = await Network.getStatus();
+    if(status.connected){
+      let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}filtrar`, data);
+      if(httpResponse.ok){
+        return httpResponse.data;
+      }else{
+        let error  = new  ResultadoHttpEntity();
+        error.ok = false;
+        error.mensaje = httpResponse.msj;
+        
+        return error;
+      }
     }else{
+      
       let error  = new  ResultadoHttpEntity();
       error.ok = false;
-      error.mensaje = httpResponse.msj;
+      error.mensaje = "No esta conectado a internet";
       
       return error;
     }
@@ -123,13 +134,25 @@ export class PedidoService {
 
   
   async facturar(pedido, gestion){
-    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}facturar?gestion=${gestion}`, pedido);
-    if(httpResponse.ok){
-      return httpResponse.data;
+    
+    const status = await Network.getStatus();
+    if(status.connected){
+
+      let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}facturar?gestion=${gestion}`, pedido);
+      if(httpResponse.ok){
+        return httpResponse.data;
+      }else{
+        let error  = new  ResultadoHttpEntity();
+        error.ok = false;
+        error.mensaje = httpResponse.msj;
+        
+        return error;
+      }
     }else{
+      
       let error  = new  ResultadoHttpEntity();
       error.ok = false;
-      error.mensaje = httpResponse.msj;
+      error.mensaje = "No esta conectado a internet";
       
       return error;
     }
