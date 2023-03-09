@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './default/http.service';
 import { ResultadoHttpEntity } from '../entity/default/resultado-http-entity';
-import { Network } from '@capacitor/network';
 
 @Injectable({
   providedIn: 'root'
@@ -54,23 +53,13 @@ export class PedidoService {
 
   
   async filter(data){
-    const status = await Network.getStatus();
-    if(status.connected){
-      let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}filtrar`, data);
-      if(httpResponse.ok){
-        return httpResponse.data;
-      }else{
-        let error  = new  ResultadoHttpEntity();
-        error.ok = false;
-        error.mensaje = httpResponse.msj;
-        
-        return error;
-      }
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}filtrar`, data);
+    if(httpResponse.ok){
+      return httpResponse.data;
     }else{
-      
       let error  = new  ResultadoHttpEntity();
       error.ok = false;
-      error.mensaje = "No esta conectado a internet";
+      error.mensaje = httpResponse.msj;
       
       return error;
     }
@@ -134,25 +123,13 @@ export class PedidoService {
 
   
   async facturar(pedido, gestion){
-    
-    const status = await Network.getStatus();
-    if(status.connected){
-
-      let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}facturar?gestion=${gestion}`, pedido);
-      if(httpResponse.ok){
-        return httpResponse.data;
-      }else{
-        let error  = new  ResultadoHttpEntity();
-        error.ok = false;
-        error.mensaje = httpResponse.msj;
-        
-        return error;
-      }
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}facturar?gestion=${gestion}`, pedido);
+    if(httpResponse.ok){
+      return httpResponse.data;
     }else{
-      
       let error  = new  ResultadoHttpEntity();
       error.ok = false;
-      error.mensaje = "No esta conectado a internet";
+      error.mensaje = httpResponse.msj;
       
       return error;
     }

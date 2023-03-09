@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './default/http.service';
 import { ResultadoHttpEntity } from '../entity/default/resultado-http-entity';
-import { Network } from '@capacitor/network';
 
 @Injectable({
   providedIn: 'root'
@@ -80,23 +79,13 @@ export class RutaService {
   }//fin noVenta
   
   async iniciarGestion(id){
-    const status = await Network.getStatus();
-    if(status.connected){
-      let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}iniciar-gestion/${id}`, null);
-      if(httpResponse.ok){
-        return httpResponse.data;
-      }else{
-        let error  = new  ResultadoHttpEntity();
-        error.ok = false;
-        error.mensaje = httpResponse.msj;
-        
-        return error;
-      }
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}iniciar-gestion/${id}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
     }else{
-      
       let error  = new  ResultadoHttpEntity();
       error.ok = false;
-      error.mensaje = "No esta conectado a internet";
+      error.mensaje = httpResponse.msj;
       
       return error;
     }
