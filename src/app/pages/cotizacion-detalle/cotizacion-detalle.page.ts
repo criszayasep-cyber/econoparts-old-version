@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController, ToastController } from '@ionic/angular';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { NavController, AlertController, ToastController, PickerController } from '@ionic/angular';
 import { ActivatedRoute, NavigationExtras } from '@angular/router';
 import { ConfiguracionService } from '../../services/default/configuracion.service';
 import { VmoPedidoEntityEntity } from '../../entity/vmo-pedido-entity';
@@ -8,6 +8,7 @@ import { ToolsService } from '../../services/default/tools.service';
 import { VmoPedidoDetalleEntityEntity } from '../../entity/vmo-pedido-detalle-entity';
 import { ClienteService } from '../../services/cliente.service';
 import { ClienteEntity } from '../../entity/cliente-entity';
+import { NavService } from 'src/app/services/nav.service';
 
 @Component({
   selector: 'app-cotizacion-detalle',
@@ -25,6 +26,9 @@ export class CotizacionDetallePage implements OnInit {
   }
   usuario: any;
   historial= null;
+  sucursales: any[];
+  rutas: any[];
+  segment = "precios";
 
   pedido: VmoPedidoEntityEntity;
   cliente: ClienteEntity;
@@ -33,6 +37,9 @@ export class CotizacionDetallePage implements OnInit {
     private alertController: AlertController,
     private activeRoute: ActivatedRoute, 
     public configuracion: ConfiguracionService,
+    private pickerCtrl: PickerController,
+    private navService: NavService,
+    private ref: ChangeDetectorRef,
     private pedidoService: PedidoService,
     private tools: ToolsService,
     private clienteService: ClienteService,
@@ -45,6 +52,9 @@ export class CotizacionDetallePage implements OnInit {
       this.pedido = JSON.parse(params["pedido"]);
       this.loadDetalle();
       this.loadInfoCliente();
+
+      this.loadRutas();
+      this.loadSucursales();
 
       
       let hoy = new Date();
@@ -66,6 +76,28 @@ export class CotizacionDetallePage implements OnInit {
   
   ionViewWillEnter(){
     this.facturado = false;
+  }
+
+  async loadRutas(){
+    var response = await this.navService.getRutas();
+    if(response){
+      if(response.ok){
+        this.rutas = response.registros;
+      }else{
+        this.tools.showNotification("Error", response.mensaje,"Ok");
+      }
+    }
+  }
+
+  async loadSucursales(){
+    var response = await this.navService.getSucursales();
+    if(response){
+      if(response.ok){
+        this.sucursales = response.registros;
+      }else{
+        this.tools.showNotification("Error", response.mensaje,"Ok");
+      }
+    }
   }
 
   async loadInfoCliente(){
@@ -199,7 +231,7 @@ export class CotizacionDetallePage implements OnInit {
   totalMonto(){
     if(this.pedido.vmo_pedido_detalle?.length>0){
       return this.pedido.vmo_pedido_detalle.reduce((accumulator, obj) => {
-        return accumulator + (obj.pde_precio_unitario*obj.pde_cantidad);
+        return accumulator + (obj.pde_precio_unitario_final*obj.pde_cantidad);
       }, 0);
     }else{
       return 0;
@@ -209,11 +241,154 @@ export class CotizacionDetallePage implements OnInit {
   totalMontoIVA(){
     if(this.pedido.vmo_pedido_detalle?.length>0){
       return this.pedido.vmo_pedido_detalle.reduce((accumulator, obj) => {
-        return accumulator + ((obj.pde_precio_unitario*1.13)*obj.pde_cantidad);
+        return accumulator + ((obj.pde_precio_unitario_final*1.13)*obj.pde_cantidad);
       }, 0);
     }else{
       return 0;
     }
   }
+
   
+  async openPickerRutas(){
+    
+    var opciones = [];
+
+    this.rutas.forEach(s => {
+      opciones.push({
+        text: s.Codigo+"-"+s.Nombre+" ("+s.DeliveryCodigo+": "+s.DeliveryNombre+")",
+        value: s.Codigo
+      })
+    });
+
+    var seleccion = 0;
+    if(this.pedido.ped_ruta.length>0){
+      seleccion = this.rutas.findIndex(s => s.Codigo==this.pedido.ped_ruta)
+    }
+
+    const picker = await this.pickerCtrl.create({
+      columns: [
+        {
+          name: 'rutas',
+          selectedIndex: seleccion,
+          options: opciones,
+        },
+      ],
+      cssClass: 'prueba',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'OK',
+          handler: (value) => {
+            //window.alert(`You selected: ${value.languages.value}`);
+            var obj = this.obtenerKeyValue(this.rutas, 'Codigo', value.rutas.value);
+            this.pedido.ped_ruta = value.rutas.value;
+            this.pedido.ped_ruta_txt = obj.Codigo+" - "+obj.Nombre;
+
+            this.ref.detectChanges();
+          },
+        },
+      ],
+    });
+
+    await picker.present();
+  }
+
+  
+
+  async openPickerSucursales(){
+    var opciones = [];
+
+    this.sucursales.forEach(s => {
+      opciones.push({
+        text: s.Nombre,
+        value: s.Codigo
+      })
+    });
+
+    var seleccion = 0;
+    if(this.pedido.ped_sucursal.length>0 && this.pedido.ped_sucursal!='Seleccionar'){
+      seleccion = this.sucursales.findIndex(s => s.Codigo==this.pedido.ped_sucursal)
+    }
+
+    const picker = await this.pickerCtrl.create({
+      columns: [
+        {
+          name: 'sucursales',
+          selectedIndex: seleccion,
+          options: opciones,
+        },
+      ],
+      cssClass: 'prueba',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'OK',
+          handler: (value) => {
+            //window.alert(`You selected: ${value.languages.value}`);
+            this.pedido.ped_sucursal = value.sucursales.value;
+            this.pedido.ped_sucursal_txt = value.sucursales.text;
+            this.ref.detectChanges();
+          },
+        },
+      ],
+    });
+
+    await picker.present();
+  }
+  
+  obtenerKeyValue(array, buscar, valor){
+    return array.find(s => s[buscar]==valor);
+  }
+
+
+
+  async editar(){
+    if(this.configuracion.getCodigoActivo()!=undefined){
+      this.tools.showNotification("Error", "Hay una gestión activa","Ok");
+    }else{
+      const alert = await this.alertController.create({
+        header: '¿Realmente desea modificar esta cotización?',
+        subHeader: 'Los precios se actualizaran a la lista de precios actual.',
+        cssClass: 'coupon-alert',
+        message: '',
+        backdropDismiss: false,
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },{
+            text: 'OK',
+            role: 'ok'
+          }]
+        });
+  
+        await alert.present();
+        const { data, role } = await alert.onDidDismiss();
+        if(role=="ok"){
+          this.tools.presentLoading("Actualizando información...")
+          var response = await this.pedidoService.EditarCotizacion(this.pedido.ped_id);
+          this.tools.destroyLoading();
+          if(response.ok){
+            this.tools.showNotification("Exito!", "Pedido activo para modificar","Ok");
+            var item = response.registros;
+            ConfiguracionService.setSelectedCliente(item, item["pedido"]);
+            
+            let navigationExtras: NavigationExtras = {
+              queryParams: {
+                  segment: "first"
+              }
+            };
+            this.navCtrl.navigateForward(['tabs/tab4'], navigationExtras);
+          }else{
+            this.tools.showNotification("Error!", response.mensaje,"Ok");
+          }
+        }
+    }
+  }
 }

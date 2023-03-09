@@ -34,7 +34,7 @@ export class LoginPage implements OnInit {
     public device: DeviceService,
     private loginService: LoginService) { 
       this.formLogin = this.formBuilder.group({
-        Username: ['', Validators.compose([Validators.required])],
+        Username: [window.localStorage.getItem("userLogin"), Validators.compose([Validators.required])],
         Password: ['', Validators.compose([Validators.required])],
         Sistema: [environment.signature],
         withoutRC: [true],
@@ -66,7 +66,9 @@ export class LoginPage implements OnInit {
   }
 
 
-  async login(){    
+  async login(){
+    window.localStorage["userLogin"] = this.formLogin.controls["Username"].value;
+
     this.verError = false;
     this.mensajeError = "";
     if(this.formLogin.valid){

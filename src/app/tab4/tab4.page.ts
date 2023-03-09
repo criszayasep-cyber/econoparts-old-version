@@ -45,6 +45,7 @@ export class Tab4Page implements OnInit {
   constructor(private route: Router,
     private sanitizer: DomSanitizer,
     public configuracion: ConfiguracionService, 
+    private activeRoute: ActivatedRoute, 
     private pedidoService: PedidoService,
     private tools: ToolsService,
     public navCtrl: NavController) {
@@ -65,6 +66,16 @@ export class Tab4Page implements OnInit {
   }
   
   ionViewWillEnter() {
+    this.activeRoute.queryParams.subscribe(params => {
+      if(params["segment"]!=undefined){
+        this.segment = params["segment"];
+        this.route.navigate([], {queryParams: null});
+        this.listado.cotizaciones = new Array<VmoPedidoEntityEntity>();
+        this.listado.historico = new Array<VmoPedidoEntityEntity>();
+        this.totales.cotizaciones = 0;
+        this.totales.historico = 0;
+      }
+    });
     this.loadPedidosEnProceso();
   }
 

@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { PedidoDetallePage } from './pedido-detalle.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatSelectModule } from '@angular/material/select';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     FontAwesomeModule,

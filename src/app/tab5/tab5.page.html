@@ -94,7 +94,7 @@
                             {{c.descuento}}%<br/>
                             {{c.lista}}
                         </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> ${{buscarPrecio(element.sku, item, c.lista) | number:'1.2-2'}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> ${{buscarPrecio(element.sku, item, c.lista) | currencyFormat}} </mat-cell>
                     </ng-container>
                 
                     <mat-header-row *matHeaderRowDef="displayedColumns[item]; sticky: true"></mat-header-row>

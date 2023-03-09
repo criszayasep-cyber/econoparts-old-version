@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { AuthService } from './services/auth/auth.service';
 import { DeviceService } from './services/default/device.service';
+import { ToolsService } from './services/default/tools.service';
 //import { FCMPlugin } from 'plugins/cordova-plugin-fcm-with-dependecy-updated/src/FCMPlugin';
 //import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic";
 
@@ -38,6 +39,7 @@ export class AppComponent {
     private fcm: FCM,
     private alertController: AlertController,
     public auth: AuthService,
+    private tools: ToolsService,
     public device: DeviceService
   ) {
     this.initializeApp();
@@ -79,5 +81,8 @@ export class AppComponent {
     this.auth.sessionEnd();
   }
 
+  async sincronizar(){
+    this.tools.showNotification("Aviso", "Intentelo nuevamete","Ok");
+  }
 
 }

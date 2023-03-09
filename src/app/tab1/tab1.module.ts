@@ -8,9 +8,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LazyLoadImageModule,intersectionObserverPreset } from 'ng-lazyload-image';
 import { OrdenamientoComponent } from '../componentes/ordenamiento/ordenamiento.component';
 import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
+    SharedModule,
     IonicModule,
     CommonModule,
     FormsModule,

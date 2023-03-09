@@ -17,9 +17,9 @@
         <td>DISPONIBLE</td>
       </tr>
       <tr>
-        <td>{{cliente.limite | number: '1.2-2'}}</td>
-        <td>{{cliente.saldo | number: '1.2-2'}}</td>
-        <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
+        <td>{{cliente.limite | currencyFormat}}</td>
+        <td>{{cliente.saldo | currencyFormat}}</td>
+        <td>{{cliente.limite-cliente.saldo | currencyFormat}}</td>
       </tr>
     </table>
     <br/>
@@ -146,8 +146,8 @@
               <td>{{item.fecha_registro | date: 'd/M/y'}}</td>
               <td>{{item.fecha_vencimiento | date: 'd/M/y'}}</td>
               <!--<td>{{item.descripcion}}</td>-->
-              <td>{{item.inicial | number:'1.2-2'}}</td>
-              <td>{{item.saldo | number:'1.2-2'}}</td>
+              <td>{{item.inicial | currencyFormat}}</td>
+              <td>{{item.saldo | currencyFormat}}</td>
               <td>{{item.dias_mora}}</td>
             </tr>
             <tr *ngIf="registros!=-1 && facturasPendientes.length==0">

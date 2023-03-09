@@ -8,9 +8,11 @@ import { HistoricoDetallePageRoutingModule } from './historico-detalle-routing.m
 
 import { HistoricoDetallePage } from './historico-detalle.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     FontAwesomeModule,

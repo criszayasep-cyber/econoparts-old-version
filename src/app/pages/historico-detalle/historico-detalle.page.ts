@@ -8,6 +8,7 @@ import { ToolsService } from '../../services/default/tools.service';
 import { VmoPedidoDetalleEntityEntity } from '../../entity/vmo-pedido-detalle-entity';
 import { FacturaEntity } from 'src/app/entity/factura-entity';
 import { FacturaDetalleEntity } from 'src/app/entity/factura-detalle-entity';
+import { TrackingPedidoEntity } from 'src/app/entity/tracking-pedido-entity';
 
 @Component({
   selector: 'app-historico-detalle',
@@ -28,6 +29,7 @@ export class HistoricoDetallePage implements OnInit {
   facturado = false;
   facturaEncabezado: FacturaEntity;
   facturaDetalle: Array<FacturaDetalleEntity> = [];
+  tracking: Array<TrackingPedidoEntity> = [];
 
   constructor(public navCtrl: NavController, 
     private alertController: AlertController,
@@ -41,13 +43,64 @@ export class HistoricoDetallePage implements OnInit {
   ngOnInit() {
     this.activeRoute.queryParams.subscribe(params => {
       this.pedido = JSON.parse(params["pedido"]);
-      this.loadDetalle();
-      this.loadFactura();
+      this.loadTracking();
+      this.loadInfo();
     });
   }
   
   ionViewWillEnter(){
     
+  }
+
+  async reenviar(){
+
+    if(this.configuracion.getCodigoActivo()!=undefined){
+      this.tools.showNotification("Error", "Hay una gestión activa","Ok");
+    }else{
+    
+      const alert = await this.alertController.create({
+        header: '¿Realmente desea crear otro pedido igual?',
+        subHeader: 'El cliente de este pedido se pondrá en gestión',
+        cssClass: 'coupon-alert',
+        message: '',
+        backdropDismiss: false,
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },{
+            text: 'OK',
+            role: 'ok'
+          }]
+        });
+  
+        await alert.present();
+        const { data, role } = await alert.onDidDismiss();
+        if(role=="ok"){
+          this.tools.presentLoading("Creando duplicado...")
+          var response = await this.pedidoService.Reenviar(this.pedido.ped_id);
+          this.tools.destroyLoading();
+          if(response.ok){
+            this.tools.showNotification("Exito!", "Pedido creado","Ok");
+            var item = response.registros;
+            ConfiguracionService.setSelectedCliente(item, item["pedido"]);
+            
+            let navigationExtras: NavigationExtras = {
+              queryParams: {
+                  segment: "first"
+              }
+            };
+            this.navCtrl.navigateForward(['tabs/tab4'], navigationExtras);
+          }else{
+            this.tools.showNotification("Error!", response.mensaje,"Ok");
+          }
+        }
+    }
+  }
+
+  async loadInfo(){
+    await this.loadDetalle();
+    this.loadFactura();
   }
 
   
@@ -101,6 +154,38 @@ export class HistoricoDetallePage implements OnInit {
     }
   }
 
+  
+  async loadTracking(){
+    this.tracking = [];
+    var response = await this.pedidoService.getTracking(this.pedido.ped_no);
+    if(response){
+      if(response.ok){
+        this.tracking = response.registros;
+      }else{
+        this.tools.showNotification("Error", response.mensaje,"Ok");
+      }
+    }
+    this.loading.detalle = false;
+  }
+
+  filterTracking(){
+    return this.tracking.filter(f => f.Estado!="TOTAL");
+  }
+
+  filterTotalServicio(){
+    var encontrado = this.tracking.filter(f => f.Estado=="TOTAL")[0];
+    if(encontrado!=undefined){
+      return encontrado.Dias+" días "+this.pad(encontrado.Horas,2)+":"+this.pad(encontrado.Minutos,2);
+    }else{
+      return "";
+    }
+  }
+  pad(num, size) {
+    let s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
   async atras(){
     this.navCtrl.navigateBack(['/tabs/tab4']);
   }
@@ -119,7 +204,7 @@ export class HistoricoDetallePage implements OnInit {
   totalMonto(){
     if(this.pedido.vmo_pedido_detalle?.length>0){
       return this.pedido.vmo_pedido_detalle.reduce((accumulator, obj) => {
-        return accumulator + (obj.pde_precio_unitario*obj.pde_cantidad);
+        return accumulator + (obj.pde_precio_unitario_final*obj.pde_cantidad);
       }, 0);
     }else{
       return 0;
@@ -129,7 +214,7 @@ export class HistoricoDetallePage implements OnInit {
   totalMontoIVA(){
     if(this.pedido.vmo_pedido_detalle?.length>0){
       return this.pedido.vmo_pedido_detalle.reduce((accumulator, obj) => {
-        return accumulator + ((obj.pde_precio_unitario*1.13)*obj.pde_cantidad);
+        return accumulator + ((obj.pde_precio_unitario_final*1.13)*obj.pde_cantidad);
       }, 0);
     }else{
       return 0;

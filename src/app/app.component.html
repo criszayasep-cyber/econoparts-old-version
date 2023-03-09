@@ -22,6 +22,11 @@
             <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','sign-out-alt']" slot="start" ></fa-icon>
             <ion-label style="color:var(--ion-color-stjazul);">Cerrar sesión</ion-label>
           </ion-item>
+          
+          <ion-item (click)="sincronizar()">
+            <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','sync']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">Sincronizar datos</ion-label>
+          </ion-item>
 
           <!--<ion-item (click)="goMenu(1)" >
             <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','tags']" slot="start" ></fa-icon>

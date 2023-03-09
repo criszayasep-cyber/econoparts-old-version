@@ -9,6 +9,7 @@ import { Tab4Page } from './tab4.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     IonicModule,

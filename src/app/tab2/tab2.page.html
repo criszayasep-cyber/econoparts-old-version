@@ -146,9 +146,9 @@
               <td>{{(filtros.offset+1)+i}}</td>
               <td style="color: blue;text-decoration: underline;" (click)="verEquivalentes(item)">{{item.pro_number}}</td>
               <td>{{item.pro_descripcion}}</td>
-              <td>{{item.preciou | number: '1.2-2'}}</td>
-              <td>{{item.preciou*1.13 | number: '1.2-2'}}</td>
-              <td>{{item.existencia | number: '1.0-0'}}</td>
+              <td>{{item.preciou | currencyFormat}}</td>
+              <td>{{item.preciou*1.13 | currencyFormat}}</td>
+              <td>{{item.existencia | quantityFormat}}</td><!--number: '1.0-0'-->
               <td>
                 <ion-button color="primary" (click)="verProducto(item)">
                   <fa-icon [icon]="['fas','eye']"></fa-icon>
@@ -211,9 +211,9 @@
               <td>{{item.pro_categoria}}</td>
               <td>{{item.pro_sub_categoria}}</td>
               <td>{{item.pro_descripcion}}</td>
-              <td>{{item.preciou | number: '1.2-2'}}</td>
-              <td>{{item.preciou*1.13 | number: '1.2-2'}}</td>
-              <td>{{item.existencia}}</td>
+              <td>{{item.preciou | currencyFormat}}</td>
+              <td>{{item.preciou*1.13 | currencyFormat}}</td>
+              <td>{{item.existencia | quantityFormat}}</td>
               <td>
                 <ion-button color="primary" (click)="verProducto(item)">
                   <fa-icon [icon]="['fas','eye']"></fa-icon>

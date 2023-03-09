@@ -25,16 +25,16 @@
           <td>{{i+1}}</td>
           <td>{{item.codigo}}</td>
           <td>{{item.descripcion}}</td>
-          <td style="text-align: right;">{{item.precio | number: '1.2-2'}}</td>
+          <td style="text-align: right;">{{item.precio | currencyFormat}}</td>
           <td style="text-align: right;">{{item.cantidad}}</td>
-          <td style="text-align: right;">{{item.precio*item.cantidad | number: '1.2-2'}}</td>
-          <td style="text-align: right;">{{(item.precio*1.13)*item.cantidad | number: '1.2-2'}}</td>
+          <td style="text-align: right;">{{item.precio*item.cantidad | currencyFormat}}</td>
+          <td style="text-align: right;">{{(item.precio*1.13)*item.cantidad | currencyFormat}}</td>
       </tr>
       <tr *ngIf="productos?.length>0">
           <th colspan="4" style="text-align: right;">TOTAL</th>
           <th style="text-align: right;">{{totalUnidades()}}</th>
-          <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
-          <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>
+          <th style="text-align: right;">{{totalMonto() | currencyFormat}}</th>
+          <th style="text-align: right;">{{totalMontoIVA() | currencyFormat}}</th>
       </tr>
   </table>
 

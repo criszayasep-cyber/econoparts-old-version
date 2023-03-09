@@ -34,6 +34,7 @@
                 <ion-progress-bar type="indeterminate" *ngIf="loading.proceso"></ion-progress-bar>
                 <table class="customers">
                   <tr>
+                    <th>Pedido</th>
                     <th>No. Cliente</th>
                     <th>Nombre</th>
                     <th>Comercial</th>
@@ -43,13 +44,14 @@
                     <th>Venta+IVA</th>
                   </tr>
                   <tr *ngFor="let item of listado.proceso" (click)="detallePedido(item)">
+                    <td>{{item.ped_no}}</td>
                     <td>{{item.ped_cliente_codigo}}</td>
                     <td>{{item.ped_cliente_nombre}}</td>
                     <td>{{item.ped_cliente_comercial}}</td>
                     <td>{{item.ped_tipo_pago}}</td>
                     <td>{{item.ped_cantidad}}</td>
-                    <td>{{item.ped_monto | number: '1.2-2'}}</td>
-                    <td>{{item.ped_monto_iva | number: '1.2-2'}}</td>
+                    <td>{{item.ped_monto | currencyFormat}}</td>
+                    <td>{{item.ped_monto_iva | currencyFormat}}</td>
                   </tr>
                   <tr *ngIf="registros.proceso!=-1 && listado.proceso.length==0">
                     <td style="text-align: center;" colspan="9">No se encontraron registros</td>
@@ -109,6 +111,7 @@
                 <table class="customers">
                   <tr>
                     <th>#</th>
+                    <th>Pedido</th>
                     <th>Fecha Cotización</th>
                     <th>No. Cliente</th>
                     <th>Razon Social</th>
@@ -120,17 +123,18 @@
                   </tr>
                   <tr *ngFor="let item of listado.cotizaciones; let i = index" (click)="detalleCotizacion(item)">
                     <td>{{(filtros.cotizaciones.offset+1)+i}}</td>
+                    <td>{{item.ped_no}}</td>
                     <td>{{item.ped_fecha | date: 'd/M/y'}}</td>
                     <td>{{item.ped_cliente_codigo}}</td>
                     <td>{{item.ped_cliente_nombre}}</td>
                     <td>{{item.ped_cliente_comercial}}</td>
                     <td>{{item.ped_tipo_pago}}</td>
                     <td>{{item.ped_cantidad}}</td>
-                    <td>{{item.ped_monto | number: '1.2-2'}}</td>
-                    <td>{{item.ped_monto_iva | number: '1.2-2'}}</td>
+                    <td>{{item.ped_monto | currencyFormat}}</td>
+                    <td>{{item.ped_monto_iva | currencyFormat}}</td>
                   </tr>
                   <tr *ngIf="registros.cotizaciones!=-1 && listado.cotizaciones.length==0">
-                    <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+                    <td style="text-align: center;" colspan="10">No se encontraron registros</td>
                   </tr>
                 </table>
                 <mat-paginator #paginator class="table-paginator" *ngIf="listado.cotizaciones.length>0"
@@ -195,6 +199,7 @@
                 <table class="customers">
                   <tr>
                     <th>#</th>
+                    <th>ID</th>
                     <th>Fecha</th>
                     <th>Estado</th>
                     <th>No. Cliente</th>
@@ -207,6 +212,7 @@
                   </tr>
                   <tr *ngFor="let item of listado.historico; let i = index" (click)="detalleHistorico(item)">
                     <td>{{(filtros.historico.offset+1)+i}}</td>
+                    <td>{{item.ped_no}}</td>
                     <td>{{item.ped_fecha | date: 'd/M/y'}}</td>
                     <td>{{item.ped_estado}}</td>
                     <td>{{item.ped_cliente_codigo}}</td>
@@ -214,11 +220,11 @@
                     <td>{{item.ped_cliente_comercial}}</td>
                     <td>{{item.ped_tipo_pago}}</td>
                     <td>{{item.ped_cantidad}}</td>
-                    <td>{{item.ped_monto | number: '1.2-2'}}</td>
-                    <td>{{item.ped_monto_iva | number: '1.2-2'}}</td>
+                    <td>{{item.ped_monto | currencyFormat}}</td>
+                    <td>{{item.ped_monto_iva | currencyFormat}}</td>
                   </tr>
                   <tr *ngIf="registros.historico!=-1 && listado.historico.length==0">
-                    <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+                    <td style="text-align: center;" colspan="11">No se encontraron registros</td>
                   </tr>
                 </table>
                 <mat-paginator #paginator class="table-paginator" *ngIf="listado.historico.length>0"

@@ -29,11 +29,11 @@
                         <div style="margin-right: 10px;">
                             <ion-item>
                                 <ion-label position="floating">Usuario</ion-label>
-                                <ion-input formControlName="Username" autofocus="true" type="text"></ion-input>
+                                <ion-input formControlName="Username" autofocus="true" type="text" (keyup.enter)="login()"></ion-input>
                             </ion-item>
                             <ion-item>
                                 <ion-label position="floating">Contraseña</ion-label>
-                                <ion-input formControlName="Password" [type]="showPassword?'text':'password'"></ion-input>
+                                <ion-input formControlName="Password" [type]="showPassword?'text':'password'" (keyup.enter)="login()"></ion-input>
                                 <ion-icon slot="end" [name]="passwordToggleIcon" style="align-self: flex-end;" (click)="togglePassword()"></ion-icon>
                                 <p class="errores" *ngIf="!formLogin.controls.Password.valid  && (formLogin.controls.Password.dirty )">Ingrese una contraseña valida.</p>
                             </ion-item>

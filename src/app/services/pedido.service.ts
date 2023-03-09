@@ -230,4 +230,49 @@ export class PedidoService {
     }
   }//fin getFacturaPendienteSuc
 
+  
+  async getTracking(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}tracking/${pedido}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin getTracking
+
+
+  
+  
+  async Reenviar(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}reenviar/${pedido}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin Reenviar
+  
+  async EditarCotizacion(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}editar-cotizacion/${pedido}`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin EditarCotizacion
+
+
+
 }

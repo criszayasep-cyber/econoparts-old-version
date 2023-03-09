@@ -6,7 +6,7 @@
           Cerrar
       </ion-button>
     </ion-buttons>
-    <ion-title>Detalle de Pedido</ion-title>
+    <ion-title>Detalle de Pedido: {{pedido.ped_no}}</ion-title>
   </ion-toolbar>
   <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
     <ion-segment-button value="pedido"> <!-- layout="icon-start"-->
@@ -35,50 +35,130 @@
             <tr>
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">FECHA DE PEDIDO:</td>
                 <td>{{pedido.ped_fecha | date:'d/M/y'}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO. CLIENTE:</td>
-                <td>{{pedido.ped_cliente_codigo}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
-                <td>{{pedido.ped_cliente_nombre}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
-                <td>{{pedido.ped_cliente_comercial}}</td>
-            </tr>
-            <tr>
+                
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">DIRECCIÓN:</td>
-                <td>{{pedido.ped_cliente_direccion}}</td>
+                <td colspan="3">{{pedido.ped_cliente_direccion}}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">CORREO:</td>
-                <td>{{pedido.ped_cliente_correo}}</td>
-            </tr>
-            <tr>
+                <td colspan="3">{{pedido.ped_cliente_correo}}</td>
+                
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">CELULAR:</td>
                 <td>{{pedido.ped_celular}}</td>
             </tr>
             <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">MONTO:</td>
-                <td>{{pedido.ped_monto | number: '1.2-2'}}</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">UNIDADES:</td>
-                <td>{{pedido.ped_cantidad}}</td>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO. CLIENTE:</td>
+                <td>{{pedido.ped_cliente_codigo}}</td>
+
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">RAZON SOCIAL:</td>
+                <td>{{pedido.ped_cliente_nombre}}</td>
+                
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">NOMBRE COMERCIAL:</td>
+                <td>{{pedido.ped_cliente_comercial}}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">CONDICION:</td>
                 <td>{{pedido.ped_tipo_pago}}</td>
+
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">MONTO:</td>
+                <td>{{pedido.ped_monto | currencyFormat}}</td><!--number: '1.2-2':'en-US'-->
+                
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">UNIDADES:</td>
+                <td>{{pedido.ped_cantidad}}</td>
             </tr>
             <tr>
-                <td style="font-weight: bold;padding-right: 5px;text-align: right;">COMENTARIO:</td>
-                <td>{{pedido.ped_comentario}}</td>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">PRECIOS:</td>
+                <td colspan="5">{{pedido.ped_comentario}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;padding-right: 5px;text-align: right;">CREDITOS Y COBROS:</td>
+                <td colspan="5">{{pedido.ped_comentario_cc}}</td>
             </tr>
         </table>
+        <hr/>
+
+        <p style="text-align: right;">
+            <b>TIEMPO TOTAL DE PROCESAMIENTO: </b>{{filterTotalServicio()}}
+        </p>
         <br/>
-        <h2>Productos</h2>
+        <br/>
+        <div style="padding-top: 120px;">
+          <section class="ps-timeline-sec">
+            <div class="container">
+                <ol class="ps-timeline">
+                    <li *ngFor="let item of filterTracking(); let i = index">
+                        <div class="img-handler-top" [ngSwitch]="item.Estado">
+                            <p>{{item.Estado}}</p>
+                            <img *ngSwitchCase="'REGISTRADO'" src="/assets/timeline/1.png" alt="" width="50px"/>
+                            <img *ngSwitchCase="'ENVIADO'" src="/assets/timeline/2.png" alt="" width="50px"/>
+                            <img *ngSwitchCase="'PREPARADO'" src="/assets/timeline/3.png" alt="" width="50px"/>
+                            <img *ngSwitchCase="'APROBADO'" src="/assets/timeline/4.1.png" alt="" width="50px"/>
+                            <img *ngSwitchCase="'RECHAZADO'" src="/assets/timeline/4.2.png" alt="" width="50px"/>
+                            <img *ngSwitchCase="'FACTURADO'" src="/assets/timeline/5.png" alt="" width="50px"/>
+                        </div>
+                        <div class="ps-bot">
+                            <p>{{item.Fecha | date:'d/M/y H:mm:ss'}}</p>
+                            <p>{{item.Usuario}}</p>
+                        </div>
+                        <span class="ps-sp-bot">{{i+1}}</span>
+                    </li>
+                    <!--<li>
+                        <div class="img-handler-top">
+                            <img src="/assets/timeline/2.png" alt="" width="50px"/>
+                            <p>ENVIADO</p>
+                        </div>
+                        <div class="ps-bot">
+                            <p>28/02/2023 13:45:12</p>
+                        </div>
+                        <span class="ps-sp-bot">2</span>
+                    </li>
+                    <li>
+                        <div class="img-handler-top">
+                            <img src="/assets/timeline/3.png" alt="" width="50"/>
+                            <p>PREPARADO</p>
+                        </div>
+                        <div class="ps-bot">
+                            <p>28/02/2023 13:13:46</p>
+                        </div>
+                        <span class="ps-sp-bot">3</span>
+                    </li>
+                    <li>
+                        <div class="img-handler-top">
+                            <img src="/assets/timeline/4.1.png" alt="" width="50"/>
+                            <p>APROBADO</p>
+                        </div>
+                        <div class="ps-bot">
+                            <p>28/02/2023 14:12:46</p>
+                        </div>
+                        <span class="ps-sp-bot">4</span>
+                    </li>
+                    <li>
+                        <div class="img-handler-top">
+                            <img src="/assets/timeline/4.2.png" alt="" width="50"/>
+                            <p>RECHAZADO</p>
+                        </div>
+                        <div class="ps-bot">
+                            <p>28/02/2023 14:12:46</p>
+                        </div>
+                        <span class="ps-sp-bot">4</span>
+                    </li>
+                    <li>
+                        <div class="img-handler-top">
+                            <img src="/assets/timeline/5.png" alt="" width="50"/>
+                            <p>FACTURADO</p>
+                        </div>
+                        <div class="ps-bot">
+                            <p>28/02/2023 14:12:46</p>
+                        </div>
+                        <span class="ps-sp-bot">5</span>
+                    </li>-->
+                </ol>
+            </div>
+        </section>
+        </div>
+
+        <br/>
+        <h2 style="font-weight: bold;">PRODUCTOS</h2>
         <ion-progress-bar type="indeterminate" *ngIf="loading.detalle"></ion-progress-bar>
         <table class="customers">
             <tr>
@@ -95,10 +175,10 @@
                 <td>{{i+1}}</td>
                 <td>{{item.pde_producto}}</td>
                 <td>{{item.pde_descripcion}}</td>
-                <td>{{item.pde_precio_unitario | number: '1.2-2'}}</td>
-                <td style="text-align: right;">{{item.pde_cantidad}}</td>
-                <td style="text-align: right;">{{item.pde_precio_unitario*item.pde_cantidad | number: '1.2-2'}}</td>
-                <td style="text-align: right;">{{(item.pde_precio_unitario*1.13)*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td>{{item.pde_precio_unitario_final | currencyFormat}}</td>
+                <td style="text-align: right;">{{item.pde_cantidad | quantityFormat}}</td>
+                <td style="text-align: right;">{{item.pde_precio_unitario_final*item.pde_cantidad | currencyFormat}}</td>
+                <td style="text-align: right;">{{(item.pde_precio_unitario_final*1.13)*item.pde_cantidad | currencyFormat}}</td>
                 <td style="text-align: right;">
                   {{item.facturado}} 
                   <fa-icon [icon]="['fas','check-circle']" *ngIf="item.facturado==item.pde_cantidad"></fa-icon>
@@ -108,11 +188,18 @@
             <tr *ngIf="pedido.vmo_pedido_detalle?.length>0">
                 <th colspan="4" style="text-align: right;">TOTAL</th>
                 <th style="text-align: right;">{{totalUnidades()}}</th>
-                <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
-                <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalMonto() | currencyFormat}}</th>
+                <th style="text-align: right;">{{totalMontoIVA() | currencyFormat}}</th>
                 <th style="text-align: right;">{{totalUnidadesFacturadas()}}</th>
             </tr>
         </table>
+
+        <div>
+            <ion-button color="success" (click)="reenviar()">
+                <fa-icon [icon]="['fas','cash-register']" style="margin-right: 1em;"></fa-icon>
+                Reenviar
+            </ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
     
@@ -122,26 +209,24 @@
             <tr>
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">FECHA DE FACTURACION:</td>
                 <td>{{facturaEncabezado.fecha | date:'d/M/y'}} {{facturaEncabezado.hora | date:'h:mm a' }}</td>
-            </tr>
-            <tr>
+            
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO. CLIENTE:</td>
                 <td>{{facturaEncabezado.cliente_codigo}}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">CLIENTE:</td>
                 <td>{{facturaEncabezado.cliente_nombre}}</td>
-            </tr>
-            <tr>
+            
+                
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">NO FACTURA:</td>
                 <td>{{facturaEncabezado.no_factura}}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">MONTO FACTURA:</td>
-                <td>{{facturaEncabezado.monto | number: '1.2-2'}}</td>
-            </tr>
-            <tr>
+                <td>{{facturaEncabezado.monto | currencyFormat}}</td>
+            
                 <td style="font-weight: bold;padding-right: 5px;text-align: right;">MONTO:</td>
-                <td>{{totalMontoFacturado() | number: '1.2-2'}}</td>
+                <td>{{totalMontoFacturado() | currencyFormat}}</td>
             </tr>
         </table>
 
@@ -174,16 +259,16 @@
                 <td>{{i+1}}</td>
                 <td>{{item.codigo}}</td>
                 <td>{{item.descripcion}}</td>
-                <td>{{item.precio | number: '1.2-2'}}</td>
+                <td>{{item.precio | currencyFormat}}</td>
                 <td style="text-align: right;">{{item.cantidad}}</td>
-                <td style="text-align: right;">{{item.monto | number: '1.2-2'}}</td>
-                <td style="text-align: right;">{{item.monto_iva | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{item.monto | currencyFormat}}</td>
+                <td style="text-align: right;">{{item.monto_iva | currencyFormat}}</td>
             </tr>
             <tr *ngIf="facturaDetalle?.length>0">
                 <th colspan="4" style="text-align: right;">TOTAL</th>
                 <th style="text-align: right;">{{totalUnidadesFacturadas()}}</th>
-                <th style="text-align: right;">{{totalMontoFacturado() | number:'1.2-2'}}</th>
-                <th style="text-align: right;">{{totalMontoIVAFacturado() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalMontoFacturado() | currencyFormat}}</th>
+                <th style="text-align: right;">{{totalMontoIVAFacturado() | currencyFormat}}</th>
             </tr>
         </table>
       </ion-card-content>

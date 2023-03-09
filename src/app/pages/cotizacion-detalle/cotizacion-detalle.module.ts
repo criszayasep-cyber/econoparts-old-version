@@ -8,9 +8,11 @@ import { CotizacionDetallePageRoutingModule } from './cotizacion-detalle-routing
 
 import { CotizacionDetallePage } from './cotizacion-detalle.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     FontAwesomeModule,

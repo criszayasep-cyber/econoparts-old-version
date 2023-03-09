@@ -8,9 +8,11 @@ import { LazyLoadImageModule,intersectionObserverPreset } from 'ng-lazyload-imag
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
+    SharedModule,
     IonicModule,
     CommonModule,
     FormsModule,

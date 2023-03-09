@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar class="background-yellow" mode="md">
-        <ion-title>Detalle de Pedido</ion-title>
+        <ion-title>Detalle de Pedido: {{pedido.ped_no}}</ion-title>
 
         <!--<ion-segment color="primary" scrollable style="display: none;">
         <ion-segment-button>
@@ -44,13 +44,13 @@
                 </tr>
                 <tr>
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">LIMITE:</td>
-                    <td>{{cliente.limite | number: '1.2-2'}}</td> 
+                    <td>{{cliente.limite | currencyFormat}}</td> 
                 
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">SALDO:</td>
-                    <td>{{cliente.saldo | number: '1.2-2'}}</td>
+                    <td>{{cliente.saldo | currencyFormat}}</td>
                 
                     <td style="font-weight: bold;padding-right: 5px;text-align: right;">DISPONIBLE:</td>
-                    <td>{{cliente.limite-cliente.saldo | number: '1.2-2'}}</td>
+                    <td>{{cliente.limite-cliente.saldo | currencyFormat}}</td>
                 </tr>
             </table>
           </ion-card-content>
@@ -154,10 +154,10 @@
                 <td>{{item.pde_descripcion}}</td>
                 <td>{{item.pde_lp_promocion}}</td>
                 <td>{{item.pde_lp_lista}}</td>
-                <td>{{item.pde_precio_unitario_final | number: '1.2-2'}}</td>
+                <td>{{item.pde_precio_unitario_final | currencyFormat}}</td>
                 <td style="text-align: right;"><input type="number" style="text-align: right;width: 50px;" (input)='onInputTime($event.target.value)' [(ngModel)]="item.pde_cantidad" [disabled]="facturado" /></td>
-                <td style="text-align: right;">{{item.pde_precio_unitario_final*item.pde_cantidad | number: '1.2-2'}}</td>
-                <td style="text-align: right;">{{(item.pde_precio_unitario_final*1.13)*item.pde_cantidad | number: '1.2-2'}}</td>
+                <td style="text-align: right;">{{item.pde_precio_unitario_final*item.pde_cantidad | currencyFormat}}</td>
+                <td style="text-align: right;">{{(item.pde_precio_unitario_final*1.13)*item.pde_cantidad | currencyFormat}}</td>
                 <td style="width: 50px;">
                     <ion-button color="primary" [disabled]="facturado" (click)="deleteProducto(item, i)">
                       <fa-icon [icon]="['fas','trash-alt']"></fa-icon>
@@ -167,8 +167,8 @@
             <tr *ngIf="pedido.vmo_pedido_detalle?.length>0">
                 <th colspan="5" style="text-align: right;">TOTAL</th>
                 <th style="text-align: right;">{{totalUnidades()}}</th>
-                <th style="text-align: right;">{{totalMonto() | number:'1.2-2'}}</th>
-                <th style="text-align: right;">{{totalMontoIVA() | number:'1.2-2'}}</th>
+                <th style="text-align: right;">{{totalMonto() | currencyFormat}}</th>
+                <th style="text-align: right;">{{totalMontoIVA() | currencyFormat}}</th>
                 <th></th>
             </tr>
         </table>

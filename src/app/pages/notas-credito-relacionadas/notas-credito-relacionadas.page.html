@@ -26,7 +26,7 @@
         <td>{{item.documento}}</td>
         <td>{{item.descripcion}}</td>
         <td>{{item.documento_externo}}</td>
-        <td>{{item.monto | number:'1.2-2'}}</td>
+        <td>{{item.monto | currencyFormat}}</td>
       </tr>
       <tr *ngIf="notasCredito?.length==0">
         <td style="text-align: center;" colspan="11">No se encontraron registros</td>
@@ -50,11 +50,11 @@
           <td>{{item.cantidad}}</td>
           <td>{{item.identificador}}</td>
           <td>{{item.ubicacion}}</td>
-          <td style="text-align: right;">{{item.monto | number:'1.2-2'}}</td>
+          <td style="text-align: right;">{{item.monto | currencyFormat}}</td>
         </tr>
         <tr *ngIf="detalle?.length>0">
           <th colspan="5" style="text-align: right;">TOTAL</th>
-          <th style="text-align: right;">{{total() | number:'1.2-2'}}</th>
+          <th style="text-align: right;">{{total() | currencyFormat}}</th>
         </tr>
         <tr *ngIf="detalle?.length==0">
           <td style="text-align: center;" colspan="11">No se encontraron registros</td>

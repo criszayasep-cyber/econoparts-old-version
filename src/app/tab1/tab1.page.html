@@ -50,25 +50,25 @@
                     <ion-item>
                       <ion-icon src="assets/icon/money.svg" style="font-size: 50px;" slot="start"></ion-icon>
                       <ion-label>Cumplimiento de <br/>venta a la fecha</ion-label>
-                      <ion-badge slot="end">{{kpiAcumulado?.venta | number: '1.2-2'}}%</ion-badge>
+                      <ion-badge slot="end">{{kpiAcumulado?.venta | percentajeFormat}}</ion-badge>
                     </ion-item>
                   
                     <ion-item>
                       <ion-icon src="assets/icon/proyeccion.svg" style="font-size: 50px;" slot="start"></ion-icon>
                       <ion-label>Proyección de venta</ion-label>
-                      <ion-badge slot="end">{{kpiAcumulado?.proyeccion | number: '1.2-2'}}K</ion-badge>
+                      <ion-badge slot="end">{{kpiAcumulado?.proyeccion | currencyFormat}}K</ion-badge>
                     </ion-item>
                   
                     <ion-item>
                       <ion-icon src="assets/icon/success.svg" style="font-size: 50px;" slot="start"></ion-icon>
                       <ion-label>Efectividad de visitas</ion-label>
-                      <ion-badge slot="end">{{kpiAcumulado?.efectividad | number: '1.2-2'}}%</ion-badge>
+                      <ion-badge slot="end">{{kpiAcumulado?.efectividad | percentajeFormat}}</ion-badge>
                     </ion-item>
                   
                     <ion-item>
                       <ion-icon src="assets/icon/route.svg" style="font-size: 50px;" slot="start"></ion-icon>
                       <ion-label>Cumplimiento de <br/>visitas</ion-label>
-                      <ion-badge slot="end">{{kpiAcumulado?.cumplimiento | number: '1.2-2'}}%</ion-badge>
+                      <ion-badge slot="end">{{kpiAcumulado?.cumplimiento | percentajeFormat}}</ion-badge>
                     </ion-item>
                   </ion-card>
 
@@ -82,13 +82,13 @@
                   <ion-item>
                     <ion-icon src="assets/icon/success.svg" style="font-size: 50px;" slot="start"></ion-icon>
                     <ion-label>Efectividad de <br/>visitas</ion-label>
-                    <ion-badge slot="end">{{kpiDia?.efectividad | number: '1.2-2'}}%</ion-badge>
+                    <ion-badge slot="end">{{kpiDia?.efectividad | percentajeFormat}}</ion-badge>
                   </ion-item>
                 
                   <ion-item>
                     <ion-icon src="assets/icon/route.svg" style="font-size: 50px;" slot="start"></ion-icon>
                     <ion-label>Cumplimiento de <br/>visitas</ion-label>
-                    <ion-badge slot="end">{{kpiDia?.cumplimiento | number: '1.2-2'}}%</ion-badge>
+                    <ion-badge slot="end">{{kpiDia?.cumplimiento | percentajeFormat}}</ion-badge>
                   </ion-item>
                 </ion-card>
                 <ion-card style="margin-top: 0px;display: none;">
@@ -99,7 +99,7 @@
                   <ion-item>
                     <ion-icon src="assets/icon/collect.svg" style="font-size: 50px;" slot="start"></ion-icon>
                     <ion-label>Cobranza</ion-label>
-                    <ion-badge slot="end">{{55.2 | number: '1.2-2'}}%</ion-badge>
+                    <ion-badge slot="end">{{55.2 | percentajeFormat}}</ion-badge>
                   </ion-item>
                 </ion-card>
             </ion-col>
