@@ -8,6 +8,7 @@ import { ToolsService } from '../services/default/tools.service';
 import { FilterEntity } from '../entity/default/filter-entity';
 import { PedidoService } from '../services/pedido.service';
 import { ProductoDetallePage } from '../pages/producto-detalle/producto-detalle.page';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-tab2',
@@ -16,6 +17,20 @@ import { ProductoDetallePage } from '../pages/producto-detalle/producto-detalle.
 })
 export class Tab2Page  implements OnInit{
 
+  myControl = new FormControl('');
+  states = [
+    {code: 'AL', name: 'Alabama'},
+    {code: 'CA', name: 'California'},
+    {code: 'FL', name: 'Florida'},
+    {code: 'KS', name: 'Kansas'},
+    {code: 'MA', name: 'Massachusetts'},
+    {code: 'NY', name: 'New York'},
+    {code: 'OR', name: 'Oregon'},
+    {code: 'PA', name: 'Pennsylvania'},
+    {code: 'TN', name: 'Tennessee'},
+    {code: 'VA', name: 'Virginia'},
+    {code: 'WY', name: 'Wyoming'},
+  ];
   titulo = "| Catálogo";
   productos = [];
   productosEquivalentes = [];

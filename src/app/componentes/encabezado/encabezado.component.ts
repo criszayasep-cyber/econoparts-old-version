@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ConfiguracionService } from 'src/app/services/default/configuracion.service';
 
 @Component({
   selector: 'app-encabezado',
@@ -9,7 +10,7 @@ export class EncabezadoComponent implements OnInit {
 
   @Input() titulo: any;
 
-  constructor() { }
+  constructor(public config: ConfiguracionService) { }
 
   ngOnInit() {}
 

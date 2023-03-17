@@ -7,6 +7,7 @@ import { GestionDiariaEntity } from 'src/app/entity/gestion-diaria-entity';
 })
 export class ConfiguracionService {
   
+  public static online = window.localStorage["online"]?window.localStorage["online"]=="true":true;
   
   public static actualizarTab1 = window.localStorage["actualizarTab1"]?JSON.parse(window.localStorage["actualizarTab1"]):false;
   public static gestionDiaria: GestionDiariaEntity = window.localStorage["gestionDiaria"]?JSON.parse(window.localStorage["gestionDiaria"]):new GestionDiariaEntity();
@@ -20,6 +21,7 @@ export class ConfiguracionService {
     })
   };
   
+  ConfiguracionService = ConfiguracionService
 
   constructor() {
     

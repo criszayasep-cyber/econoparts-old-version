@@ -24,8 +24,9 @@
           </ion-item>
           
           <ion-item (click)="sincronizar()">
-            <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','sync']" slot="start" ></fa-icon>
-            <ion-label style="color:var(--ion-color-stjazul);">Sincronizar datos</ion-label>
+            <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','wifi']" slot="start" ></fa-icon>
+            <ion-label style="color:var(--ion-color-stjazul);">{{config.ConfiguracionService.online==true?"Online":"Offline"}}</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="conexion" ></ion-toggle>
           </ion-item>
 
           <!--<ion-item (click)="goMenu(1)" >

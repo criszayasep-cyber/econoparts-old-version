@@ -21,10 +21,27 @@
             <form style="background: transparent;margin-top: 0px;">
               <ion-row>
                 <ion-col size="3">
-                  <ion-item>
+                  <!--<ion-item>
                       <ion-label position="floating">Grupo</ion-label>
-                      <ion-input  [clearInput]="true" autofocus="true" type="text" name="grupo" [(ngModel)]="filtros.grupo" (keyup.enter)="onEnter()"></ion-input>
-                  </ion-item>
+                      <input  [matAutocomplete]="autocomplete" >
+                      <mat-autocomplete #autocomplete="matAutocomplete">
+                        <mat-option *ngFor="let state of states" [value]="state.name">{{ state.name }}</mat-option>
+                      </mat-autocomplete>
+                  </ion-item>-->
+                  <form>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Number</mat-label>
+                      <input type="text"
+                             placeholder="Pick one"
+                             aria-label="Number"
+                             matInput
+                             [formControl]="myControl"
+                             [matAutocomplete]="grupo">
+                             <mat-autocomplete #grupo="matAutocomplete">
+                               <mat-option *ngFor="let state of states" [value]="state.name">{{ state.name }}</mat-option>
+                             </mat-autocomplete>
+                    </mat-form-field>
+                  </form>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
@@ -34,14 +51,20 @@
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
-                      <ion-label position="floating">No. Básico</ion-label>
-                      <ion-input [clearInput]="true" type="text" name="numero" [(ngModel)]="filtros.numero" (keyup.enter)="onEnter()"></ion-input>
+                      <ion-label position="floating">Fabricante</ion-label>
+                      <ion-input [clearInput]="true" type="text" name="fabricante" [(ngModel)]="filtros.fabricante" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Familia</ion-label>
                       <ion-input [clearInput]="true" type="text" name="familia" [(ngModel)]="filtros.familia" (keyup.enter)="onEnter()"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-item>
+                      <ion-label position="floating">No. Básico</ion-label>
+                      <ion-input [clearInput]="true" type="text" name="numero" [(ngModel)]="filtros.numero" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">
@@ -60,12 +83,6 @@
                   <ion-item>
                       <ion-label position="floating">Modelo</ion-label>
                       <ion-input [clearInput]="true" type="text" name="modelo" [(ngModel)]="filtros.modelo" (keyup.enter)="onEnter()"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="3">
-                  <ion-item>
-                      <ion-label position="floating">Fabricante</ion-label>
-                      <ion-input [clearInput]="true" type="text" name="fabricante" [(ngModel)]="filtros.fabricante" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="3">

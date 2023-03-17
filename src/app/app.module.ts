@@ -28,9 +28,11 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { ConfiguracionService } from './services/default/configuracion.service';
 import { environment } from 'src/environments/environment';
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import { SQLite } from '@ionic-native/sqlite/ngx';
 import localeEs from '@angular/common/locales/es';
 import { DatePipe, registerLocaleData } from '@angular/common';
+import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
+import { FormsModule } from '@angular/forms';
 
 
 registerLocaleData(localeEs, 'es');
@@ -39,6 +41,7 @@ registerLocaleData(localeEs, 'es');
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    FormsModule,
     IonicModule.forRoot(),
     NgxMaskIonicModule.forRoot(), 
     IonicModule.forRoot({
@@ -69,6 +72,8 @@ registerLocaleData(localeEs, 'es');
     MatPaginatorModule
   ],
   providers: [
+    SQLite,
+    SQLitePorter,
     StatusBar,
     SplashScreen,
     FCM,
