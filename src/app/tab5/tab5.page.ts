@@ -57,42 +57,47 @@ export class Tab5Page implements OnInit {
   }
 
   async loadPromociones(){
-    var httpResponse = await this.promService.activas()
-    if(httpResponse.ok){
-      this.promocionesCustom = httpResponse.registros["custom"];
-      this.productos = httpResponse.registros["listas"];
-      this.promociones = [...new Set(httpResponse.registros["listas"].map(item => item.nombre))];
-      this.promocionesCodigos = [...new Set(httpResponse.registros["listas"].map(item => item.codigo))];
-      if(this.promocionesCustom.length>0){
-        this.segment = "0";
+    if(this.configuracion.ConfiguracionService.online){
+      var httpResponse = await this.promService.activas()
+      if(httpResponse.ok){
+        this.promocionesCustom = httpResponse.registros["custom"];
+        this.productos = httpResponse.registros["listas"];
+        this.promociones = [...new Set(httpResponse.registros["listas"].map(item => item.nombre))];
+        this.promocionesCodigos = [...new Set(httpResponse.registros["listas"].map(item => item.codigo))];
+        if(this.promocionesCustom.length>0){
+          this.segment = "0";
+        }else{
+          this.segment = this.promocionesCodigos[0];
+        }
+  
+        //Agrupar todos los productos por promoción
+        this.promocionesCodigos.forEach( c => {
+          var prds = this.productosByPromocion(c);
+          this.listaPrecios[c] = this.unique(prds, ['minimo', 'lista']);
+          this.listaProductos[c] = this.unique(prds, ['codigo', 'descripcion', 'imagen']);
+  
+          this.displayedColumns[c] = [];
+          this.displayedColumns[c].length = this.listaPrecios.length+3;
+          this.displayedColumns[c][0] = 'sku';
+          this.displayedColumns[c][1] = 'descripcion';
+          this.displayedColumns[c][2] = 'imagen';
+          
+          this.dataSource[c] = this.listaProductos[c];
+          var iterador = 3;
+          this.listaPrecios[c].forEach(lp => {
+            this.displayedColumns[c][iterador] = lp.minimo+"";
+            iterador++;
+          });
+        });  
+  
       }else{
-        this.segment = this.promocionesCodigos[0];
+        this.tools.showNotification("Error", httpResponse.mensaje,"Ok");
       }
-
-      //Agrupar todos los productos por promoción
-      this.promocionesCodigos.forEach( c => {
-        var prds = this.productosByPromocion(c);
-        this.listaPrecios[c] = this.unique(prds, ['minimo', 'lista']);
-        this.listaProductos[c] = this.unique(prds, ['codigo', 'descripcion', 'imagen']);
-
-        this.displayedColumns[c] = [];
-        this.displayedColumns[c].length = this.listaPrecios.length+3;
-        this.displayedColumns[c][0] = 'sku';
-        this.displayedColumns[c][1] = 'descripcion';
-        this.displayedColumns[c][2] = 'imagen';
-        
-        this.dataSource[c] = this.listaProductos[c];
-        var iterador = 3;
-        this.listaPrecios[c].forEach(lp => {
-          this.displayedColumns[c][iterador] = lp.minimo+"";
-          iterador++;
-        });
-      });  
-
+      this.loading = false;
     }else{
-      this.tools.showNotification("Error", httpResponse.mensaje,"Ok");
+      //alert("Consulta local")
+      this.loading = false;
     }
-    this.loading = false;
   }
 
   clearFilter(item){

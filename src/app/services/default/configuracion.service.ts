@@ -13,7 +13,7 @@ export class ConfiguracionService {
   public static gestionDiaria: GestionDiariaEntity = window.localStorage["gestionDiaria"]?JSON.parse(window.localStorage["gestionDiaria"]):new GestionDiariaEntity();
   public static clienteSelected = window.localStorage["gestionDiaria"]?true:false;
 
-  public static paginacion = 5;
+  public static paginacion = 10;
   public static bearer = window.localStorage["token"]?window.localStorage["token"]:null;
   public static httpOptions = {
     headers: new HttpHeaders({
@@ -25,6 +25,11 @@ export class ConfiguracionService {
 
   constructor() {
     
+  }
+
+  public setOnline(value){
+    window.localStorage["online"] = value;
+    ConfiguracionService.online = value;
   }
 
   public getPaginacion(){

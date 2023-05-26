@@ -20,6 +20,17 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'tab1/estatus',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/estatus-conexion/estatus-conexion.module').then(m => m.EstatusConexionPageModule),
+              canActivate: [AuthGuard] 
+          }
+        ]
+      },
+      {
         path: 'tab2',
         children: [
           {

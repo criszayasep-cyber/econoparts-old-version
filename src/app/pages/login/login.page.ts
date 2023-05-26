@@ -7,6 +7,7 @@ import { ToolsService } from '../../services/default/tools.service';
 import { ConfiguracionService } from '../../services/default/configuracion.service';
 import { DeviceService } from '../../services/default/device.service';
 import { environment } from 'src/environments/environment';
+import { DbService } from 'src/app/services/default/db.service';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +33,7 @@ export class LoginPage implements OnInit {
     private toastCtrl: ToastController,
     public tools: ToolsService,
     public device: DeviceService,
+    private db: DbService,
     private loginService: LoginService) { 
       this.formLogin = this.formBuilder.group({
         Username: [window.localStorage.getItem("userLogin"), Validators.compose([Validators.required])],
@@ -77,6 +79,7 @@ export class LoginPage implements OnInit {
       this.loading.dismiss();
       if(response.ok){
         //this.formLogin.reset();
+        this.db.createDB();
         this.formLogin.controls["Password"].setValue("");
         /*
         window.localStorage['nombre'] =  this.isLogin.datos.nombre;

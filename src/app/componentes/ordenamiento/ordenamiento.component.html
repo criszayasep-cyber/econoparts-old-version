@@ -14,7 +14,7 @@
         Iniciar Gestión
       </ion-button>
   </ion-item>
-  <ion-item >
+  <ion-item *ngIf="configuracion.ConfiguracionService.online">
       <ion-button expand="block" style="width: 100%;" color="secondary" (click)="seleccionar(3)" >
         Cambiar día
       </ion-button>

@@ -41,14 +41,14 @@ export class FilterEntity {
         //this.orderCampo = campo;
         //this.orderTipo = "asc";
 
-        this.grupo = "";
-        this.subGrupo = "";
+        this.grupo = null;
+        this.subGrupo = null;
+        this.familia = null;
+        this.fabricante = null;
         this.numero = "";
-        this.familia = "";
         this.descripcion = "";
         this.marca = "";
         this.modelo = "";
-        this.fabricante = "";
         this.chasis = "";
         this.motor = "";
         this.anio = null;

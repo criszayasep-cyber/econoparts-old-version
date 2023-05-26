@@ -11,6 +11,7 @@ import { MatAutocompleteModule} from '@angular/material/autocomplete'
 import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
 import { SharedModule } from '../shared/shared.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     RouterModule.forChild([{ path: '', component: Tab2Page }]),
     LazyLoadImageModule.forRoot({
       preset: intersectionObserverPreset // <-- tell LazyLoadImage that you want to use IntersectionObserver
-    })
+    }),
+    NgSelectModule
   ],
   declarations: [Tab2Page]
 })

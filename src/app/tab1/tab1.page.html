@@ -3,7 +3,7 @@
 
 <ion-content #container>
 
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher slot="fixed" *ngIf="configuracion.ConfiguracionService.online" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingText="Deslizar para actualizar" refreshingSpinner="circles" refreshingText="Actualizando...">
         </ion-refresher-content>
     </ion-refresher>
@@ -114,7 +114,7 @@
               <fa-icon [icon]="['fas','plus-circle']" style="margin-right: 5px;"></fa-icon>
               Agregar cliente a gestión del día
             </ion-button>
-            <ion-button color="primary" (click)="addClienteNuevo()">
+            <ion-button color="primary" (click)="addClienteNuevo()" [disabled]="!configuracion.ConfiguracionService.online">
               <fa-icon [icon]="['fas','address-card']" style="margin-right: 5px;"></fa-icon>
               Gestión cliente nuevo
             </ion-button>

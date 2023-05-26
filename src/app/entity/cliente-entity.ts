@@ -21,6 +21,7 @@ export class ClienteEntity {
     grupo: string;
     limite: number;
     saldo: number;
+    vendedor: string;
 
     constructor(){
         this.tipo_pago = "";

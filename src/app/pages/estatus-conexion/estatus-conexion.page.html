@@ -1,0 +1,54 @@
+<app-encabezado [titulo]="'Detalle del backup'"></app-encabezado>
+
+<ion-content>
+  <p class="block-actions">
+    <fa-icon [icon]="['fas','sync']" (click)="loadTables()"></fa-icon>
+  </p>
+  <ion-card style="margin-bottom: 0px;">
+    <ion-card-header>
+      <ion-card-title>Tablas backup</ion-card-title>
+      <ion-card-subtitle>Estas tablas deben de estar lo mas actualizadas posibles, se recomienda una vez al día como minimo.</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>Tabla</ion-col>
+          <ion-col>Ultima fecha de<br/>actualización</ion-col>
+          <ion-col>Registros</ion-col>
+          <ion-col>Descripción</ion-col>
+        </ion-row>
+        <ion-row *ngFor="let item of filterTable('CONEXION')">
+          <ion-col>{{item.tabla}}</ion-col>
+          <ion-col>{{item.fecha | date: 'd/M/y h:mm:ss a'}}</ion-col>
+          <ion-col>{{item.registros | quantityFormat}}</ion-col>
+          <ion-col>{{item.descripcion}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Tablas sin conexión</ion-card-title>
+      <ion-card-subtitle>Estas tablas deben de contener información unicamente cuando se encuentra trabajando sin conexión.</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>Tabla</ion-col>
+          <ion-col>Ultima fecha de<br/>actualización</ion-col>
+          <ion-col>Registros</ion-col>
+          <ion-col>Descripción</ion-col>
+        </ion-row>
+        <ion-row *ngFor="let item of filterTable('SIN CONEXION')">
+          <ion-col>{{item.tabla}}</ion-col>
+          <ion-col>{{item.fecha | date: 'd/M/y h:mm:ss a'}}</ion-col>
+          <ion-col>{{item.registros | quantityFormat}}</ion-col>
+          <ion-col>{{item.descripcion}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

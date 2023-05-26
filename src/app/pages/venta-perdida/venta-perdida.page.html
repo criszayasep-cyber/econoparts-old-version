@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Venta perdida</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+  <div style="padding-right: 30px;padding-left: 30px;">
+    <table class="resumen" style="width: 100%;">
+      <tr>
+        <td>Tipo de venta</td>
+        <td>{{producto.tipo_venta}}</td>
+      </tr>
+      <tr>
+        <td>No.</td>
+        <td *ngIf="producto.pro_number.length>0">{{producto.pro_number}}</td>
+        <td *ngIf="producto.pro_number.length==0"><input type="text" [value]="producto.pro_number" style="width: 100%;"/></td>
+      </tr>
+      <tr>
+        <td>Descripción</td>
+        <td *ngIf="producto.pro_descripcion.length>0">{{producto.pro_descripcion}}</td>
+        <td *ngIf="producto.pro_descripcion.length==0"><input type="text" [value]="producto.pro_descripcion" style="width: 100%;"/></td>
+      </tr>
+      <tr>
+        <td>Cantidad</td>
+        <td><input type="number" [value]="producto.cantidad" style="width: 100%;"/></td>
+      </tr>
+      <ng-container *ngIf="producto.tipo_venta=='Producto no comercializable'">
+        <tr>
+          <td colspan="2" style="height: 20px;"></td>
+        </tr>
+        <tr>
+          <td>Marca<br/>
+            <input type="text" [value]="producto.marca" style="width: 100%;"/>
+          </td>
+          
+          <td>Modelo<br/>
+            <input type="text" [value]="producto.modelo" style="width: 100%;"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Año<br/>
+            <input type="text" [value]="producto.anio" style="width: 100%;"/>
+          </td>
+          
+          <td>Chasis<br/>
+            <input type="text" [value]="producto.chasis" style="width: 100%;"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Número de motor<br/>
+            <input type="text" [value]="producto.motor" style="width: 100%;"/>
+          </td>
+          
+          <td>Grupo<br/>
+            <input type="text" [value]="producto.grupo" style="width: 100%;"/>
+          </td>
+        </tr>
+      </ng-container>
+    </table>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-row>
+    <ion-col size="6">
+      <ion-button expand="block" (click)="close()">Ok</ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button expand="block" (click)="close()">Cancelar</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

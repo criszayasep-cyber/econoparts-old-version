@@ -6,6 +6,7 @@ import { ConfiguracionService } from '../../services/default/configuracion.servi
 import { ProductoService } from '../../services/producto.service';
 import { ToolsService } from '../../services/default/tools.service';
 import { AplicacionEntity } from '../../entity/aplicaciones-entity';
+import { DbService } from 'src/app/services/default/db.service';
 
 @Component({
   selector: 'app-producto-detalle',
@@ -22,6 +23,7 @@ export class ProductoDetallePage implements OnInit {
 
   constructor(private navParams:NavParams, 
     private modalController: ModalController,
+    private db: DbService,
     private sanitizer: DomSanitizer,
     public configuracion: ConfiguracionService, 
     public navCtrl: NavController,
@@ -32,15 +34,30 @@ export class ProductoDetallePage implements OnInit {
   ngOnInit() {
     this.producto = this.navParams.get("producto");
 
-    if(this.producto.imagen!=null && this.producto.imagen.length>10){
-      this.imagen = 'data:image/jpeg;base64,'+this.producto.imagen
+    this.loadImage();
+  }
+
+  async loadImage(){
+    var image: any;
+
+    if(ConfiguracionService.online){
+      var http = await this.productoService.findImage(this.producto.pro_number);
+      if(http.ok){
+        if(http.registros!=null && http.registros.length>10){
+          image = http.registros;
+        }
+      }
+    }
+
+    if(image!=undefined && image.length>0){
+      this.imagen = 'data:image/jpeg;base64,'+image;
     }
   }
   
   async segmentChanged(event){
     switch(event.detail.value){
       case "aplicaciones":
-        if(this.aplicaciones.length==0){
+        /*if(this.aplicaciones.length==0){
           this.loading = true;
           let dataPost = {
             busqueda: this.producto.pro_number
@@ -52,7 +69,8 @@ export class ProductoDetallePage implements OnInit {
           }else{
             this.tools.showNotification("Error", respose.mensaje,"Ok");
           }
-        }
+        }*/
+        this.aplicaciones = await this.db.select("SELECT * FROM venta_movil_aplicaciones WHERE no='"+this.producto.pro_number+"' ORDER BY aplicacion ASC");
         break;
     }
   }

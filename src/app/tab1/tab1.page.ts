@@ -9,6 +9,9 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GestionDiariaEntity } from '../entity/gestion-diaria-entity';
 import { element } from 'protractor';
 import { Network } from '@capacitor/network';
+import { Subject } from 'rxjs';
+import { DbService } from '../services/default/db.service';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-tab1',
@@ -19,6 +22,7 @@ export class Tab1Page implements OnInit{
 
   
   titulo = "Gestión Comercial";
+	loadTotales: Subject<number> = new Subject();
   fechasDisponibles: Array<Date> = window.localStorage["fechasDisponibles"]?JSON.parse(window.localStorage["fechasDisponibles"]):[];
   hoy = window.localStorage["hoy"]?window.localStorage["hoy"]:new Date();
   kpiAcumulado: any;
@@ -38,7 +42,9 @@ export class Tab1Page implements OnInit{
     private kpiService: KPIService,
     private activeRoute: ActivatedRoute,
     public router: Router,
-    private rutaService: RutaService
+    private rutaService: RutaService,
+    private authService: AuthService,
+    private db: DbService
     ) {
       
     }
@@ -48,48 +54,74 @@ export class Tab1Page implements OnInit{
   }
 
   async loadAll(){
-    const status = await Network.getStatus();
-    if(status.connected){
-      this.loadClientes();
-      this.loadKPI();
-      this.loadGestionActiva();
+    if(this.configuracion.ConfiguracionService.online){
+      const status = await Network.getStatus();
+      if(status.connected){
+        this.loadClientes();
+        this.loadKPI();
+        this.loadGestionActiva();
+      }else{
+        this.tools.showNotification("Error", "No esta conectado a internet","Ok");
+      }
     }else{
-      this.tools.showNotification("Error", "No esta conectado a internet","Ok");
+      this.loadClientes();
+      this.loadGestionActiva();
     }
   }
 
   
   async ionViewWillEnter() {
 
-    const status = await Network.getStatus();
-      if(status.connected){
-        let necesarioActualizar = false;
-
-        await this.activeRoute.queryParams.subscribe( params => {
-          if(params["actualizarLista"]!=undefined){
-            necesarioActualizar = true;
-          }
-        });
-        
-        if(necesarioActualizar || ConfiguracionService.actualizarTab1){
-          this.loadAll();
+    if(this.configuracion.ConfiguracionService.online){
+      const status = await Network.getStatus();
+        if(status.connected){
+          let necesarioActualizar = false;
+  
+          await this.activeRoute.queryParams.subscribe( params => {
+            if(params["actualizarLista"]!=undefined){
+              necesarioActualizar = true;
+            }
+          });
           
-          ConfiguracionService.actualizarTab1 = false;
-          window.localStorage["actualizarTab1"] = JSON.stringify(false);
-          this.router.navigate([], {queryParams: null});
+          if(necesarioActualizar || ConfiguracionService.actualizarTab1){
+            this.loadAll();
+            
+            ConfiguracionService.actualizarTab1 = false;
+            window.localStorage["actualizarTab1"] = JSON.stringify(false);
+            this.router.navigate([], {queryParams: null});
+          }
+        }else{
+          this.tools.showNotification("Error", "No esta conectado a internet","Ok");
         }
-      }else{
-        this.tools.showNotification("Error", "No esta conectado a internet","Ok");
+    }else{
+      let necesarioActualizar = false;
+
+      await this.activeRoute.queryParams.subscribe( params => {
+        if(params["actualizarLista"]!=undefined){
+          necesarioActualizar = true;
+        }
+      });
+      
+      if(necesarioActualizar || ConfiguracionService.actualizarTab1){
+        this.loadAll();
+        
+        ConfiguracionService.actualizarTab1 = false;
+        window.localStorage["actualizarTab1"] = JSON.stringify(false);
+        this.router.navigate([], {queryParams: null});
       }
+    }
   }
   
   
   doRefresh(event) {
     this.loadAll();
-    
-    setTimeout(() => {
-      event.target.complete();
-    }, 2000);
+    let countLoad = 0
+    this.loadTotales.subscribe(s => {
+      countLoad += s;
+      if(countLoad==3){
+        event.target.complete();
+      }
+    })
   }
 
   searchCliente(){
@@ -200,25 +232,44 @@ export class Tab1Page implements OnInit{
                   this.ref.detectChanges();
                   
                   if(data!=undefined && data.length>0){
-                    let dataPost = {
-                      ruta: item.ruta.rde_id,
-                      motivo: data
-                    }
-  
-                    var response = await this.rutaService.noVenta(dataPost);
-                    if(response.ok){
-                      //this.configuracion.removePedidoActual();
+                    if(this.configuracion.ConfiguracionService.online){
+                      let dataPost = {
+                        ruta: item.ruta.rde_id,
+                        motivo: data
+                      }
+    
+                      var response = await this.rutaService.noVenta(dataPost);
+                      if(response.ok){
+                        //this.configuracion.removePedidoActual();
+                        ConfiguracionService.setUnselectCliente(false); 
+                        if(data!="0"){
+                          this.clientes.splice(indice, 1);
+                          this.loadAll();
+                          window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
+                        }
+                      }
+                      /*if(data!="0"){
+                        item.cancelado = true;
+                        item.motivo = data;
+                      }*/
+                    }else{
                       ConfiguracionService.setUnselectCliente(false); 
-                      if(data!="0"){
+                      if(data=="0"){
+                        let params = [0, null];
+                        this.db.update(`UPDATE venta_movil_gestiones SET rde_visitado=?, rde_gestion_inicio=? WHERE rde_id=${item.ruta.rde_id}`,params)
+                      }else{
+                        let params = [data, new Date()];
+                        this.db.update(`UPDATE venta_movil_gestiones SET rde_motivo_no_venta=?, rde_gestion_fin=? WHERE rde_id=${item.ruta.rde_id}`,params)
+
+                        params = ['CANCELADO NO VENTA']
+                        this.db.update(`UPDATE venta_movil_pedidos SET ped_estado=? WHERE ped_id=${item.ruta.rde_pedido}`,params)
+                        
                         this.clientes.splice(indice, 1);
                         this.loadAll();
                         window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
                       }
                     }
-                    /*if(data!="0"){
-                      item.cancelado = true;
-                      item.motivo = data;
-                    }*/
+
                   }
 
                   this.ref.detectChanges();
@@ -253,15 +304,58 @@ export class Tab1Page implements OnInit{
             this.ref.detectChanges();
           break;
         case 2://Iniciar gestión
-
-          this.tools.presentLoading("Iniciando gestión...")
-          var response = await this.rutaService.iniciarGestion(item.ruta.rde_id);
-          this.tools.destroyLoading();
-          if(response.ok){
-            ConfiguracionService.setSelectedCliente(item, response.registros);
-            this.navCtrl.navigateForward(['tabs/tab2']);
+          if(this.configuracion.ConfiguracionService.online){
+            this.tools.presentLoading("Iniciando gestión...")
+            var response = await this.rutaService.iniciarGestion(item.ruta.rde_id);
+            this.tools.destroyLoading();
+            if(response.ok){
+              ConfiguracionService.setSelectedCliente(item, response.registros);
+              this.navCtrl.navigateForward(['tabs/tab2']);
+            }else{
+              this.tools.showNotification("Error", response.mensaje,"Ok");
+            } 
           }else{
-            this.tools.showNotification("Error", response.mensaje,"Ok");
+            var idPed = 0
+            if(item.pedido==null){
+              //Se crea el pedido
+              var id = new Date().getTime()
+              let data = [id, 
+                new Date(),
+                this.authService.getUsername(),
+                item.cliente.correo,
+                item.cliente.codigo,
+                new Date(),
+                this.authService.getCodigoVendedor(),
+                item.cliente.nombre_social,
+                item.cliente.nombre_comercial,
+                item.cliente.direccion,
+                item.cliente.direccion2,
+                item.cliente.dui,
+                item.cliente.nit,
+                item.cliente.telefono,
+                item.cliente.area_despacho,
+                item.cliente.celular
+              ];
+              var query = `INSERT INTO 
+                            venta_movil_pedidos(ped_id,ped_fecha_registro,ped_usuario,
+                              ped_cliente_correo,ped_cliente_codigo,ped_fecha, ped_vendedor,
+                              ped_cliente_nombre,ped_cliente_comercial,ped_cliente_direccion,ped_cliente_direccion2,
+                              ped_cliente_dui, ped_cliente_nit,ped_telefono,ped_ruta,ped_celular) 
+                            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+              this.db.insert(query, data)
+              idPed = id
+            }else{
+              //Se busca el pedido
+              idPed = item.pedido.ped_id
+            }
+            var p = await this.db.select(`SELECT * FROM venta_movil_pedidos WHERE ped_id='${idPed}'`);
+            
+            let params = [idPed, new Date(), 1];
+            this.db.update(`UPDATE venta_movil_gestiones SET rde_pedido=?, rde_gestion_inicio=?, rde_visitado=? 
+                            WHERE rde_id=${item.ruta.rde_id}`,params)
+
+            ConfiguracionService.setSelectedCliente(item, p[0]);
+            this.navCtrl.navigateForward(['tabs/tab2']);
           }
           break;
         case 3://Cambiar día
@@ -328,18 +422,36 @@ export class Tab1Page implements OnInit{
   async loadClientes(){
     this.ref.detectChanges();
     //this.clientes = [];
-    this.loading.clientes = true;
-    var r = await this.rutaService.getToday();
-    this.loading.clientes = false;
-    if(r){
-      if(r.ok){
-        this.clientes = r.registros;
-        window.localStorage["clientesVisitar"] = JSON.stringify(r.registros);
-      }else{
-        this.tools.showNotification("Error", r.mensaje,"Ok");
+    if(this.configuracion.ConfiguracionService.online){
+      this.loading.clientes = true;
+      var r = await this.rutaService.getToday();
+      this.loading.clientes = false;
+      if(r){
+        if(r.ok){
+          this.clientes = r.registros;
+          window.localStorage["clientesVisitar"] = JSON.stringify(r.registros);
+        }else{
+          this.tools.showNotification("Error", r.mensaje,"Ok");
+        }
       }
+    }else{
+      var resultado = []
+      var query = "SELECT * FROM  venta_movil_gestiones WHERE rde_vendedor_codigo = '"+this.authService.getCodigoVendedor()+"' AND rde_gestion_fin IS NULL"
+      var gestiones = await this.db.select(query)
+      gestiones.forEach(async g => {
+        var cli = await this.db.select("SELECT * FROM venta_movil_clientes WHERE codigo='"+g.rde_cliente_codigo+"'")
+        resultado.push({
+          ruta: g,
+          cliente: cli[0]
+        });
+      })
+
+      //console.log(resultado)
+      this.clientes = resultado;
+      window.localStorage["clientesVisitar"] = JSON.stringify(resultado);
     }
     this.ref.detectChanges();
+    this.loadTotales.next(1);
   }
 
   async loadKPI(){
@@ -357,6 +469,7 @@ export class Tab1Page implements OnInit{
         this.tools.showNotification("Error", r.mensaje,"Ok");
       }
     }
+    this.loadTotales.next(1);
   }
 
   async loadFechasDisponibles(serverString){
@@ -375,16 +488,45 @@ export class Tab1Page implements OnInit{
   }
 
   async loadGestionActiva(){
-    var response = await this.rutaService.getGestionActiva();
-    if(response.ok){
-      if(response.registros["ruta"]!=null){
-        ConfiguracionService.setGestionActiva(response.registros);
+    
+    if(this.configuracion.ConfiguracionService.online){
+      var response = await this.rutaService.getGestionActiva();
+      if(response.ok){
+        if(response.registros["ruta"]!=null){
+          ConfiguracionService.setGestionActiva(response.registros);
+        }else{
+          ConfiguracionService.setUnselectCliente(false);
+        }
+      }else{
+        this.tools.showNotification("Error", response.mensaje,"Ok");
+      }
+    }else{
+      var registros = []
+      var query = `SELECT * FROM venta_movil_gestiones 
+                  WHERE rde_visitado=1 
+                    AND rde_vendedor_codigo='${this.authService.getCodigoVendedor()}' 
+                    AND rde_gestion_inicio IS NOT NULL
+                    AND rde_gestion_fin IS NULL`
+      var ruQuery = await this.db.select(query);
+
+      if(ruQuery.length>0){
+        var ruta = ruQuery[0]
+  
+        var cliQuery = await this.db.select(`SELECT * FROM venta_movil_clientes WHERE codigo='${ruta.rde_cliente_codigo}'`);
+        var pedQuery = await this.db.select(`SELECT * FROM venta_movil_pedidos WHERE ped_id='${ruta.rde_pedido}'`);
+
+        registros.push({
+          ruta: ruta,
+          cliente: cliQuery[0],
+          pedido: pedQuery[0]
+        })
+        
+        ConfiguracionService.setGestionActiva(registros);
       }else{
         ConfiguracionService.setUnselectCliente(false);
       }
-    }else{
-      this.tools.showNotification("Error", response.mensaje,"Ok");
     }
+    this.loadTotales.next(1);
   }
 
 }

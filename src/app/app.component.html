@@ -20,13 +20,23 @@
           
           <ion-item (click)="cerrarSesion()">
             <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','sign-out-alt']" slot="start" ></fa-icon>
-            <ion-label style="color:var(--ion-color-stjazul);">Cerrar sesión</ion-label>
+            <ion-label >Cerrar sesión</ion-label>
           </ion-item>
-          
-          <ion-item (click)="sincronizar()">
+
+          <ion-item (click)="crearCopia()" >
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','cloud-download-alt']" slot="start" ></fa-icon>
+            <ion-label >Realizar copia</ion-label>
+          </ion-item>
+
+          <ion-item (click)="estatus()" >
+            <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','database']" slot="start" ></fa-icon>
+            <ion-label >Backup</ion-label>
+          </ion-item>
+
+          <ion-item>
             <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','wifi']" slot="start" ></fa-icon>
-            <ion-label style="color:var(--ion-color-stjazul);">{{config.ConfiguracionService.online==true?"Online":"Offline"}}</ion-label>
-            <ion-toggle slot="end" [(ngModel)]="conexion" ></ion-toggle>
+            <ion-label >{{config.ConfiguracionService.online==true?"Online":"Offline"}}</ion-label>
+            <ion-toggle slot="end"  (click)="sincronizar()" [(ngModel)]="conexion" ></ion-toggle>
           </ion-item>
 
           <!--<ion-item (click)="goMenu(1)" >

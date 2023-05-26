@@ -11,25 +11,25 @@
         <ion-col size="3">
           <ion-item>
               <ion-label position="floating">No Cliente</ion-label>
-              <ion-input autofocus="true" type="email" [(ngModel)]="filtros.cliente" name="cliente"></ion-input>
+              <ion-input [clearInput]="true" autofocus="true" type="email" [(ngModel)]="filtros.cliente" name="cliente" (keyup.enter)="onEnter()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="3">
           <ion-item>
               <ion-label position="floating">Razon Social</ion-label>
-              <ion-input type="text" [(ngModel)]="filtros.razon_social" name="razon_social"></ion-input>
+              <ion-input [clearInput]="true" type="text" [(ngModel)]="filtros.razon_social" name="razon_social" (keyup.enter)="onEnter()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="3">
           <ion-item>
               <ion-label position="floating">Nombre Comercial</ion-label>
-              <ion-input type="text" [(ngModel)]="filtros.nombre_comercial" name="nombre_comercial"></ion-input>
+              <ion-input [clearInput]="true" (ionClear)="onInputClear($event)" type="text" [(ngModel)]="filtros.nombre_comercial" name="nombre_comercial" (keyup.enter)="onEnter()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="3">
           <ion-item>
               <ion-label position="floating">No. Registro</ion-label>
-              <ion-input type="text" [(ngModel)]="filtros.registro" name="registro"></ion-input>
+              <ion-input [clearInput]="true" type="text" [(ngModel)]="filtros.registro" name="registro" (keyup.enter)="onEnter()"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>

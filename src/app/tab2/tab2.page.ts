@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
-import { AlertController, ModalController, NavController } from '@ionic/angular';
+import { AlertController, IonContent, ModalController, NavController } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConfiguracionService } from '../services/default/configuracion.service';
 import { ProductoService } from '../services/producto.service';
@@ -9,6 +9,11 @@ import { FilterEntity } from '../entity/default/filter-entity';
 import { PedidoService } from '../services/pedido.service';
 import { ProductoDetallePage } from '../pages/producto-detalle/producto-detalle.page';
 import { FormControl } from '@angular/forms';
+import { NgSelectConfig } from '@ng-select/ng-select';
+import { DbService } from '../services/default/db.service';
+import { VentaPerdidaPage } from '../pages/venta-perdida/venta-perdida.page';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
+
 
 @Component({
   selector: 'app-tab2',
@@ -16,21 +21,15 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page  implements OnInit{
+  @ViewChild(IonContent) content: IonContent;
+  
+  combos = {
+    grupos: [],
+    subgrupos: [],
+    fabricantes: [],
+    familias:[]
+  }
 
-  myControl = new FormControl('');
-  states = [
-    {code: 'AL', name: 'Alabama'},
-    {code: 'CA', name: 'California'},
-    {code: 'FL', name: 'Florida'},
-    {code: 'KS', name: 'Kansas'},
-    {code: 'MA', name: 'Massachusetts'},
-    {code: 'NY', name: 'New York'},
-    {code: 'OR', name: 'Oregon'},
-    {code: 'PA', name: 'Pennsylvania'},
-    {code: 'TN', name: 'Tennessee'},
-    {code: 'VA', name: 'Virginia'},
-    {code: 'WY', name: 'Wyoming'},
-  ];
   titulo = "| Catálogo";
   productos = [];
   productosEquivalentes = [];
@@ -53,6 +52,8 @@ export class Tab2Page  implements OnInit{
   someDefaultImage = 'assets/default-img.jpg';
   categorias: any = [];
   constructor(private router: Router,
+    private config: NgSelectConfig,
+    private db: DbService,
     private sanitizer: DomSanitizer,
     private alertController: AlertController, 
     public configuracion: ConfiguracionService,
@@ -62,9 +63,11 @@ export class Tab2Page  implements OnInit{
     public navCtrl: NavController,
     private modalController: ModalController,
     private activeRoute: ActivatedRoute,
+    private keyboard: Keyboard,
     private tools: ToolsService) {}
   
   ngOnInit(){
+    this.config.notFoundText = "No se encuentra";
 
     /*if(window.localStorage["categorias"]){
       this.cargado = true;
@@ -72,11 +75,18 @@ export class Tab2Page  implements OnInit{
     }*/
     
     this.filtros = new FilterEntity(ConfiguracionService.paginacion);
-    
+  }
+
+  async loadCombos(){
+    this.combos.grupos = await this.db.select("SELECT * FROM venta_movil_combos WHERE tipo='GRUPO'");
+    this.combos.subgrupos = await this.db.select("SELECT * FROM venta_movil_combos WHERE tipo='SUB_GRUPO'");
+    this.combos.fabricantes = await this.db.select("SELECT * FROM venta_movil_combos WHERE tipo='FABRICANTE'");
+    this.combos.familias = await this.db.select("SELECT * FROM venta_movil_combos WHERE tipo='FAMILIA'");
   }
 
   
   async ionViewWillEnter() {
+    this.loadCombos();
 
 
     await this.activeRoute.queryParams.subscribe( params => {
@@ -109,7 +119,7 @@ export class Tab2Page  implements OnInit{
     this.buscar(true);
   }
 
-  async buscar(primera:boolean){
+  /*async buscar(primera:boolean){
     this.filtros.primera = primera;
     if(primera){
       this.total = 0;
@@ -131,6 +141,137 @@ export class Tab2Page  implements OnInit{
       this.tools.showNotification("Error", http.mensaje,"Ok");
     }
     this.loading.busqueda = false;
+  }*/
+
+  async buscar(primera:boolean){
+    
+    setTimeout(async () => 
+    {
+      this.keyboard.hide()
+    },
+    500);
+    this.keyboard.hide()
+    this.loading.busqueda = true;
+    var where = "";
+    
+    this.filtros.primera = primera;
+    if(primera){
+      this.total = 0;
+      this.filtros.pageIndex = 0;
+      this.filtros.offset = 0;
+    }else{
+      this.filtros.total = this.total;
+    }
+
+    this.registros.busqueda = -1;
+    this.productos = [];
+
+    if(!this.tools.isNullOrEmpty(this.filtros.grupo)){
+      where += (where.length>0?" and ": "") + ` pro_categoria_id='${this.filtros.grupo}' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.subGrupo)){
+      where += (where.length>0?" and ": "") + ` pro_sub_categoria_id='${this.filtros.subGrupo}' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.fabricante)){
+      where += (where.length>0?" and ": "") + ` pro_fabricante_id='${this.filtros.fabricante}' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.familia)){
+      where += (where.length>0?" and ": "") + ` pro_familia_id='${this.filtros.familia}' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.numero)){
+      where += (where.length>0?" and ": "") + ` UPPER(pro_number) LIKE '%${this.filtros.numero.toUpperCase()}%' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.descripcion)){
+      where += (where.length>0?" and ": "") + ` UPPER(pro_descripcion) LIKE '%${this.filtros.descripcion.toUpperCase()}%' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.marca)){
+      where += (where.length>0?" and ": "") + ` UPPER(pro_marca) LIKE '%${this.filtros.marca.toUpperCase()}%' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.modelo)){
+      where += (where.length>0?" and ": "") + ` UPPER(pro_modelo) LIKE '%${this.filtros.modelo.toUpperCase()}%' `
+    }
+
+    if(!this.tools.isNullOrEmpty(this.filtros.aplicacion)){
+      where += (where.length>0?" and ": "") + ` UPPER(pro_number) IN (SELECT no FROM venta_movil_aplicaciones WHERE UPPER(aplicacion) LIKE '%${this.filtros.aplicacion.toUpperCase()}%') `
+    }
+
+    if(where.length>0){
+      var query = `SELECT * 
+                  FROM venta_movil_productos 
+                    LEFT JOIN venta_movil_inventario_precios ON no=pro_number
+                  WHERE ${where} 
+                  ORDER BY existencia DESC 
+                  LIMIT ${this.filtros.offset}, ${this.filtros.items}`;
+      //console.log(query)
+      var prds = await this.db.select(query);
+      
+      this.productos = prds;
+      this.registros.busqueda = prds.length;
+      
+      
+      const yOffset = document.getElementById("tbResultado");
+      if(yOffset){
+        //console.log(yOffset.offsetTop)
+        this.content.scrollToPoint(0, yOffset.offsetTop,500)
+      }
+
+      if(this.filtros.primera){
+        var count = await this.db.select("SELECT count(*) total FROM venta_movil_productos WHERE "+where);
+        this.total = count[0]["total"];
+      }else{
+        this.total = this.filtros.total;
+      }
+
+      if(this.registros.busqueda>0 && this.configuracion.ConfiguracionService.online){
+        //Enviamos los codigos para búsqueda
+        var cods = "'"+prds.map(a => a.pro_number).join("','")+"'"
+        var dataPost = {
+          busqueda : cods
+        }
+        var http = await this.productoService.FiltrarPrecioExistencia(dataPost);
+        if(http.ok){
+          var actualizacion = http.registros
+          var jsonUpdate = [];
+          actualizacion.forEach(element => {
+            var index = this.productos.findIndex(obj => obj.pro_number == element.no)
+            this.productos[index].preciou = element.preciou;
+            this.productos[index].existencia = element.existencia;
+            //Actualizar la DB
+            jsonUpdate.push({
+              "set": {
+                "preciou": element.preciou,
+                "existencia": element.existencia
+              },
+              "where": {
+                "no": element.no
+              }
+            })
+          });
+          
+          if(jsonUpdate.length>0){
+            var json = {
+              "data":{
+                  "updates":{
+                      "venta_movil_inventario_precios":jsonUpdate
+                  }
+              }
+            };
+            this.db.updateMassive(json);
+          }
+        }else{
+          this.tools.showNotification("Error", http.mensaje,"Ok");
+        }
+      }
+    }
+    this.loading.busqueda = false;
+
   }
 
   verProducto(item){
@@ -144,8 +285,20 @@ export class Tab2Page  implements OnInit{
     }).then(modal => modal.present());
   }
 
+  ventaPerdida(item){
+    this.modalController.create({
+      component: VentaPerdidaPage,
+      cssClass: 'modal-venta-perdida',
+      backdropDismiss: false,
+      componentProps:{
+        producto: item
+      }
+    }).then(modal => modal.present());
+  }
+
   async agregarProducto(producto){
     this.ref.detectChanges();
+    
     const alert = await this.alertController.create({
       header: 'Agregar al pedido',
       backdropDismiss: false,
@@ -184,13 +337,18 @@ export class Tab2Page  implements OnInit{
       cantidad: cantidad,
       pedido: ConfiguracionService.gestionDiaria.pedido.ped_id
     }
-    var http = await this.pedidoService.addProducto(dataPost);
-    if(http){
-      if(http.ok){
-        this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
+    
+    if(this.configuracion.ConfiguracionService.online){
+      var http = await this.pedidoService.addProducto(dataPost);
+      if(http){
+        if(http.ok){
+          this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
+        }
+      }else{
+        this.tools.showNotification("Error", http.mensaje,"Ok");
       }
     }else{
-      this.tools.showNotification("Error", http.mensaje,"Ok");
+      this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
     }
   }
 
@@ -213,7 +371,7 @@ export class Tab2Page  implements OnInit{
     this.codigo = "";
   }
 
-  async buscarEquivalentes(){
+  /*async buscarEquivalentes(){
     this.registros.equivalentes = -1;
     this.productosEquivalentes = [];
     this.loading.equivalentes = true;
@@ -228,6 +386,70 @@ export class Tab2Page  implements OnInit{
       this.tools.showNotification("Error", http.mensaje,"Ok");
     }
     this.loading.equivalentes = false;
+  }*/
+  async buscarEquivalentes(){
+    this.registros.equivalentes = -1;
+    this.productosEquivalentes = [];
+    this.loading.equivalentes = true;
+    /*let dataPost = {
+      busqueda: this.codigo
+    }*/
+    
+    var query = `SELECT * FROM venta_movil_productos 
+                  INNER JOIN venta_movil_inventario_precios ON no=pro_number
+                  WHERE pro_number IN (SELECT noSustituto FROM venta_movil_equivalentes WHERE no='${this.codigo}')
+                  ORDER BY existencia DESC ` 
+    var prds = await this.db.select(query);
+    this.productosEquivalentes = prds;
+    this.registros.equivalentes = prds.length;
+  
+    this.loading.equivalentes = false;
+
+    if(this.registros.equivalentes>0 && this.configuracion.ConfiguracionService.online){
+      //Enviamos los codigos para búsqueda
+      var cods = "'"+prds.map(a => a.pro_number).join("','")+"'"
+      var dataPost = {
+        busqueda : cods
+      }
+      var http = await this.productoService.FiltrarPrecioExistencia(dataPost);
+      if(http.ok){
+        var actualizacion = http.registros
+        var jsonUpdate = [];
+        actualizacion.forEach(element => {
+          var index = this.productosEquivalentes.findIndex(obj => obj.pro_number == element.no)
+          this.productosEquivalentes[index].preciou = element.preciou;
+          this.productosEquivalentes[index].existencia = element.existencia;
+          //Actualizar la DB
+          jsonUpdate.push({
+            "set": {
+              "preciou": element.preciou,
+              "existencia": element.existencia
+            },
+            "where": {
+              "no": element.no
+            }
+          })
+        });
+        
+        if(jsonUpdate.length>0){
+          var json = {
+            "data":{
+                "updates":{
+                    "venta_movil_inventario_precios":jsonUpdate
+                }
+            }
+          };
+          this.db.updateMassive(json);
+        }
+      }else{
+        this.tools.showNotification("Error", http.mensaje,"Ok");
+      }
+    }
   }
 
+
+  buscarCombo(term, list) {
+      term = term.toLowerCase();
+      return list.nombre.toLowerCase().indexOf(term) > -1 || list.id.toLowerCase().indexOf(term) > -1
+  }
 }

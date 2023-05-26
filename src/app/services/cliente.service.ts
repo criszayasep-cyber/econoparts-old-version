@@ -96,4 +96,20 @@ export class ClienteService {
     }
   }//fin ReportarDocumento
 
+  async Backup(){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "get", `${this.url}backup`, null);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin Backup
+
+
+  
+
 }

@@ -33,6 +33,7 @@ import localeEs from '@angular/common/locales/es';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 registerLocaleData(localeEs, 'es');

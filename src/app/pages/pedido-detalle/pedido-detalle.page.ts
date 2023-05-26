@@ -66,13 +66,17 @@ export class PedidoDetallePage implements OnInit {
   }
 
   async loadInfoCliente(){
-    var response = await this.clienteService.getByID(this.pedido.ped_cliente_codigo);
-    if(response){
-      if(response.ok){
-        this.cliente = response.registros["cliente"];
-      }else{
-        this.tools.showNotification("Error", response.mensaje,"Ok");
+    if(this.configuracion.ConfiguracionService.online){
+      var response = await this.clienteService.getByID(this.pedido.ped_cliente_codigo);
+      if(response){
+        if(response.ok){
+          this.cliente = response.registros["cliente"];
+        }else{
+          this.tools.showNotification("Error", response.mensaje,"Ok");
+        }
       }
+    }else{
+
     }
   }
 
@@ -80,14 +84,18 @@ export class PedidoDetallePage implements OnInit {
     this.registros = -1;
     this.loading.detalle = true;
     
-    var response = await this.pedidoService.getDetalle(this.pedido.ped_id);
-    if(response){
-      if(response.ok){
-        this.pedido.vmo_pedido_detalle = response.registros;
-        this.registros = this.pedido.vmo_pedido_detalle.length;
-      }else{
-        this.tools.showNotification("Error", response.mensaje,"Ok");
+    if(this.configuracion.ConfiguracionService.online){
+      var response = await this.pedidoService.getDetalle(this.pedido.ped_id);
+      if(response){
+        if(response.ok){
+          this.pedido.vmo_pedido_detalle = response.registros;
+          this.registros = this.pedido.vmo_pedido_detalle.length;
+        }else{
+          this.tools.showNotification("Error", response.mensaje,"Ok");
+        }
       }
+    }else{
+
     }
     this.loading.detalle = false;
   }
@@ -378,24 +386,32 @@ export class PedidoDetallePage implements OnInit {
   
 
   async loadRutas(){
-    var response = await this.navService.getRutas();
-    if(response){
-      if(response.ok){
-        this.rutas = response.registros;
-      }else{
-        this.tools.showNotification("Error", response.mensaje,"Ok");
+    if(this.configuracion.ConfiguracionService.online){
+      var response = await this.navService.getRutas();
+      if(response){
+        if(response.ok){
+          this.rutas = response.registros;
+        }else{
+          this.tools.showNotification("Error", response.mensaje,"Ok");
+        }
       }
+    }else{
+
     }
   }
 
   async loadSucursales(){
-    var response = await this.navService.getSucursales();
-    if(response){
-      if(response.ok){
-        this.sucursales = response.registros;
-      }else{
-        this.tools.showNotification("Error", response.mensaje,"Ok");
+    if(this.configuracion.ConfiguracionService.online){
+      var response = await this.navService.getSucursales();
+      if(response){
+        if(response.ok){
+          this.sucursales = response.registros;
+        }else{
+          this.tools.showNotification("Error", response.mensaje,"Ok");
+        }
       }
+    }else{
+
     }
   }
 

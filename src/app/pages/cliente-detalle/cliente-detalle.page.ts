@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, NavController, PopoverController } from '@ionic/angular';
 import { OpcionesFacturaComponent } from 'src/app/componentes/opciones-factura/opciones-factura.component';
+import { ConfiguracionService } from 'src/app/services/default/configuracion.service';
 import { ClienteEntity } from '../../entity/cliente-entity';
 import { FacturaPendienteEntity } from '../../entity/factura-pendiente';
 import { ClienteService } from '../../services/cliente.service';
@@ -56,17 +57,19 @@ export class ClienteDetallePage implements OnInit {
       case "first":
         break;
       case "second":
-        this.loading.facturas = true;
-        var response = await this.clienteService.getFacturasPendientes(this.cliente.codigo);
-        if(response){
-          if(response.ok){
-            this.facturasPendientes = response.registros;
-            this.registros = this.facturasPendientes.length;
-          }else{
-            this.tools.showNotification("Error", response.mensaje,"Ok");
+        if(ConfiguracionService.online){
+          this.loading.facturas = true;
+          var response = await this.clienteService.getFacturasPendientes(this.cliente.codigo);
+          if(response){
+            if(response.ok){
+              this.facturasPendientes = response.registros;
+              this.registros = this.facturasPendientes.length;
+            }else{
+              this.tools.showNotification("Error", response.mensaje,"Ok");
+            }
           }
+          this.loading.facturas = false;
         }
-        this.loading.facturas = false;
         break;
     }
     this.router.navigate([], 
@@ -263,7 +266,7 @@ export class ClienteDetallePage implements OnInit {
                   role: 'ok'
                 }]
               });
-        
+              
               await alert.present();
               var { data, role } = await alert.onDidDismiss();
               if(role=="ok"){

@@ -15,6 +15,16 @@ export class ToolsService {
     private toastCtrl: ToastController
     ) { }
 
+  public isNullOrEmpty(texto){
+    if(texto==null){
+      return true;
+    }else if(texto.replace(/\s/g,'')==""){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   public paginar(filtros: FilterEntity, pag){
     if(filtros.items!=pag.pageSize){
       filtros.pageIndex = 0;

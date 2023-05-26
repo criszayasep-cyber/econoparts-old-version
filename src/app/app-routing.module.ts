@@ -40,6 +40,14 @@ const routes: Routes = [
     path: 'tab5',
     loadChildren: () => import('./tab5/tab5.module').then( m => m.Tab5PageModule)
   },
+  {
+    path: 'estatus-conexion',
+    loadChildren: () => import('./pages/estatus-conexion/estatus-conexion.module').then( m => m.EstatusConexionPageModule)
+  },
+  {
+    path: 'venta-perdida',
+    loadChildren: () => import('./pages/venta-perdida/venta-perdida.module').then( m => m.VentaPerdidaPageModule)
+  },
 
 
 

@@ -18,13 +18,13 @@ export class AuthService {
   public isAuthenticated(): boolean {
     var valid = !this.helper.isTokenExpired(ConfiguracionService.bearer);
     if(valid){
-      this.setTimeOut();
+      //this.setTimeOut();
     }
     return valid;
   }
 
   
-  public setTimeOut(){
+  public ExsetTimeOut(){
     if(!this.isTimer){
       /*const conversor = 0.0000115741;
       var user = this.helper.decodeToken(localStorage.getItem("token"));
@@ -89,6 +89,14 @@ export class AuthService {
 
   public getNombre(){
     return this.getClaveToken("nombre");
+  }
+
+  public getCodigoVendedor(){
+    return this.getClaveToken("codigoVendedor");
+  }
+
+  public getUsername(){
+    return this.getClaveToken("user");
   }
 
   public getFoto(){

@@ -7,6 +7,7 @@ import { VmoPedidoEntityEntity } from '../entity/vmo-pedido-entity';
 import { PedidoService } from '../services/pedido.service';
 import { ToolsService } from '../services/default/tools.service';
 import { FilterEntity } from '../entity/default/filter-entity';
+import { DbService } from '../services/default/db.service';
 
 @Component({
   selector: 'app-tab4',
@@ -47,6 +48,7 @@ export class Tab4Page implements OnInit {
     public configuracion: ConfiguracionService, 
     private activeRoute: ActivatedRoute, 
     private pedidoService: PedidoService,
+    private db: DbService,
     private tools: ToolsService,
     public navCtrl: NavController) {
       this.listado.proceso = new Array<VmoPedidoEntityEntity>();
@@ -104,19 +106,27 @@ export class Tab4Page implements OnInit {
       total: 0,
       pageIndex: 0
     }
-    var response = await this.pedidoService.filter(dataPost);
-    if(response){
-      if(response.ok){
-        this.listado.proceso = response.registros;
-        this.registros.proceso = this.listado.proceso.length;
-      }else{
-        this.tools.showNotification("Error", response.mensaje,"Ok");
+    if(this.configuracion.ConfiguracionService.online){
+      var response = await this.pedidoService.filter(dataPost);
+      if(response){
+        if(response.ok){
+          this.listado.proceso = response.registros;
+          this.registros.proceso = this.listado.proceso.length;
+        }else{
+          this.tools.showNotification("Error", response.mensaje,"Ok");
+        }
       }
+    }else{
+      var query = `SELECT * FROM venta_movil_pedidos
+                  WHERE ped_estado='EN PROCESO'`;
+      var pedidos = await this.db.select(query);
+      this.listado.proceso = pedidos;
+      this.registros.proceso = this.listado.proceso.length;
     }
     this.loading.proceso = false;
   }
   
-  async loadPedidosCotizaciones(){
+  /*async loadPedidosCotizaciones(){
     this.registros.cotizaciones = -1;
     this.loading.cotizaciones = true;
     let dataPost = {
@@ -150,7 +160,7 @@ export class Tab4Page implements OnInit {
       }
     }
     this.loading.historico = false;
-  }
+  }*/
   
   detallePedido(item){
     let navigationExtras: NavigationExtras = {
@@ -209,58 +219,59 @@ export class Tab4Page implements OnInit {
   }
 
   async buscar(primera){
-
-    switch(this.segment){
-      case "second":
-        this.filtros.cotizaciones.primera = primera;
-        if(primera){
-          this.totales.cotizaciones = 0;
-          this.filtros.cotizaciones.pageIndex = 0;
-          this.filtros.cotizaciones.offset = 0;
-        }else{
-          this.filtros.cotizaciones.total = this.totales.cotizaciones;
-        }
-
-        this.registros.cotizaciones = -1;
-        this.loading.cotizaciones = true;
-        this.filtros.cotizaciones.estado = "COTIZACION";
-        var response = await this.pedidoService.filter(this.filtros.cotizaciones);
-        if(response){
-          if(response.ok){
-            this.listado.cotizaciones = response.registros;
-            this.registros.cotizaciones = this.listado.historico.length;
-            this.totales.cotizaciones = response.total;
+    if(this.configuracion.ConfiguracionService.online){
+      switch(this.segment){
+        case "second":
+          this.filtros.cotizaciones.primera = primera;
+          if(primera){
+            this.totales.cotizaciones = 0;
+            this.filtros.cotizaciones.pageIndex = 0;
+            this.filtros.cotizaciones.offset = 0;
           }else{
-            this.tools.showNotification("Error", response.mensaje,"Ok");
+            this.filtros.cotizaciones.total = this.totales.cotizaciones;
           }
-        }
-        this.loading.cotizaciones = false;
-      break;
-      case "third":
-        this.filtros.historico.primera = primera;
-        if(primera){
-          this.totales.historico = 0;
-          this.filtros.historico.pageIndex = 0;
-          this.filtros.historico.offset = 0;
-        }else{
-          this.filtros.historico.total = this.totales.historico;
-        }
-
-        this.registros.historico = -1;
-        this.loading.historico = true;
-        this.filtros.historico.estado = "HISTORICO";
-        var response = await this.pedidoService.filter(this.filtros.historico);
-        if(response){
-          if(response.ok){
-            this.listado.historico = response.registros;
-            this.registros.historico = this.listado.historico.length;
-            this.totales.historico = response.total;
+  
+          this.registros.cotizaciones = -1;
+          this.loading.cotizaciones = true;
+          this.filtros.cotizaciones.estado = "COTIZACION";
+          var response = await this.pedidoService.filter(this.filtros.cotizaciones);
+          if(response){
+            if(response.ok){
+              this.listado.cotizaciones = response.registros;
+              this.registros.cotizaciones = this.listado.historico.length;
+              this.totales.cotizaciones = response.total;
+            }else{
+              this.tools.showNotification("Error", response.mensaje,"Ok");
+            }
+          }
+          this.loading.cotizaciones = false;
+        break;
+        case "third":
+          this.filtros.historico.primera = primera;
+          if(primera){
+            this.totales.historico = 0;
+            this.filtros.historico.pageIndex = 0;
+            this.filtros.historico.offset = 0;
           }else{
-            this.tools.showNotification("Error", response.mensaje,"Ok");
+            this.filtros.historico.total = this.totales.historico;
           }
-        }
-        this.loading.historico = false;
-      break;
+  
+          this.registros.historico = -1;
+          this.loading.historico = true;
+          this.filtros.historico.estado = "HISTORICO";
+          var response = await this.pedidoService.filter(this.filtros.historico);
+          if(response){
+            if(response.ok){
+              this.listado.historico = response.registros;
+              this.registros.historico = this.listado.historico.length;
+              this.totales.historico = response.total;
+            }else{
+              this.tools.showNotification("Error", response.mensaje,"Ok");
+            }
+          }
+          this.loading.historico = false;
+        break;
+      }
     }
   }
   
