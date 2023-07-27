@@ -21,6 +21,7 @@ import { FCMPlugin } from 'plugins/cordova-plugin-fcm-with-dependecy-updated/src
 })
 export class AppComponent {
 
+  clientesEnGestion = 0
   conexion = this.config.ConfiguracionService.online
   showSplash = true;
   lastTimeBackPress = 0;
@@ -81,6 +82,11 @@ export class AppComponent {
         // backend.registerToken(token);
         console.log(token)
       });
+      
+      this.db.clientesEnGestion.subscribe(c => {
+        this.clientesEnGestion = c
+      })
+
     });
   }
 
@@ -148,6 +154,9 @@ export class AppComponent {
         }else if(this.config.getCodigoActivo()!=undefined){
           //Verificar que no tenga una gestión activa
           this.tools.showNotification("Aviso", "No puede cambiar la configuración, si tiene una gestión activa.","Ok");
+        }else if(this.clientesEnGestion>0){
+          //Verificar que no tenga clientes para gestionar
+          this.tools.showNotification("Aviso", "No puede cambiar la configuración, si tiene clientes a visitar","Ok");
         }else if(this.conexion){
             //Preparar copia local
             //Sincronizar las tablas catalogo: combos, productos, aplicaciones, equivalentes y clientes

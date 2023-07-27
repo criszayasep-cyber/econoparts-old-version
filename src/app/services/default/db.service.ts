@@ -32,6 +32,7 @@ export class DbService {
 	public procesosTotales: Subject<number> = new Subject();
 	public procesosOk: number = 0;
   public showIconLoading = false;
+  public clientesEnGestion: Subject<number> = new Subject();
 
   constructor(
     private prodService: ProductoService,

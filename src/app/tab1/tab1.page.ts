@@ -429,6 +429,7 @@ export class Tab1Page implements OnInit{
       if(r){
         if(r.ok){
           this.clientes = r.registros;
+          this.db.clientesEnGestion.next(this.clientes?this.clientes.length:0)
           window.localStorage["clientesVisitar"] = JSON.stringify(r.registros);
         }else{
           this.tools.showNotification("Error", r.mensaje,"Ok");
@@ -448,6 +449,7 @@ export class Tab1Page implements OnInit{
 
       //console.log(resultado)
       this.clientes = resultado;
+      this.db.clientesEnGestion.next(this.clientes?this.clientes.length:0)
       window.localStorage["clientesVisitar"] = JSON.stringify(resultado);
     }
     this.ref.detectChanges();
