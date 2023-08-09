@@ -74,8 +74,7 @@ CREATE TABLE venta_movil_productos (
 	pro_version varchar(50)  NULL,
 	pro_vin varchar(50)  NULL,
 	pro_fabricante_id varchar(50)  NULL,
-	pro_fabricante varchar(50)  NULL,
-	medida varchar(50)
+	pro_fabricante varchar(50)  NULL
 );
 --preciou numeric(10,2) NULL,
 --existencia int,
@@ -129,9 +128,11 @@ CREATE TABLE venta_movil_clientes (
 
 --inventario y precios
 CREATE TABLE venta_movil_inventario_precios (
+	bodega varchar(10),
 	no varchar(100),
 	existencia int,
-	preciou numeric(10,2)
+	preciou numeric(10,2),
+	medida varchar(100)
 );
 
 --======================================================================================
@@ -190,7 +191,8 @@ CREATE TABLE venta_movil_pedidos (
 	ped_complemento int DEFAULT 0 NULL,
 	ped_comentario_cc text NULL,
 	ped_fecha_envio_nav datetime NULL,
-	ped_requiere_aut_creditos int NULL
+	ped_requiere_aut_creditos int NULL,
+	ped_online int DEFAULT 0 
 );
 
 --pedido detalle

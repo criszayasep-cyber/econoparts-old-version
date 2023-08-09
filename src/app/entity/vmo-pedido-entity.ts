@@ -37,6 +37,7 @@ export class VmoPedidoEntityEntity {
     ped_comentario_cc: string;
     ped_fecha_envio_nav: Date;
     ped_requiere_aut_creditos: number;
+    ped_online: number;
 
     vmo_pedido_detalle: Array<VmoPedidoDetalleEntityEntity>;
 }

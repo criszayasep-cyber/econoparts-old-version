@@ -23,6 +23,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 export class Tab2Page  implements OnInit{
   @ViewChild(IonContent) content: IonContent;
   
+  bodega = "CD2"
   combos = {
     grupos: [],
     subgrupos: [],
@@ -152,7 +153,7 @@ export class Tab2Page  implements OnInit{
     500);
     this.keyboard.hide()
     this.loading.busqueda = true;
-    var where = "";
+    var where = ` bodega='${this.bodega}' `;
     
     this.filtros.primera = primera;
     if(primera){
@@ -167,39 +168,39 @@ export class Tab2Page  implements OnInit{
     this.productos = [];
 
     if(!this.tools.isNullOrEmpty(this.filtros.grupo)){
-      where += (where.length>0?" and ": "") + ` pro_categoria_id='${this.filtros.grupo}' `
+      where += ` and pro_categoria_id='${this.filtros.grupo}' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.subGrupo)){
-      where += (where.length>0?" and ": "") + ` pro_sub_categoria_id='${this.filtros.subGrupo}' `
+      where += ` and pro_sub_categoria_id='${this.filtros.subGrupo}' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.fabricante)){
-      where += (where.length>0?" and ": "") + ` pro_fabricante_id='${this.filtros.fabricante}' `
+      where += ` and pro_fabricante_id='${this.filtros.fabricante}' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.familia)){
-      where += (where.length>0?" and ": "") + ` pro_familia_id='${this.filtros.familia}' `
+      where += ` and pro_familia_id='${this.filtros.familia}' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.numero)){
-      where += (where.length>0?" and ": "") + ` UPPER(pro_number) LIKE '%${this.filtros.numero.toUpperCase()}%' `
+      where += ` and UPPER(pro_number) LIKE '%${this.filtros.numero.toUpperCase()}%' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.descripcion)){
-      where += (where.length>0?" and ": "") + ` UPPER(pro_descripcion) LIKE '%${this.filtros.descripcion.toUpperCase()}%' `
+      where += ` and UPPER(pro_descripcion) LIKE '%${this.filtros.descripcion.toUpperCase()}%' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.marca)){
-      where += (where.length>0?" and ": "") + ` UPPER(pro_marca) LIKE '%${this.filtros.marca.toUpperCase()}%' `
+      where += ` and UPPER(pro_marca) LIKE '%${this.filtros.marca.toUpperCase()}%' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.modelo)){
-      where += (where.length>0?" and ": "") + ` UPPER(pro_modelo) LIKE '%${this.filtros.modelo.toUpperCase()}%' `
+      where += ` and UPPER(pro_modelo) LIKE '%${this.filtros.modelo.toUpperCase()}%' `
     }
 
     if(!this.tools.isNullOrEmpty(this.filtros.aplicacion)){
-      where += (where.length>0?" and ": "") + ` UPPER(pro_number) IN (SELECT no FROM venta_movil_aplicaciones WHERE UPPER(aplicacion) LIKE '%${this.filtros.aplicacion.toUpperCase()}%') `
+      where += ` and UPPER(pro_number) IN (SELECT no FROM venta_movil_aplicaciones WHERE UPPER(aplicacion) LIKE '%${this.filtros.aplicacion.toUpperCase()}%') `
     }
 
     if(where.length>0){
@@ -223,7 +224,7 @@ export class Tab2Page  implements OnInit{
       }
 
       if(this.filtros.primera){
-        var count = await this.db.select("SELECT count(*) total FROM venta_movil_productos WHERE "+where);
+        var count = await this.db.select("SELECT count(*) total FROM venta_movil_productos LEFT JOIN venta_movil_inventario_precios ON no=pro_number WHERE "+where);
         this.total = count[0]["total"];
       }else{
         this.total = this.filtros.total;
@@ -233,7 +234,8 @@ export class Tab2Page  implements OnInit{
         //Enviamos los codigos para búsqueda
         var cods = "'"+prds.map(a => a.pro_number).join("','")+"'"
         var dataPost = {
-          busqueda : cods
+          busqueda : cods,
+          sucursal: this.bodega
         }
         var http = await this.productoService.FiltrarPrecioExistencia(dataPost);
         if(http.ok){
@@ -243,14 +245,17 @@ export class Tab2Page  implements OnInit{
             var index = this.productos.findIndex(obj => obj.pro_number == element.no)
             this.productos[index].preciou = element.preciou;
             this.productos[index].existencia = element.existencia;
+            this.productos[index].medida = element.medida;
             //Actualizar la DB
             jsonUpdate.push({
               "set": {
                 "preciou": element.preciou,
-                "existencia": element.existencia
+                "existencia": element.existencia,
+                "medida": element.medida
               },
               "where": {
-                "no": element.no
+                "no": element.no,
+                "bodega": element.bodega
               }
             })
           });
