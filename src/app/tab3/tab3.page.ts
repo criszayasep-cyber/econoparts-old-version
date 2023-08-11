@@ -10,6 +10,8 @@ import { ToolsService } from '../services/default/tools.service';
 import { RutaService } from '../services/ruta.service';
 import { DbService } from '../services/default/db.service';
 import { AuthService } from '../services/auth/auth.service';
+import { DeviceService } from '../services/default/device.service';
+
 
 @Component({
   selector: 'app-tab3',
@@ -31,6 +33,7 @@ export class Tab3Page  implements OnInit{
     private rutaSerivce: RutaService,
     private db: DbService,
     private authService: AuthService,
+    private pf: DeviceService,
     private tools: ToolsService) {
       this.filtros = new FilterEntity(ConfiguracionService.paginacion);
     }
@@ -136,43 +139,53 @@ export class Tab3Page  implements OnInit{
     this.clientes = [];
     this.loading = true;
 
-    var where = "";
-
-    var codVendedor = this.authService.getCodigoVendedor()
-    if(codVendedor!="138"){
-      where = " vendedor='"+codVendedor+"' ";
-    }
-    
-    if(!this.tools.isNullOrEmpty(this.filtros.cliente)){
-      where += (where.length>0?" and ": "") + ` codigo='${this.filtros.cliente}' `;
-    }
-    if(!this.tools.isNullOrEmpty(this.filtros.razon_social)){
-      where += (where.length>0?" and ": "") + ` UPPER(nombre_social) LIKE '%${this.filtros.razon_social}%' `;
-    }
-    if(!this.tools.isNullOrEmpty(this.filtros.nombre_comercial)){
-      where += (where.length>0?" and ": "") + ` UPPER(nombre_comercial) LIKE '%${this.filtros.nombre_comercial}%' `;
-    }
-    if(!this.tools.isNullOrEmpty(this.filtros.registro)){
-      where += (where.length>0?" and ": "") + ` nrc='${this.filtros.registro}' `;
-    }
-
-    if(where.length>0){
-      var query = `SELECT * 
-                  FROM venta_movil_clientes 
-                  WHERE ${where} 
-                  ORDER BY nombre_social ASC 
-                  LIMIT ${this.filtros.offset}, ${this.filtros.items}`;
-      //console.log(query)
-      var cls = await this.db.select(query);
-
-      
-      this.clientes = cls;
-      this.registros = cls.length;
-      if(this.filtros.primera){
-        var count = await this.db.select("SELECT count(*) total FROM venta_movil_clientes WHERE "+where);
-        this.total = count[0]["total"];
+    if(this.pf.isBrowser()){
+      var http = await this.clienteService.filter(this.filtros);
+      if(http.ok){
+          this.clientes = http.registros;
+          this.registros = this.clientes.length;
+          this.total = http.total;
       }else{
-        this.total = this.filtros.total;
+        this.tools.showNotification("Error", http.mensaje,"Ok");
+      }
+    }else{
+      var where = "";
+      var codVendedor = this.authService.getCodigoVendedor()
+      if(codVendedor!="138"){
+        where = " vendedor='"+codVendedor+"' ";
+      }
+      
+      if(!this.tools.isNullOrEmpty(this.filtros.cliente)){
+        where += (where.length>0?" and ": "") + ` codigo='${this.filtros.cliente}' `;
+      }
+      if(!this.tools.isNullOrEmpty(this.filtros.razon_social)){
+        where += (where.length>0?" and ": "") + ` UPPER(nombre_social) LIKE '%${this.filtros.razon_social}%' `;
+      }
+      if(!this.tools.isNullOrEmpty(this.filtros.nombre_comercial)){
+        where += (where.length>0?" and ": "") + ` UPPER(nombre_comercial) LIKE '%${this.filtros.nombre_comercial}%' `;
+      }
+      if(!this.tools.isNullOrEmpty(this.filtros.registro)){
+        where += (where.length>0?" and ": "") + ` nrc='${this.filtros.registro}' `;
+      }
+
+      if(where.length>0){
+        var query = `SELECT * 
+                    FROM venta_movil_clientes 
+                    WHERE ${where} 
+                    ORDER BY nombre_social ASC 
+                    LIMIT ${this.filtros.offset}, ${this.filtros.items}`;
+        //console.log(query)
+        var cls = await this.db.select(query);
+  
+        
+        this.clientes = cls;
+        this.registros = cls.length;
+        if(this.filtros.primera){
+          var count = await this.db.select("SELECT count(*) total FROM venta_movil_clientes WHERE "+where);
+          this.total = count[0]["total"];
+        }else{
+          this.total = this.filtros.total;
+        }
       }
     }
 

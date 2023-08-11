@@ -6,14 +6,17 @@
               <h1 style="display: inline-block;padding-left: 10px;margin:0px">{{titulo}}</h1>
           </ion-col>
           <ion-col size="5" style="text-align: right;margin: 0px;padding: 0px;padding-right: 10px;">
-              <p *ngIf="config.ConfiguracionService.online" class="status-network">
-                <img src="/assets/icon/online.png" style="width: 20px;"/>
-                <ion-badge color="success" style="font-weight: lighter;">online</ion-badge>
-              </p>
-              <p *ngIf="!config.ConfiguracionService.online" class="status-network">
-                <img src="/assets/icon/offline.png" style="width: 20px;"/>
-                <ion-badge color="danger" style="font-weight: lighter;">offline</ion-badge>
-              </p>
+              <div style="display: inline-block;" *ngIf="!pf.isBrowser()">
+                <p *ngIf="config.ConfiguracionService.online" class="status-network">
+                  <img src="/assets/icon/online.png" style="width: 20px;"/>
+                  <ion-badge color="success" style="font-weight: lighter;">online</ion-badge>
+                </p>
+                <p *ngIf="!config.ConfiguracionService.online" class="status-network">
+                  <img src="/assets/icon/offline.png" style="width: 20px;"/>
+                  <ion-badge color="danger" style="font-weight: lighter;">offline</ion-badge>
+                </p>
+              </div>
+              <p *ngIf="pf.isBrowser()" style="display: inline-block;">Versión Web</p>
               <ion-menu-toggle>
                   <fa-icon [icon]="['fas','bars']" style="font-size:18px;margin-left: 15px;"></fa-icon>
               </ion-menu-toggle>

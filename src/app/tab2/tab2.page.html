@@ -206,11 +206,22 @@
         <ion-card-content>
           <form style="background: transparent;margin-top: 0px;">
             <ion-row>
-              <ion-col size="8">
+              <ion-col size="4">
                 <ion-item>
                     <ion-label position="floating">No. Básico</ion-label>
                     <ion-input autofocus="true" type="text" name="grupo" [(ngModel)]="codigo"></ion-input>
                 </ion-item>
+              </ion-col>
+              <ion-col size="4">
+                <h3 style="display: inline-block;margin-right: 10px;">Inventario:</h3><br/>
+                <div class="form-check form-check-inline" style="display: inline-block;margin-right: 10px;">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="CD2" [(ngModel)]="bodegaEq">
+                  <label class="form-check-label" for="inlineRadio1">CD2</label>
+                </div>
+                <div class="form-check form-check-inline" style="display: inline-block;">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="CEN.DIST" [(ngModel)]="bodegaEq">
+                  <label class="form-check-label" for="inlineRadio2">CEN.DIST</label>
+                </div>
               </ion-col>
                 <ion-col size="4" style="text-align: right;align-self: end;">
                     <ion-button [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="buscarEquivalentes()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>

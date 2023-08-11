@@ -23,6 +23,7 @@ export class FilterEntity {
     traccion: string;
     version: string;
     aplicacion: string;
+    sucursal: string;
 
     cliente: string;
     razon_social: string;

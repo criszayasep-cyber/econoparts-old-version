@@ -11,6 +11,7 @@ import { AuthService } from '../auth/auth.service';
 import { ClienteService } from '../cliente.service';
 import { ConfiguracionService } from './configuracion.service';
 import { NavService } from '../nav.service';
+import { DeviceService } from './device.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,7 @@ export class DbService {
     private customerService: ClienteService,
     private navService: NavService,
     private platform: Platform,
+    private pf: DeviceService,
     private sqlite: SQLite,
     private httpClient: HttpClient,
     private sqlPorter: SQLitePorter,
@@ -47,7 +49,9 @@ export class DbService {
       this.platform.ready().then(() => {
         //Verificar si esta logueado
         if (this.auth.isAuthenticated()) {
-          this.createDB();
+          if(!pf.isBrowser()){
+            this.createDB();
+          }
         }
       }).catch(error => {
         console.log(error);

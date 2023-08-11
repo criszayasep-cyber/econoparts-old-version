@@ -79,7 +79,9 @@ export class LoginPage implements OnInit {
       this.loading.dismiss();
       if(response.ok){
         //this.formLogin.reset();
-        this.db.createDB();
+        if(!this.device.isBrowser()){
+          this.db.createDB();
+        }
         this.formLogin.controls["Password"].setValue("");
         /*
         window.localStorage['nombre'] =  this.isLogin.datos.nombre;

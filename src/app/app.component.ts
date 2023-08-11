@@ -30,6 +30,7 @@ export class AppComponent {
   
   constructor(
     private platform: Platform,
+    public pf: DeviceService,
     private statusBar: StatusBar,
     //private actionSheetCtrl: ActionSheetController,
     //private popoverCtrl: PopoverController,

@@ -7,6 +7,7 @@ import { ProductoService } from '../../services/producto.service';
 import { ToolsService } from '../../services/default/tools.service';
 import { AplicacionEntity } from '../../entity/aplicaciones-entity';
 import { DbService } from 'src/app/services/default/db.service';
+import { DeviceService } from 'src/app/services/default/device.service';
 
 @Component({
   selector: 'app-producto-detalle',
@@ -28,6 +29,7 @@ export class ProductoDetallePage implements OnInit {
     public configuracion: ConfiguracionService, 
     public navCtrl: NavController,
     private productoService: ProductoService,
+    private pf: DeviceService,
     private tools: ToolsService) { }
 
   
@@ -57,20 +59,23 @@ export class ProductoDetallePage implements OnInit {
   async segmentChanged(event){
     switch(event.detail.value){
       case "aplicaciones":
-        /*if(this.aplicaciones.length==0){
-          this.loading = true;
-          let dataPost = {
-            busqueda: this.producto.pro_number
-          }
-          var respose = await this.productoService.aplicaciones(dataPost);
-          this.loading = false;
-          if(respose.ok){
-            this.aplicaciones = respose.registros;
+        if(this.aplicaciones.length==0){
+          if(this.pf.isBrowser()){
+            this.loading = true;
+            let dataPost = {
+              busqueda: this.producto.pro_number
+            }
+            var respose = await this.productoService.aplicaciones(dataPost);
+            this.loading = false;
+            if(respose.ok){
+              this.aplicaciones = respose.registros;
+            }else{
+              this.tools.showNotification("Error", respose.mensaje,"Ok");
+            }
           }else{
-            this.tools.showNotification("Error", respose.mensaje,"Ok");
+            this.aplicaciones = await this.db.select("SELECT * FROM venta_movil_aplicaciones WHERE no='"+this.producto.pro_number+"' ORDER BY aplicacion ASC");
           }
-        }*/
-        this.aplicaciones = await this.db.select("SELECT * FROM venta_movil_aplicaciones WHERE no='"+this.producto.pro_number+"' ORDER BY aplicacion ASC");
+        }
         break;
     }
   }
