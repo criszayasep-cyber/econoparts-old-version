@@ -257,3 +257,21 @@ CREATE TABLE venta_movil_lista_precios (
 	precio decimal(38,20),
 	lista varchar(20)
 );
+
+
+--venta perdida
+CREATE TABLE venta_movil_venta_perdida (
+	vpe_id numeric(38,0) NULL,
+	vpe_fecha datetime NULL,
+	vpe_vendedor varchar(50) NULL,
+	vpe_tipo varchar(100) NULL,
+	vpe_sku varchar(100) NULL,
+	vpe_descripcion varchar(500) NULL,
+	vpe_cantidad int NULL,
+	vpe_marca varchar(100) NULL,
+	vpe_modelo varchar(100) NULL,
+	vpe_anio varchar(100) NULL,
+	vpe_chasis varchar(100) NULL,
+	vpe_motor varchar(100) NULL,
+	vpe_grupo varchar(100) NULL
+);
