@@ -379,6 +379,21 @@ export class Tab2Page  implements OnInit{
         this.tools.showNotification("Error", http.mensaje,"Ok");
       }
     }else{
+      var id = new Date().getTime()
+      let data = [id,
+        ConfiguracionService.gestionDiaria.pedido.ped_id,
+        producto.pro_number,
+        producto.pro_descripcion,
+        cantidad,
+        producto.preciou,
+        0,
+        cantidad * producto.preciou,
+        (cantidad * producto.preciou) * 1.13,
+        producto.medida,
+        producto.bodega,
+      ];
+      this.db.insert('INSERT INTO venta_movil_pedidos_detalle(pde_id, pde_pedido, pde_producto, pde_descripcion, pde_cantidad, pde_precio_unitario, pde_descuento, pde_monto, pde_monto_iva, pde_unidad_medida, pde_bodega) VALUES (?,?,?,?,?,?,?,?,?,?,?)', data)
+      this.modalController.dismiss();
       this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
     }
   }
