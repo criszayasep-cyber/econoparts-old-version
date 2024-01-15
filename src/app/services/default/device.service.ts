@@ -26,7 +26,8 @@ export class DeviceService {
   }
 
   isBrowser(){
-    return false; //this.pf.isBrowser;
+    //return false;
+    return this.pf.isBrowser;
   }
 
 }

@@ -14,6 +14,7 @@ import { DbService } from '../services/default/db.service';
 import { VentaPerdidaPage } from '../pages/venta-perdida/venta-perdida.page';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { DeviceService } from '../services/default/device.service';
+import { VmoPedidoEntityEntity } from '../entity/vmo-pedido-entity';
 
 
 @Component({
@@ -23,9 +24,9 @@ import { DeviceService } from '../services/default/device.service';
 })
 export class Tab2Page  implements OnInit{
   @ViewChild(IonContent) content: IonContent;
-  
-  bodega = "CD2"
-  bodegaEq = "CD2"
+  pedido: VmoPedidoEntityEntity;
+  bodega = "CENDIST"
+  bodegaEq = "CENDIST"
 
   combos = {
     grupos: [],
@@ -49,6 +50,12 @@ export class Tab2Page  implements OnInit{
     busqueda: false,
     equivalentes: false
   }
+
+  registrosLim = -1;
+  loadingLim = {
+    detalle: false
+  }
+
   filtros: FilterEntity;
   verMas = false;
 
@@ -329,7 +336,9 @@ export class Tab2Page  implements OnInit{
 
   async agregarProducto(producto){
     this.ref.detectChanges();
+
     
+
     const alert = await this.alertController.create({
       header: 'Agregar al pedido',
       backdropDismiss: false,
@@ -340,10 +349,14 @@ export class Tab2Page  implements OnInit{
           },{
           text: 'OK',
           handler: data =>{
-            producto.cantidad = data[0];
-            this.addProduct(producto, data[0]);
-            this.ref.detectChanges();
-            return true;
+            if(producto.existencia>=data[0]){
+              producto.cantidad = data[0];
+              this.addProduct(producto, data[0]);
+              this.ref.detectChanges();
+              return true;
+            }else{
+              this.tools.showNotification("Error", "La cantidad solicitada supera la existencia disponible" ,"Ok");
+            }
           }
         }],
         inputs: [
@@ -354,6 +367,7 @@ export class Tab2Page  implements OnInit{
         ]
       });
 
+      
       await alert.present();
       this.ref.detectChanges();
   }
@@ -370,14 +384,31 @@ export class Tab2Page  implements OnInit{
     }
     
     if(this.configuracion.ConfiguracionService.online){
-      var http = await this.pedidoService.addProducto(dataPost);
-      if(http){
-        if(http.ok){
-          this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
+      this.registrosLim = -1;
+      this.loadingLim.detalle = true;
+      var response = await this.pedidoService.getDetalle(dataPost.pedido);
+      if(response.ok){
+        this.registrosLim = response.registros.length;
+        if (this.registrosLim >= 25) {
+          this.tools.showNotification("Error", "Ya alcanzo el limite de 25 lineas para este pedido","Ok");
+        }else{
+          var http = await this.pedidoService.addProducto(dataPost);
+          if(http){
+            if(http.ok){
+              this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
+            }else{
+              this.tools.showNotification("Error", http.mensaje,"Ok");
+            }
+          }else{
+            this.tools.showNotification("Error", http.mensaje,"Ok");
+          }
         }
+        
       }else{
-        this.tools.showNotification("Error", http.mensaje,"Ok");
+        this.tools.showNotification("Error", response.mensaje,"Ok");
       }
+
+      
     }else{
       var id = new Date().getTime()
       let data = [id,

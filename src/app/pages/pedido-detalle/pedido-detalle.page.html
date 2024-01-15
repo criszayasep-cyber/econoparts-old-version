@@ -84,8 +84,8 @@
                         </ion-list-header>
                     
                       <ion-item>
-                        <ion-label>CD</ion-label>
-                        <ion-radio slot="start" value="CD" [disabled]="facturado"></ion-radio>
+                        <ion-label>CENDIST</ion-label>
+                        <ion-radio slot="start" value="CENDIST" [disabled]="facturado"></ion-radio>
                       </ion-item>
                   
                       <ion-item>
@@ -102,9 +102,9 @@
                         <ion-toggle [checked]="pedido.ped_complemento==1" (ionChange)="pedido.ped_complemento=$event.detail.checked?1:0"></ion-toggle>
                     </ion-item>
                     <ion-list-header>
-                      <ion-label style="margin-top: 0px;">{{pedido.ped_ubicacion=='CD'?'Ruta de entrega':'Sucursal'}}</ion-label>
+                      <ion-label style="margin-top: 0px;">{{pedido.ped_ubicacion=='CENDIST'?'Ruta de entrega':'Sucursal'}}</ion-label>
                     </ion-list-header>
-                    <ion-item color="none" lines="none" *ngIf="pedido.ped_ubicacion=='CD'">
+                    <ion-item color="none" lines="none" *ngIf="pedido.ped_ubicacion=='CENDIST'">
                       <p class="fake-select" (click)="openPickerRutas()">{{pedido.ped_ruta_txt}}</p>
                     </ion-item>
                     <ion-item color="none" lines="none" *ngIf="pedido.ped_ubicacion=='SUCURSAL'">

@@ -271,7 +271,8 @@ export class PedidoDetallePage implements OnInit {
           this.facturado = true;
           this.tools.showNotification("Exito!", "Pedido facturado","Ok");
         }else{
-          this.tools.showNotification("Error", response.mensaje,"Ok");
+          this.tools.showNotification("Advertencia", response.error,"Ok");
+          this.tools.showNotification("Advertencia", response.mensaje,"Ok");
         }
       }
     }

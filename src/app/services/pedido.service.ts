@@ -12,6 +12,9 @@ export class PedidoService {
   constructor(private httpService: HttpService) { }
 
   async addProducto(data){
+
+
+    
     let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}add-producto`, data);
     if(httpResponse.ok){
       return httpResponse.data;
