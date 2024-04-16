@@ -29,7 +29,10 @@ export class Tab5Page implements OnInit {
   listaProductos: any[] = new Array();
 
   promocionesCustom: any[];
-
+  registrosLim = -1;
+  loadingLim = {
+    detalle: false
+  }
   constructor(
     private tools: ToolsService,
     public navCtrl: NavController,
@@ -169,15 +172,28 @@ export class Tab5Page implements OnInit {
       Descripcion: producto.Descripcion,
       Existencia: cantidad
     }
-    var http = await this.pedidoService.addProductoPromocion(dataPost,ConfiguracionService.gestionDiaria.pedido.ped_id);
-    if(http){
-      if(http.ok){
-        this.tools.showNotification("Exito", "Promocional agregado exitosamente","Ok");
+    this.registrosLim = -1;
+    this.loadingLim.detalle = true;
+    var response = await this.pedidoService.getDetalle(ConfiguracionService.gestionDiaria.pedido.ped_id);
+    if(response.ok){
+      this.registrosLim = response.registros.length;
+      if (this.registrosLim >= 26) {
+        this.tools.showNotification("Error", "Ya alcanzo el limite de 25 lineas para este pedido","Ok");
+      }else{
+        var http = await this.pedidoService.addProductoPromocion(dataPost,ConfiguracionService.gestionDiaria.pedido.ped_id);
+        if(http){
+          if(http.ok){
+            this.tools.showNotification("Exito", "Promocional agregado exitosamente","Ok");
+          }
+        }else{
+          this.tools.showNotification("Error", http.mensaje,"Ok");
+        }
       }
+        
     }else{
-      this.tools.showNotification("Error", http.mensaje,"Ok");
+      this.tools.showNotification("Error", response.mensaje,"Ok");
     }
-  }
+}
 
 
   buildImg(img){

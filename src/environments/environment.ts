@@ -12,11 +12,11 @@ export const environment2 = {
 };
 
 export const environment = {
-  production: false,
-  //ip: "sorteovalvoline.econoparts.com:4433",
-  ip: "localhost:49220",
-  protocolo: "http",
-  version: "v1.5.6",
+  production: true,
+  ip: "sorteovalvoline.econoparts.com:4433",
+  //ip: "localhost:49220",
+  protocolo: "https",
+  version: "v1.5.7",
   signature: "46b3dd93-27a3-42cd-8cdd-6b431a7667f5"
 };
 

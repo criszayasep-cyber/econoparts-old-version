@@ -5,7 +5,7 @@ import { Platform } from '@ionic/angular';
 import { BehaviorSubject, Observer, Subject } from 'rxjs';
 import { ToolsService } from './tools.service';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
-import { environment2 } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 import { ProductoService } from '../producto.service';
 import { AuthService } from '../auth/auth.service';
 import { ClienteService } from '../cliente.service';
@@ -180,13 +180,13 @@ export class DbService {
   async validateVersion(){
     var rows = await this.select('SELECT * FROM versiones_tracking');
     if (rows.length > 0) {
-      if(rows[0].id!=environment2.version){
-        let data = [environment2.version, new Date()];
-        this.update(`UPDATE versiones_tracking SET id=?, fecha=? WHERE id=${environment2.version}`,data)
+      if(rows[0].id!=environment.version){
+        let data = [environment.version, new Date()];
+        this.update(`UPDATE versiones_tracking SET id=?, fecha=? WHERE id=${environment.version}`,data)
         //Si hubiese que correr alguna actualización
       }
     }else{
-      let data = [environment2.version, new Date()];
+      let data = [environment.version, new Date()];
       this.insert('INSERT INTO versiones_tracking VALUES (?, ?)', data)
     }
   }
