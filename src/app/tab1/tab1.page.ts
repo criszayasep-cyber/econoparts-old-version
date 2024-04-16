@@ -12,6 +12,8 @@ import { Network } from '@capacitor/network';
 import { Subject } from 'rxjs';
 import { DbService } from '../services/default/db.service';
 import { AuthService } from '../services/auth/auth.service';
+import { CobrosService } from '../services/cobros.service';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-tab1',
@@ -41,10 +43,12 @@ export class Tab1Page implements OnInit{
     private popoverController: PopoverController,
     private kpiService: KPIService,
     private activeRoute: ActivatedRoute,
+    private cobrosService: CobrosService,
     public router: Router,
     private rutaService: RutaService,
     private authService: AuthService,
-    private db: DbService
+    private db: DbService,
+    private http: HttpClient
     ) {
       
     }
@@ -216,6 +220,8 @@ export class Tab1Page implements OnInit{
       translucent: true,
       mode: 'ios',
     });
+
+    
     
     await popover.present();
     const { data } = await popover.onDidDismiss();
@@ -415,6 +421,176 @@ export class Tab1Page implements OnInit{
           };
           this.navCtrl.navigateForward(['tabs/tab3/detalle'], navigationExtras);
           break;
+        case 5://Gestion cobros
+        this.ref.detectChanges();
+        const alertCobros = await this.alertController.create({
+          header: 'Gestión cobros',
+          backdropDismiss: false,
+            buttons: [{
+              text: 'OK',
+              handler: async data =>{
+                if (data == "Visita de cobros"){
+                  const alert = await this.alertController.create({
+                    header: 'Ingrese el monto',
+                    inputs: [
+                      {
+                        name: 'monto',
+                        type: 'number',
+                        placeholder: 'Ingrese el monto',
+                      }
+                    ],
+                    buttons: [
+                      {
+                        text: 'Cancelar',
+                        role: 'cancel',
+                        cssClass: 'secondary',
+                      },
+                      {
+                        text: 'Aceptar',
+                        handler: async (data2) => {
+                          // Manejar el rde_monto ingresado
+                          const rde_monto = parseFloat(data2.monto);
+                          let dataPost = {
+                            rde_id: item.ruta.rde_id,rde_monto: rde_monto
+                          }
+
+
+                          if (!isNaN(rde_monto)) {                  
+                            var response = await this.cobrosService.sendCobro(dataPost);//.subscribe(async respuesta => {
+                            //this.http.post('http://localhost:49220/G-cobro', { }).subscribe(async respuesta => {
+                              if(response){
+                                this.ref.detectChanges();
+                                
+                                if(data!=undefined && data.length>0){
+                                  if(this.configuracion.ConfiguracionService.online){
+                                    let dataPost = {
+                                      ruta: item.ruta.rde_id,
+                                      motivo: data
+                                    }
+                  
+                                    var response = await this.rutaService.noVenta(dataPost);
+                                    if(response.ok){
+                                      
+                                      //this.configuracion.removePedidoActual();
+                                      ConfiguracionService.setUnselectCliente(false); 
+                                      if(data!="0"){
+                                        this.clientes.splice(indice, 1);
+                                        this.loadAll();
+                                        window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
+                                      }
+                                    }
+                                
+                                  }else{
+                                    ConfiguracionService.setUnselectCliente(false); 
+                                    if(data=="0"){
+                                      let params = [0, null];
+                                      this.db.update(`UPDATE venta_movil_gestiones SET rde_visitado=?, rde_gestion_inicio=? WHERE rde_id=${item.ruta.rde_id}`,params)
+                                    }else{
+                                      let params = [data, new Date()];
+                                      this.db.update(`UPDATE venta_movil_gestiones SET rde_motivo_no_venta=?, rde_gestion_fin=? WHERE rde_id=${item.ruta.rde_id}`,params)
+
+                                      params = ['CANCELADO NO VENTA']
+                                      this.db.update(`UPDATE venta_movil_pedidos SET ped_estado=? WHERE ped_id=${item.ruta.rde_pedido}`,params)
+                                      
+                                      this.clientes.splice(indice, 1);
+                                      this.loadAll();
+                                      window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
+                                    }
+                                  }
+                                }
+                                this.ref.detectChanges();
+                                return true;
+                              }else{
+                                this.tools.showNotification("Error", response.mensaje,"Ok");
+                              }
+
+                            /*}, error => {
+                              // Manejar errores aquí
+                              this.tools.showNotification("Error", 'Error al realizar la solicitud:' + error, "Ok");
+                            });*/
+                          } else {
+                            // Mostrar un mensaje de error si el valor ingresado no es válido
+                            this.tools.showNotification("Error", "Por favor, ingrese un monto válido.", "Ok");
+                            return false;
+                          }
+                        },
+                      },
+                    ],
+                  });
+                  await alert.present();
+                }
+                else{
+                  this.ref.detectChanges();
+                                
+                                if(data!=undefined && data.length>0){
+                                  if(this.configuracion.ConfiguracionService.online){
+                                    let dataPost = {
+                                      ruta: item.ruta.rde_id,
+                                      motivo: data
+                                    }
+                  
+                                    var response = await this.rutaService.noVenta(dataPost);
+                                    if(response.ok){
+                                      
+                                      //this.configuracion.removePedidoActual();
+                                      ConfiguracionService.setUnselectCliente(false); 
+                                      if(data!="0"){
+                                        this.clientes.splice(indice, 1);
+                                        this.loadAll();
+                                        window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
+                                      }
+                                    }
+                                
+                                  }else{
+                                    ConfiguracionService.setUnselectCliente(false); 
+                                    if(data=="0"){
+                                      let params = [0, null];
+                                      this.db.update(`UPDATE venta_movil_gestiones SET rde_visitado=?, rde_gestion_inicio=? WHERE rde_id=${item.ruta.rde_id}`,params)
+                                    }else{
+                                      let params = [data, new Date()];
+                                      this.db.update(`UPDATE venta_movil_gestiones SET rde_motivo_no_venta=?, rde_gestion_fin=? WHERE rde_id=${item.ruta.rde_id}`,params)
+
+                                      params = ['CANCELADO NO VENTA']
+                                      this.db.update(`UPDATE venta_movil_pedidos SET ped_estado=? WHERE ped_id=${item.ruta.rde_pedido}`,params)
+                                      
+                                      this.clientes.splice(indice, 1);
+                                      this.loadAll();
+                                      window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
+                                    }
+                                  }
+                                }
+                                this.ref.detectChanges();
+                                return true;
+                }
+              }
+            }],
+            inputs: [
+              {
+                label: 'Visita de cobros',
+                type: 'radio',
+                value: 'Visita de cobros'
+              },
+              {
+                label: 'Visita gestión Quedan',
+                type: 'radio',
+                value: 'Visita gestión Quedan'
+              },
+              {
+                label: 'Visita por documentación',
+                type: 'radio',
+                value: 'Visita por documentación'
+              },
+              {
+                label: 'Visitar mismo dia',
+                type: 'radio',
+                value: '0'
+              }
+            ]
+          });
+    
+          await alertCobros.present();
+          this.ref.detectChanges();
+        break;
       }
     }
   }

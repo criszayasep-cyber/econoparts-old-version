@@ -22,7 +22,7 @@
             <fa-icon style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','sign-out-alt']" slot="start" ></fa-icon>
             <ion-label >Cerrar sesión</ion-label>
           </ion-item>
-
+          <!--
           <ion-item (click)="crearCopia()" *ngIf="!pf.isBrowser()">
             <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','cloud-download-alt']" slot="start" ></fa-icon>
             <ion-label >Realizar copia</ion-label>
@@ -38,7 +38,7 @@
             <ion-label >{{config.ConfiguracionService.online==true?"Online":"Offline"}}</ion-label>
             <ion-toggle slot="end"  (click)="sincronizar()" [(ngModel)]="conexion" ></ion-toggle>
           </ion-item>
-
+        -->
           <!--<ion-item (click)="goMenu(1)" >
             <fa-icon  style="color:rgb(208,16,58);font-size:20px;" [icon]="['fas','tags']" slot="start" ></fa-icon>
             <ion-label style="color:var(--ion-color-stjazul);">Ordenes</ion-label>

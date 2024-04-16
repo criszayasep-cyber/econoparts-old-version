@@ -262,19 +262,64 @@ export class PedidoDetallePage implements OnInit {
                 ${rutSuc}`;
     var r = await this.tools.showConfirm("¿Realmente desea facturar este pedido?", "", html);
     if(r=="confirm"){
-      this.tools.presentLoading("Facturando...")
-      var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
-      this.tools.destroyLoading();
-      if(response){
-        if(response.ok){
-          ConfiguracionService.setUnselectCliente(true);
-          this.facturado = true;
-          this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+      
+      if(this.cliente.tipo_pago=='0D' || this.cliente.tipo_pago=='CEN'){
+        this.tools.presentLoading("Facturando...")
+        var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
+        this.tools.destroyLoading();
+        if(response){
+          if(response.ok){
+            ConfiguracionService.setUnselectCliente(true);
+            this.facturado = true;
+            this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+          }else{
+            this.tools.showNotification("Advertencia", response.error,"Ok");
+            this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+          }
+        }/*
+        this.tools.presentLoading("Facturando...")
+        var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
+        this.tools.destroyLoading();
+        if(response){
+          if(response.ok){
+            ConfiguracionService.setUnselectCliente(true);
+            this.facturado = true;
+            this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+          }else{
+            this.tools.showNotification("Advertencia", response.error,"Ok");
+            this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+          }
+        }*/
+      }else{
+        
+        var disponible = this.cliente.limite-this.cliente.saldo;
+       /* if(disponible<=0){
+          this.tools.showNotification("Error!", "Cliente no tiene saldo disponible para facturar","Ok");
         }else{
-          this.tools.showNotification("Advertencia", response.error,"Ok");
-          this.tools.showNotification("Advertencia", response.mensaje,"Ok");
-        }
+          disponible = disponible-this.totalMontoIVA();
+          if(disponible<0){
+            this.tools.showNotification("Error!", "El monto del pedido supera el saldo disponible del cliente","Ok");
+          }else{*/
+            this.tools.presentLoading("Facturando...")
+            var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
+            this.tools.destroyLoading();
+            if(response){
+              if(response.ok){
+                ConfiguracionService.setUnselectCliente(true);
+                this.facturado = true;
+                this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+              }else{
+                this.tools.showNotification("Advertencia", response.error,"Ok");
+                this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+              }
+            }
+          /*}
+        }*/
+        
       }
+      /*
+      */
+
     }
   }
   

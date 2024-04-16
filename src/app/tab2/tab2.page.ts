@@ -356,9 +356,9 @@ export class Tab2Page  implements OnInit{
               return true;
             }else{
               this.tools.showNotification("Error", "La cantidad solicitada supera la existencia disponible" ,"Ok");
-            }
+            
           }
-        }],
+        }}],
         inputs: [
           {
             label: 'Cantidad de producto',
@@ -389,9 +389,9 @@ export class Tab2Page  implements OnInit{
       var response = await this.pedidoService.getDetalle(dataPost.pedido);
       if(response.ok){
         this.registrosLim = response.registros.length;
-        if (this.registrosLim >= 26) {
+        /*if (this.registrosLim >= 26) {
           this.tools.showNotification("Error", "Ya alcanzo el limite de 25 lineas para este pedido","Ok");
-        }else{
+        }else{*/
           var http = await this.pedidoService.addProducto(dataPost);
           if(http){
             if(http.ok){
@@ -402,7 +402,7 @@ export class Tab2Page  implements OnInit{
           }else{
             this.tools.showNotification("Error", http.mensaje,"Ok");
           }
-        }
+        //}
         
       }else{
         this.tools.showNotification("Error", response.mensaje,"Ok");

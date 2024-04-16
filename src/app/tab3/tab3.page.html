@@ -72,9 +72,14 @@
         <td>{{item.nombre_comercial}}</td>
         <td>{{item.direccion}}</td>
         <td>
-          <ion-button color="primary" (click)="add(item, i)">
-            <fa-icon [icon]="['fas','plus-square']"></fa-icon>
-          </ion-button>
+          
+            <ion-button color="primary" (click)="add(item, i)">
+              <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+            </ion-button>
+            <!--<ion-button  *ngIf="(item.tipo_pago!='CEN' || item.tipo_pago!='0D') && item.limite-item.saldo>0" color="primary" (click)="add(item, i)">
+            <ion-button  *ngIf="(item.tipo_pago!='CEN' || item.tipo_pago!='0D') && item.limite-item.saldo>0" color="primary" (click)="add(item, i)">
+              <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+            </ion-button>-->
           <ion-button color="primary" (click)="show(item)">
             <fa-icon [icon]="['fas','eye']"></fa-icon>
           </ion-button>

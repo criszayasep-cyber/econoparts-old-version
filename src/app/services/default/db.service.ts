@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { ProductoService } from '../producto.service';
 import { AuthService } from '../auth/auth.service';
 import { ClienteService } from '../cliente.service';
+import { CobrosService } from '../cobros.service';
 import { ConfiguracionService } from './configuracion.service';
 import { NavService } from '../nav.service';
 import { DeviceService } from './device.service';
@@ -38,6 +39,7 @@ export class DbService {
   constructor(
     private prodService: ProductoService,
     private customerService: ClienteService,
+    private cobrosService: CobrosService,
     private navService: NavService,
     private platform: Platform,
     private pf: DeviceService,

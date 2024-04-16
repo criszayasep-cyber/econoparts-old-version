@@ -177,9 +177,9 @@ export class Tab5Page implements OnInit {
     var response = await this.pedidoService.getDetalle(ConfiguracionService.gestionDiaria.pedido.ped_id);
     if(response.ok){
       this.registrosLim = response.registros.length;
-      if (this.registrosLim >= 26) {
+      /*if (this.registrosLim >= 26) {
         this.tools.showNotification("Error", "Ya alcanzo el limite de 25 lineas para este pedido","Ok");
-      }else{
+      }else{*/
         var http = await this.pedidoService.addProductoPromocion(dataPost,ConfiguracionService.gestionDiaria.pedido.ped_id);
         if(http){
           if(http.ok){
@@ -188,7 +188,7 @@ export class Tab5Page implements OnInit {
         }else{
           this.tools.showNotification("Error", http.mensaje,"Ok");
         }
-      }
+      //}
         
     }else{
       this.tools.showNotification("Error", response.mensaje,"Ok");

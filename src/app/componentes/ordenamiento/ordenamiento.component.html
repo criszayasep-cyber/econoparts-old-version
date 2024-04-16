@@ -14,6 +14,11 @@
         Iniciar Gestión
       </ion-button>
   </ion-item>
+  <ion-item *ngIf="configuracion.getCodigoActivo()==item.cliente.codigo">
+    <ion-button expand="block" style="width: 100%;" color="primary" (click)="seleccionar(5)" >
+      Gestion cobros
+    </ion-button>
+</ion-item>
   <ion-item *ngIf="configuracion.ConfiguracionService.online">
       <ion-button expand="block" style="width: 100%;" color="secondary" (click)="seleccionar(3)" >
         Cambiar día
