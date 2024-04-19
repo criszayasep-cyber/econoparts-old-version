@@ -349,15 +349,22 @@ export class Tab2Page  implements OnInit{
           },{
           text: 'OK',
           handler: data =>{
+            
             if(producto.existencia>=data[0]){
               producto.cantidad = data[0];
               this.addProduct(producto, data[0]);
               this.ref.detectChanges();
               return true;
             }else{
-              this.tools.showNotification("Error", "La cantidad solicitada supera la existencia disponible" ,"Ok");
-            
-          }
+              if (producto.pro_number=="510102") {
+                this.addProduct(producto, data[0]);
+                this.ref.detectChanges();
+                return true;
+              }else {
+                this.tools.showNotification("Error", "La cantidad solicitada supera la existencia disponible" ,"Ok");
+              }
+            }
+           
         }}],
         inputs: [
           {
@@ -392,16 +399,50 @@ export class Tab2Page  implements OnInit{
         /*if (this.registrosLim >= 26) {
           this.tools.showNotification("Error", "Ya alcanzo el limite de 25 lineas para este pedido","Ok");
         }else{*/
-          var http = await this.pedidoService.addProducto(dataPost);
-          if(http){
-            if(http.ok){
-              this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
-            }else{
-              this.tools.showNotification("Error", http.mensaje,"Ok");
+          //Validar productos baterias nuevas
+          var NoBateriasNuevas=0;
+          NoBateriasNuevas=response.registros.reduce((accumulator, obj) => {
+            if (obj.pde_descripcion.startsWith("BATERIAS")){
+              return accumulator + (obj.pde_cantidad*1);
+            }else {
+              return accumulator;
             }
-          }else{
-            this.tools.showNotification("Error", http.mensaje,"Ok");
+          }, 0);
+          if (producto.pro_number!="510102"){
+              var http = await this.pedidoService.addProducto(dataPost);
+              if(http){
+                if(http.ok){
+                  this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
+                }else{
+                  this.tools.showNotification("Error", http.mensaje,"Ok");
+                }
+              }else{
+                this.tools.showNotification("Error", http.mensaje,"Ok");
+              }
+          }else {
+            if (NoBateriasNuevas!=0){
+              if (cantidad<=NoBateriasNuevas) {
+                var http = await this.pedidoService.addProducto(dataPost);
+                if(http){
+                  if(http.ok){
+                    this.tools.showNotification("Exito", "Producto agregado exitosamente","Ok");
+                  }else{
+                    this.tools.showNotification("Error", http.mensaje,"Ok");
+                  }
+                }else{
+                  this.tools.showNotification("Error", http.mensaje,"Ok");
+                }
+              }else{
+                this.tools.showNotification("Error", "La cantidad de baterias chatarra debe ser menor o igual a la cantidad de baterias nuevas, Cantidad Baterias nuevas: "+NoBateriasNuevas,"Ok");
+              }
+            }else {
+              this.tools.showNotification("Error", "En el pedido no hay baterias nuevas, no se puede agregar descuento por baterias","Ok");
+            }
           }
+
+          //Fin baterias nuevas
+          
+          
         //}
         
       }else{

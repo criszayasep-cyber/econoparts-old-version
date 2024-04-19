@@ -262,60 +262,82 @@ export class PedidoDetallePage implements OnInit {
                 ${rutSuc}`;
     var r = await this.tools.showConfirm("¿Realmente desea facturar este pedido?", "", html);
     if(r=="confirm"){
-      
-      if(this.cliente.tipo_pago=='0D' || this.cliente.tipo_pago=='CEN'){
-        this.tools.presentLoading("Facturando...")
-        var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
-        this.tools.destroyLoading();
-        if(response){
-          if(response.ok){
-            ConfiguracionService.setUnselectCliente(true);
-            this.facturado = true;
-            this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+      //Validar productos baterias nuevas
+      var NoBateriasNuevas=0;
+      var NoBateriasChatarra=0;
+      var response = await this.pedidoService.getDetalle(this.pedido.ped_id);
+      if(response.ok){
+        NoBateriasNuevas=response.registros.reduce((accumulator, obj) => {
+          if (obj.pde_descripcion.startsWith("BATERIAS")){
+            return accumulator + (obj.pde_cantidad*1);
           }else{
-            this.tools.showNotification("Advertencia", response.error,"Ok");
-            this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+            return accumulator;
           }
-        }/*
-        this.tools.presentLoading("Facturando...")
-        var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
-        this.tools.destroyLoading();
-        if(response){
-          if(response.ok){
-            ConfiguracionService.setUnselectCliente(true);
-            this.facturado = true;
-            this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+        }, 0);
+        NoBateriasChatarra=response.registros.reduce((accumulator, obj) => {
+          if (obj.pde_producto=="510102"){
+            return accumulator + (obj.pde_cantidad*1);
           }else{
-            this.tools.showNotification("Advertencia", response.error,"Ok");
-            this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+            return accumulator;
           }
-        }*/
-      }else{
-        
-        var disponible = this.cliente.limite-this.cliente.saldo;
-       /* if(disponible<=0){
-          this.tools.showNotification("Error!", "Cliente no tiene saldo disponible para facturar","Ok");
+        }, 0);
+      }
+      //Fin baterias nuevas
+      if (NoBateriasChatarra<=NoBateriasNuevas) {
+        if(this.cliente.tipo_pago=='0D' || this.cliente.tipo_pago=='CEN' || this.pedido.ped_tipo_pago=='CONTADO'){
+          this.tools.presentLoading("Facturando...")
+          var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
+          this.tools.destroyLoading();
+          if(response){
+            if(response.ok){
+              ConfiguracionService.setUnselectCliente(true);
+              this.facturado = true;
+              this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+            }else{
+              this.tools.showNotification("Advertencia", response.error,"Ok");
+              this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+            }
+          }/*
+          this.tools.presentLoading("Facturando...")
+          var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
+          this.tools.destroyLoading();
+          if(response){
+            if(response.ok){
+              ConfiguracionService.setUnselectCliente(true);
+              this.facturado = true;
+              this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+            }else{
+              this.tools.showNotification("Advertencia", response.error,"Ok");
+              this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+            }
+          }*/
         }else{
-          disponible = disponible-this.totalMontoIVA();
-          if(disponible<0){
-            this.tools.showNotification("Error!", "El monto del pedido supera el saldo disponible del cliente","Ok");
-          }else{*/
-            this.tools.presentLoading("Facturando...")
-            var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
-            this.tools.destroyLoading();
-            if(response){
-              if(response.ok){
-                ConfiguracionService.setUnselectCliente(true);
-                this.facturado = true;
-                this.tools.showNotification("Exito!", "Pedido facturado","Ok");
-              }else{
-                this.tools.showNotification("Advertencia", response.error,"Ok");
-                this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+          var disponible = this.cliente.limite-this.cliente.saldo;
+          if(disponible<=0){
+            this.tools.showNotification("Error!", "Cliente no tiene saldo disponible para facturar","Ok");
+          }else{
+            disponible = disponible-this.totalMontoIVA();
+            if(disponible<0){
+              this.tools.showNotification("Error!", "El monto del pedido supera el saldo disponible del cliente","Ok");
+            }else{
+              this.tools.presentLoading("Facturando...")
+              var response = await this.pedidoService.facturar(this.pedido, this.configuracion.getGestionActiva());
+              this.tools.destroyLoading();
+              if(response){
+                if(response.ok){
+                  ConfiguracionService.setUnselectCliente(true);
+                  this.facturado = true;
+                  this.tools.showNotification("Exito!", "Pedido facturado","Ok");
+                }else{
+                  this.tools.showNotification("Advertencia", response.error,"Ok");
+                  this.tools.showNotification("Advertencia", response.mensaje,"Ok");
+                }
               }
             }
-          /*}
-        }*/
-        
+          }
+        }
+      }else {
+        this.tools.showNotification("Error", "La cantidad de baterias chatarra:"+NoBateriasChatarra+" debe ser menor o igual a la cantidad de baterias nuevas: "+NoBateriasNuevas,"Ok");
       }
       /*
       */

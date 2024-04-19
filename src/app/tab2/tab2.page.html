@@ -185,6 +185,9 @@
                 <ion-button color="primary" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
                   <fa-icon [icon]="['fas','plus-square']"></fa-icon>
                 </ion-button>
+                <ion-button color="primary" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.pro_number=='510102' && item.existencia>0">
+                  <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+                </ion-button>
               </td>
             </tr>
             <tr *ngIf="registros.busqueda!=-1 && productos.length==0">
