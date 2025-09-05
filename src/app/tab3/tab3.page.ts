@@ -25,6 +25,7 @@ export class Tab3Page  implements OnInit{
   clientes: Array<ClienteEntity> = [];
   loading = false;
   filtros: FilterEntity;
+  public SizeOptions : number[] = [];
 
   constructor(
     public config: ConfiguracionService,
@@ -39,12 +40,7 @@ export class Tab3Page  implements OnInit{
     }
   
   ngOnInit(){
-
-    /*if(window.localStorage["categorias"]){
-      this.cargado = true;
-      this.categorias = JSON.parse(window.localStorage["categorias"]);
-    }*/
-    
+   this.buscar(true);
   }
 
   paginar(pag): void{
@@ -145,6 +141,10 @@ export class Tab3Page  implements OnInit{
           this.clientes = http.registros;
           this.registros = this.clientes.length;
           this.total = http.total;
+          const limiteSuperior = Math.ceil(this.total / 5) * 5;
+          for(let i = 5; i <= limiteSuperior; i += 5){
+            this.SizeOptions.push(i);
+          }
       }else{
         this.tools.showNotification("Error", http.mensaje,"Ok");
       }

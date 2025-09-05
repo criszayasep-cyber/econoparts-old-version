@@ -1,0 +1,63 @@
+<ion-content>
+  <ion-card>
+  <ion-card-header>
+    <ion-card-title>Promociones</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list lines="none">
+      <!-- lines="none" para un look más limpio -->
+      <!-- Aplicamos la indentación directamente al ion-item -->
+      <ion-item
+        *ngFor="let node of flatTreeData"
+        class="tree-item"
+        [style.padding-left]="getPadding(node.level!)"
+        [style.--detail-icon-opacity]="hasChildren(node) ? '1' : '0'"
+        button
+      >
+        <!-- 1. Icono de Expansión (Chevron) -->
+        <!-- Se muestra solo si el nodo tiene hijos -->
+        <ion-icon
+          *ngIf="hasChildren(node)"
+          [name]="
+            node.expanded ? 'chevron-down-outline' : 'chevron-forward-outline'
+          "
+          (click)="toggleNode(node); $event.stopPropagation()"
+          class="expand-icon"
+          slot="start"
+        >
+        </ion-icon>
+        <!-- Un placeholder invisible para nodos hoja para mantener la alineación -->
+        <div
+          *ngIf="!hasChildren(node)"
+          class="placeholder-icon"
+          slot="start"
+        ></div>
+
+        <!-- 2. Checkbox -->
+        <ion-checkbox
+          slot="start"
+          [checked]="node.Checked"
+          (ionChange)="toggleCheck(node, $event)"
+          (click)="$event.stopPropagation()"
+        >
+        </ion-checkbox>
+
+       
+
+        <!-- 4. Etiqueta del Nodo -->
+        <ion-label>
+          {{ node.code }} - {{ node.description }}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-button expand="block" (click)="onSaveSelection()">
+          Guardar
+        </ion-button>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-card-content>
+</ion-card>
+
+</ion-content>

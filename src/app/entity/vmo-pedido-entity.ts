@@ -38,6 +38,7 @@ export class VmoPedidoEntityEntity {
     ped_fecha_envio_nav: Date;
     ped_requiere_aut_creditos: number;
     ped_online: number;
+    ped_descuento: number;
 
     vmo_pedido_detalle: Array<VmoPedidoDetalleEntityEntity>;
 }

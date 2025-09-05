@@ -46,6 +46,25 @@ export class ToolsService {
     });
     await alert.present();
   }
+  async showNotificationWithInput($titulo, $mensaje, $boton, $input, $pedidoService, $dataPost){
+    const alert = await this.alertController.create({
+      header: $titulo,
+      message: $mensaje,
+      backdropDismiss: false, 
+      buttons: [
+        {
+          text: $boton,
+          handler: (data) => {
+            $dataPost.producto.pro_number_2 = data;
+            $dataPost.producto.bodega = "#..#"; // esto se leera en el backend
+            $pedidoService.addProducto($dataPost);
+          }
+        }
+      ],
+      inputs: JSON.parse($input)
+    });
+    await alert.present();
+  }
 
   async showConfirm($titulo, $subtitulo, $message){
     

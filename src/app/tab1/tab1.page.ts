@@ -14,6 +14,7 @@ import { DbService } from '../services/default/db.service';
 import { AuthService } from '../services/auth/auth.service';
 import { CobrosService } from '../services/cobros.service';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { FilterEntity } from '../entity/default/filter-entity';
 
 @Component({
   selector: 'app-tab1',
@@ -29,6 +30,8 @@ export class Tab1Page implements OnInit{
   hoy = window.localStorage["hoy"]?window.localStorage["hoy"]:new Date();
   kpiAcumulado: any;
   kpiDia: any
+  total = 0;
+  filtros: FilterEntity;
   clientes: Array<GestionDiariaEntity> = window.localStorage["clientesVisitar"]?JSON.parse(window.localStorage["clientesVisitar"]):[];
   loading = {
     clientes: false
@@ -55,6 +58,7 @@ export class Tab1Page implements OnInit{
 
   ngOnInit(){
     this.loadAll();
+    this.filtros = new FilterEntity(ConfiguracionService.paginacion);
   }
 
   async loadAll(){
@@ -73,6 +77,11 @@ export class Tab1Page implements OnInit{
     }
   }
 
+  paginar(pag): void{
+    this.tools.paginar(this.filtros,pag);
+    this.configuracion.setPaginacion(pag.pageSize);
+   this.loadAll();
+  }
   
   async ionViewWillEnter() {
 
@@ -230,10 +239,10 @@ export class Tab1Page implements OnInit{
         case 1://Cancelar gestión
           this.ref.detectChanges();
           const alert = await this.alertController.create({
-            header: 'Motivo de NO venta',
+            header: 'Motivo de Cancelación',
             backdropDismiss: false,
               buttons: [{
-                text: 'OK',
+                text: 'Aceptar',
                 handler: async data =>{
                   this.ref.detectChanges();
                   
@@ -250,6 +259,7 @@ export class Tab1Page implements OnInit{
                         ConfiguracionService.setUnselectCliente(false); 
                         if(data!="0"){
                           this.clientes.splice(indice, 1);
+                          console.log(this.clientes); // No es aqui
                           this.loadAll();
                           window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
                         }
@@ -269,7 +279,7 @@ export class Tab1Page implements OnInit{
 
                         params = ['CANCELADO NO VENTA']
                         this.db.update(`UPDATE venta_movil_pedidos SET ped_estado=? WHERE ped_id=${item.ruta.rde_pedido}`,params)
-                        
+                        console.log(this.clientes); // No es aqui II
                         this.clientes.splice(indice, 1);
                         this.loadAll();
                         window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
@@ -383,7 +393,7 @@ export class Tab1Page implements OnInit{
             header: 'Seleccione la nueva fecha',
             backdropDismiss: false,
               buttons: [{
-                text: 'OK',
+                text: 'Ok',
                 handler: async data =>{
                   this.ref.detectChanges();
 
@@ -396,6 +406,7 @@ export class Tab1Page implements OnInit{
                     var response = await this.rutaService.updateFecha(dataPost);
                     if(response.ok){
                       //this.configuracion.removePedidoActual();
+                      console.log(this.clientes); // No es aqui III
                       this.clientes.splice(indice, 1);
                       window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
                       ConfiguracionService.setUnselectCliente(false);
@@ -474,6 +485,7 @@ export class Tab1Page implements OnInit{
                                       //this.configuracion.removePedidoActual();
                                       ConfiguracionService.setUnselectCliente(false); 
                                       if(data!="0"){
+                                        console.log(this.clientes); // No es aqui IV
                                         this.clientes.splice(indice, 1);
                                         this.loadAll();
                                         window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
@@ -491,7 +503,7 @@ export class Tab1Page implements OnInit{
 
                                       params = ['CANCELADO NO VENTA']
                                       this.db.update(`UPDATE venta_movil_pedidos SET ped_estado=? WHERE ped_id=${item.ruta.rde_pedido}`,params)
-                                      
+                                      console.log(this.clientes); // No es aqui V
                                       this.clientes.splice(indice, 1);
                                       this.loadAll();
                                       window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
@@ -535,6 +547,7 @@ export class Tab1Page implements OnInit{
                                       //this.configuracion.removePedidoActual();
                                       ConfiguracionService.setUnselectCliente(false); 
                                       if(data!="0"){
+                                        console.log(this.clientes); // No es aqui VI
                                         this.clientes.splice(indice, 1);
                                         this.loadAll();
                                         window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
@@ -552,7 +565,7 @@ export class Tab1Page implements OnInit{
 
                                       params = ['CANCELADO NO VENTA']
                                       this.db.update(`UPDATE venta_movil_pedidos SET ped_estado=? WHERE ped_id=${item.ruta.rde_pedido}`,params)
-                                      
+                                      console.log(this.clientes); // No es aqui VII
                                       this.clientes.splice(indice, 1);
                                       this.loadAll();
                                       window.localStorage["clientesVisitar"] = JSON.stringify(this.clientes);
@@ -597,6 +610,7 @@ export class Tab1Page implements OnInit{
 
   async loadClientes(){
     this.ref.detectChanges();
+    console.log(this.clientes); // Te encontramos pero tu eres un objecto
     //this.clientes = [];
     if(this.configuracion.ConfiguracionService.online){
       this.loading.clientes = true;
@@ -605,6 +619,7 @@ export class Tab1Page implements OnInit{
       if(r){
         if(r.ok){
           this.clientes = r.registros;
+          this.total = this.clientes.length;
           this.db.clientesEnGestion.next(this.clientes?this.clientes.length:0)
           window.localStorage["clientesVisitar"] = JSON.stringify(r.registros);
         }else{
@@ -623,7 +638,7 @@ export class Tab1Page implements OnInit{
         });
       })
 
-      //console.log(resultado)
+      
       this.clientes = resultado;
       this.db.clientesEnGestion.next(this.clientes?this.clientes.length:0)
       window.localStorage["clientesVisitar"] = JSON.stringify(resultado);

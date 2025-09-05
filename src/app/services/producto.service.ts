@@ -37,6 +37,19 @@ export class ProductoService {
     }
   }//fin equivalentes
 
+    async intercambios(codigo){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}intercambios`, codigo);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin intemcabios
+
   
 
   async aplicaciones(codigo){

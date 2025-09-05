@@ -1,32 +1,28 @@
 
-<app-encabezado [titulo]="'| Clientes'"></app-encabezado>
-
-  
+<app-encabezado [titulo]="'| Clientes'"></app-encabezado>  
   <ion-content>
-  
-
-  <div style="padding: 20px;background:whitesmoke;">
+  <div >
     <form style="background: transparent;margin-top: 0px;">
       <ion-row>
-        <ion-col size="3">
+        <ion-col  md="3">
           <ion-item>
               <ion-label position="floating">No Cliente</ion-label>
-              <ion-input [clearInput]="true" autofocus="true" type="email" [(ngModel)]="filtros.cliente" name="cliente" (keyup.enter)="onEnter()"></ion-input>
+              <ion-input mo [clearInput]="true" autofocus="true" type="email" [(ngModel)]="filtros.cliente" name="cliente" (keyup.enter)="onEnter()"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="3">
+        <ion-col md="3">
           <ion-item>
               <ion-label position="floating">Razon Social</ion-label>
               <ion-input [clearInput]="true" type="text" [(ngModel)]="filtros.razon_social" name="razon_social" (keyup.enter)="onEnter()"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="3">
+        <ion-col md="3">
           <ion-item>
               <ion-label position="floating">Nombre Comercial</ion-label>
               <ion-input [clearInput]="true" (ionClear)="onInputClear($event)" type="text" [(ngModel)]="filtros.nombre_comercial" name="nombre_comercial" (keyup.enter)="onEnter()"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="3">
+        <ion-col md="3">
           <ion-item>
               <ion-label position="floating">No. Registro</ion-label>
               <ion-input [clearInput]="true" type="text" [(ngModel)]="filtros.registro" name="registro" (keyup.enter)="onEnter()"></ion-input>
@@ -34,12 +30,12 @@
         </ion-col>
       </ion-row>
       
-      <ion-row>
+      <ion-row style="margin-top: 10px;">
           <ion-col size="12" style="text-align: right;">
-              <ion-button style="text-transform: capitalize;" [disabled]="loading" (click)="buscar(true)">
+              <ion-button  shape="round" fill="outline"  color="secondary" style="text-transform: capitalize;" [disabled]="loading" (click)="buscar(true)">
                 <fa-icon [icon]="['fas','search']"></fa-icon> Buscar
               </ion-button>
-              <ion-button [disabled]="loading" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+              <ion-button  shape="round" fill="outline" [disabled]="loading" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
           </ion-col>
       </ion-row>
     </form>
@@ -47,14 +43,7 @@
 
 
   <div style="padding: 10px">
-    <ion-row>
-      <ion-col size="6">
-        
-      </ion-col>
-      <ion-col size="6" style="text-align: right;">
-        Registros: {{total}}
-      </ion-col>
-    </ion-row>
+    
     <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
     <table id="customers">
       <tr>
@@ -73,14 +62,14 @@
         <td>{{item.direccion}}</td>
         <td>
           
-            <ion-button color="primary" (click)="add(item, i)">
+            <ion-button  color="success" (click)="add(item, i)">
               <fa-icon [icon]="['fas','plus-square']"></fa-icon>
             </ion-button>
             <!--<ion-button  *ngIf="(item.tipo_pago!='CEN' || item.tipo_pago!='0D') && item.limite-item.saldo>0" color="primary" (click)="add(item, i)">
             <ion-button  *ngIf="(item.tipo_pago!='CEN' || item.tipo_pago!='0D') && item.limite-item.saldo>0" color="primary" (click)="add(item, i)">
               <fa-icon [icon]="['fas','plus-square']"></fa-icon>
             </ion-button>-->
-          <ion-button color="primary" (click)="show(item)">
+          <ion-button   color="dark" (click)="show(item)">
             <fa-icon [icon]="['fas','eye']"></fa-icon>
           </ion-button>
         </td>
@@ -92,7 +81,7 @@
     <mat-paginator #paginator class="table-paginator" *ngIf="clientes.length>0"
       showFirstLastButtons
       [length]="total"
-      [pageSizeOptions]="[5, 10, 15, 25, 50]" 
+      [pageSizeOptions]="SizeOptions" 
       [pageSize]="config.getPaginacion()"
       [pageIndex]="filtros.pageIndex"
       (page)="paginar($event)">

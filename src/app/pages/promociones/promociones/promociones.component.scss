@@ -1,0 +1,52 @@
+ion-list {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.tree-item {
+  // Usamos variables de Ionic para controlar el espaciado
+  --inner-padding-start: 8px;
+  --inner-padding-end: 8px;
+  --padding-start: 0; // Controlaremos el padding con nuestro [style.padding-left]
+  --min-height: 48px;
+  align-items: center; // Centra verticalmente todos los elementos
+
+  // Efecto de fondo al seleccionar, como en la imagen
+  &.item-interactive-disabled:hover,
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+// Estilo para el icono de expandir/contraer (chevron)
+.expand-icon {
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px; // Área de click más grande
+  color: var(--ion-color-medium);
+}
+
+// Placeholder invisible para alinear nodos sin hijos
+.placeholder-icon {
+  width: 16px; // Mismo ancho que el icono de expansión
+  padding: 4px;
+  flex-shrink: 0; // Evita que se encoja
+}
+
+// Espaciado consistente entre los iconos y el texto
+ion-checkbox {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+ion-label {
+  margin-left: 4px;
+}
+
+:host{
+      --detail-icon-opacity: 0.0;
+}
+
+.item-detail-icon {
+    opacity: var(--detail-icon-opacity) !important;
+}

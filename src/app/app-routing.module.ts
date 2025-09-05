@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuardNoneService as AuthGuardNone } from './services/auth/auth-guard-none.service';
 import { AuthGuardService as AuthGuard } from './services/auth/auth-guard.service';
 import { RoleGuardService as RoleGuard } from './services/auth/role-guard.service';
+import { PromocionesComponent } from './pages/promociones/promociones/promociones.component';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
     path: 'tab4', 
     loadChildren: () => import('./tab4/tab4.module').then(m => m.Tab4PageModule),
     canActivate: [AuthGuard] 
-  },  {
+  },
+  {
     path: 'historico-detalle',
     loadChildren: () => import('./pages/historico-detalle/historico-detalle.module').then( m => m.HistoricoDetallePageModule)
   },
@@ -48,6 +50,11 @@ const routes: Routes = [
     path: 'venta-perdida',
     loadChildren: () => import('./pages/venta-perdida/venta-perdida.module').then( m => m.VentaPerdidaPageModule)
   },
+{
+  path:'promocion',
+  component: PromocionesComponent,
+  canActivate: [AuthGuard]
+}
 
 
 

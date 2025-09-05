@@ -1,9 +1,6 @@
 
 <app-encabezado [titulo]="titulo"></app-encabezado>
-
-  
   <ion-content>
-  
     <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
       <ion-segment-button value="busqueda">
         Búsqueda
@@ -11,29 +8,37 @@
       <ion-segment-button value="equivalentes">
         Equivalentes
       </ion-segment-button>
+      <ion-segment-button value="intercambios">
+        Intercambios
+      </ion-segment-button>
     </ion-segment>
     
     <div [ngSwitch]="segment">
       <ion-card *ngSwitchCase="'busqueda'">
         <ion-card-content>
 
-          <div style="background:whitesmoke;">
+          <div>
             <form style="background: transparent;margin-top: 0px;">
               <ion-row>
-                <ion-col size="3">
-                  <!--<ion-item>
+                <!--<ion-col size="3">
+
+                  #estaba comentado
+                  <ion-item>
                       <ion-label position="floating">Grupo</ion-label>
                       <ion-input  [clearInput]="true" autofocus="true" type="text" name="grupo" [(ngModel)]="filtros.grupo" (keyup.enter)="onEnter()"></ion-input>
-                  </ion-item>-->
+                  </ion-item>-
+                  #estaba comentado
                   <ng-select (change)="buscar(true)" style="padding: 0px;background: white;color: black;padding-left: 10px;padding-top: 15px;" placeholder="Grupo" [(ngModel)]="filtros.grupo" name="grupo">
                     <ng-option *ngFor="let item of combos.grupos" [value]="item.id">{{item.id + '-' +item.nombre}}</ng-option>
                   </ng-select>
                 </ion-col>
                 <ion-col size="3">
-                  <!--<ion-item>
+                  #estaba comentado
+                  <ion-item>
                       <ion-label  position="floating">Sub Grupo</ion-label>
                       <ion-input  [clearInput]="true" type="text" name="subGrupo" [(ngModel)]="filtros.subGrupo" (keyup.enter)="onEnter()"></ion-input>
-                  </ion-item>-->
+                  </ion-item>
+                  #estaba comentado
                   <ng-select (change)="buscar(true)" style="padding: 0px;background: white;color: black;padding-left: 10px;padding-top: 15px;" placeholder="Sub Grupo" 
                     [items]="combos.subgrupos" [(ngModel)]="filtros.subGrupo" bindLabel="nombre" bindValue="id" name="subgrupo" [searchFn]="buscarCombo">
                     <ng-template ng-option-tmp let-item="item">
@@ -44,36 +49,40 @@
                   </ng-select>
                 </ion-col>
                 <ion-col size="3">
-                  <!--<ion-item>
+                  #estaba comentado
+                  <ion-item>
                       <ion-label position="floating">Fabricante</ion-label>
                       <ion-input [clearInput]="true" type="text" name="fabricante" [(ngModel)]="filtros.fabricante" (keyup.enter)="onEnter()"></ion-input>
-                  </ion-item>-->
+                  </ion-item>
+                  #estaba comentado
                   <ng-select (change)="buscar(true)" style="padding: 0px;background: white;color: black;padding-left: 10px;padding-top: 15px;" placeholder="Fabricante" [(ngModel)]="filtros.fabricante" name="fabricante">
                     <ng-option *ngFor="let item of combos.fabricantes" [value]="item.id">{{item.nombre}}</ng-option>
                   </ng-select>
                 </ion-col>
                 <ion-col size="3">
-                  <!--<ion-item>
+                  #estaba comentado
+                  <ion-item>
                       <ion-label position="floating">Familia</ion-label>
                       <ion-input [clearInput]="true" type="text" name="familia" [(ngModel)]="filtros.familia" (keyup.enter)="onEnter()"></ion-input>
-                  </ion-item>-->
+                  </ion-item>-
+                  #estaba comentado
                   <ng-select (change)="buscar(true)" style="padding: 0px;background: white;color: black;padding-left: 10px;padding-top: 15px;" placeholder="Familia" [(ngModel)]="filtros.familia" name="familia">
                     <ng-option *ngFor="let item of combos.familias" [value]="item.id">{{item.nombre}}</ng-option>
                   </ng-select>
-                </ion-col>
-                <ion-col size="3">
+                </ion-col> -->
+                <ion-col md="4">
                   <ion-item>
                       <ion-label position="floating">No. Básico</ion-label>
                       <ion-input [clearInput]="true" type="text" name="numero" [(ngModel)]="filtros.numero" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="3">
+                <ion-col md="4">
                   <ion-item>
                       <ion-label position="floating">Descripcion</ion-label>
                       <ion-input [clearInput]="true" type="text" name="descripcion" [(ngModel)]="filtros.descripcion" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="3">
+               <!--<ion-col size="3">
                   <ion-item>
                       <ion-label position="floating">Marca</ion-label>
                       <ion-input [clearInput]="true" type="text" name="marca" [(ngModel)]="filtros.marca" (keyup.enter)="onEnter()"></ion-input>
@@ -84,14 +93,15 @@
                       <ion-label position="floating">Modelo</ion-label>
                       <ion-input [clearInput]="true" type="text" name="modelo" [(ngModel)]="filtros.modelo" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
-                </ion-col>
-                <ion-col size="3">
+                </ion-col> -->
+                <ion-col md="4">
                   <ion-item>
                       <ion-label position="floating">Aplicación</ion-label>
                       <ion-input [clearInput]="true" type="text" name="aplicacion" [(ngModel)]="filtros.aplicacion" (keyup.enter)="onEnter()"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="3" *ngIf="verMas">
+
+                <!--<ion-col size="3" *ngIf="verMas">
                   <ion-item>
                       <ion-label position="floating">Chasis</ion-label>
                       <ion-input [clearInput]="true" type="text" name="chasis" [(ngModel)]="filtros.chasis" (keyup.enter)="onEnter()"></ion-input>
@@ -124,14 +134,36 @@
                 <ion-col size="1" style="align-self: center;font-size: 50px;text-align:center;">
                   <fa-icon *ngIf="verMas" [icon]="['fas','minus-square']" (click)="verMas=!verMas"></fa-icon>
                   <fa-icon *ngIf="!verMas" [icon]="['fas','plus-square']" (click)="verMas=!verMas"></fa-icon>
-                </ion-col>
+                </ion-col>-->
               </ion-row>
+              <ion-row>
+                <ion-col md="4">
+                  <ng-select (change)="buscar(true)" style="background: white;color: black;padding-left: 10px;padding-top: 15px;" placeholder="Fabricante" 
+                    [items]="combos.subgrupos" [(ngModel)]="filtros.subGrupo" bindLabel="Value" bindValue="ID" name="subgrupo">
+                    <ng-template ng-option-tmp let-item="item">
+                      <p style="font-family: 10px;white-space: normal;line-height: initial;">
+                        {{item.ID}} - {{item.Value}}
+                      </p>
+                    </ng-template>
+                  </ng-select>
+                </ion-col>
+                <ion-col md="4">
+                  <ng-select (change)="buscar(true)" style="background: white;color: black;padding-left: 10px;padding-top: 15px;" placeholder="Categoria" 
+                    [items]="combos.familias" [(ngModel)]="filtros.familia" bindLabel="Value" bindValue="ID" name="familias">
+                    <ng-template ng-option-tmp let-item="item">
+                      <p style="font-family: 10px;white-space: normal;line-height: initial;">
+                        {{item.ID}} - {{item.Value}}
+                      </p>
+                    </ng-template>
+                  </ng-select>
+                </ion-col>
+              </ion-row>  
               
               <ion-row>
                   <ion-col size="12" style="text-align: right;">
-                      <ion-button [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="buscar(true)"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
-                      <ion-button [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
-                      <ion-button [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="ventaPerdida(null)" *ngIf="configuracion.getEstatusGestion()"><fa-icon [icon]="['fas','handshake-slash']"></fa-icon> Venta perdida</ion-button>
+                      <ion-button fill="outline" color="dark" [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="buscar(true)"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                      <ion-button fill="outline" [disabled]="loading.busqueda" style="text-transform: capitalize;" (click)="limpiar()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+                      <!--<ion-button [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="ventaPerdida(null)" *ngIf="configuracion.getEstatusGestion()"><fa-icon [icon]="['fas','handshake-slash']"></fa-icon> Venta perdida</ion-button>-->
                   </ion-col>
               </ion-row>
             </form>
@@ -139,25 +171,12 @@
         
           <ion-progress-bar type="indeterminate" *ngIf="loading.busqueda"></ion-progress-bar>
           <ion-row>
-            <ion-col size="5">
-              <h3>Cliente en gestión: <b>{{configuracion.getClienteNombre()}}</b></h3>
-            </ion-col>
-            <ion-col size="4">
-              <h3 style="display: inline-block;margin-right: 10px;">Inventario:</h3>
-              <!-- <div class="form-check form-check-inline" style="display: inline-block;margin-right: 10px;">
-                <input class="form-check-input" (change)="buscar(true)" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="CD2" [(ngModel)]="bodega">
-                <label class="form-check-label" for="inlineRadio1">CD2</label>
-              </div> -->
-              <div class="form-check form-check-inline" style="display: inline-block;">
-                <input class="form-check-input" (change)="buscar(true)" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="CENDIST" [(ngModel)]="bodega">
-                <label class="form-check-label" for="inlineRadio2">CENDIST</label>
-              </div>
-            </ion-col>
-            <ion-col size="3" style="text-align: right;">
-              Registros: {{total}}
+            <ion-col md="12">
+              <h3 class="clienteName">Cliente en gestión: <b>{{configuracion.getClienteNombre()}}</b></h3>
             </ion-col>
           </ion-row>
           
+          <!--<ion-input type="text" [(ngModel)]="textoFiltro" placeholder="Buscar producto"></ion-input>-->
           <table class="customers" id="tbResultado">
             <tr>
               <th>#</th>
@@ -166,26 +185,32 @@
               <th>Mayoreo</th>
               <th>Mayoreo+IVA</th>
               <th>Existencia</th>
+              <th>K10</th>
               <th></th>
             </tr>
-            <tr *ngFor="let item of productos; let i = index">
+            <tr *ngFor="let item of productosFiltrados(); let i = index">
               <td>{{(filtros.offset+1)+i}}</td>
-              <td style="color: blue;text-decoration: underline;" (click)="verEquivalentes(item)">{{item.pro_number}}</td>
+              <td  style="cursor: pointer; font-weight: bold;" (click)="verEquivalentes(item)">{{item.pro_number}}</td>
               <td>{{item.pro_descripcion}}</td>
               <td>{{item.preciou | currencyFormat}}</td>
               <td>{{item.preciou*1.13 | currencyFormat}}</td>
               <td>{{item.existencia | quantityFormat}}</td><!--number: '1.0-0'-->
+
+              <!-- BODEGA K10 -->
+              <td>{{item.k10 | quantityFormat}}</td>
+              <!-- BODEGA K10 -->
+
               <td>
-                <ion-button color="primary" (click)="verProducto(item)">
+                <ion-button color="dark" (click)="verProducto(item)">
                   <fa-icon [icon]="['fas','eye']"></fa-icon>
                 </ion-button>
                 <ion-button color="primary" (click)="ventaPerdida(item)" *ngIf="configuracion.getEstatusGestion()">
                   <fa-icon [icon]="['fas','handshake-slash']"></fa-icon>
                 </ion-button>
-                <ion-button color="primary" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
+                <ion-button color="success" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
                   <fa-icon [icon]="['fas','plus-square']"></fa-icon>
                 </ion-button>
-                <ion-button color="primary" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.pro_number=='510102' && item.existencia>0">
+                <ion-button color="success" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.pro_number=='510102' && item.existencia>0">
                   <fa-icon [icon]="['fas','plus-square']"></fa-icon>
                 </ion-button>
               </td>
@@ -198,7 +223,7 @@
           <mat-paginator #paginator class="table-paginator" *ngIf="productos.length>0"
             showFirstLastButtons
             [length]="total"
-            [pageSizeOptions]="[10, 15, 25, 50]" 
+            [pageSizeOptions]="SizeOptions" 
             [pageSize]="configuracion.getPaginacion()"
             [pageIndex]="filtros.pageIndex"
             (page)="paginar($event)">
@@ -207,34 +232,22 @@
       </ion-card>
       <ion-card *ngSwitchCase="'equivalentes'">
         <ion-card-content>
-          <form style="background: transparent;margin-top: 0px;">
+          <form>
             <ion-row>
-              <ion-col size="4">
+              <ion-col  size="12" md="8">
                 <ion-item>
                     <ion-label position="floating">No. Básico</ion-label>
                     <ion-input autofocus="true" type="text" name="grupo" [(ngModel)]="codigo"></ion-input>
                 </ion-item>
               </ion-col>
-              <ion-col size="4">
-                <h3 style="display: inline-block;margin-right: 10px;">Inventario:</h3><br/>
-                <!-- <div class="form-check form-check-inline" style="display: inline-block;margin-right: 10px;">
-                  <input class="form-check-input" (change)="buscarEquivalentes()" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="CD2" [(ngModel)]="bodegaEq">
-                  <label class="form-check-label" for="inlineRadio1">CD2</label>
-                </div> -->
-                <div class="form-check form-check-inline" style="display: inline-block;">
-                  <input class="form-check-input" (change)="buscarEquivalentes()" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="CENDIST" [(ngModel)]="bodegaEq">
-                  <label class="form-check-label" for="inlineRadio2">CENDIST</label>
-                </div>
-              </ion-col>
-                <ion-col size="4" style="text-align: right;align-self: end;">
-                    <ion-button [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="buscarEquivalentes()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
-                    <ion-button [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="limpiarEquivalentes()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+              
+                <ion-col size="12" md="5" style="text-align: right;align-self: end; margin-top: 15px;">
+                    <ion-button fill="outline" color="dark" [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="buscarEquivalentes()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                    <ion-button fill="outline" [disabled]="loading.equivalentes" style="text-transform: capitalize;" (click)="limpiarEquivalentes()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
                 </ion-col>
             </ion-row>
           </form>
-          
-          <br/>
-          <br/>
+        
           <ion-progress-bar type="indeterminate" *ngIf="loading.equivalentes"></ion-progress-bar>
           <table class="customers">
             <tr>
@@ -258,21 +271,116 @@
               <td>{{item.preciou*1.13 | currencyFormat}}</td>
               <td>{{item.existencia | quantityFormat}}</td>
               <td>
-                <ion-button color="primary" (click)="verProducto(item)">
+                <ion-button color="dark" (click)="verProducto(item)">
                   <fa-icon [icon]="['fas','eye']"></fa-icon>
                 </ion-button>
                 <ion-button color="primary" (click)="ventaPerdida(item)" *ngIf="configuracion.getEstatusGestion()">
                   <fa-icon [icon]="['fas','handshake-slash']"></fa-icon>
                 </ion-button>
-                <ion-button color="primary" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
+                <ion-button color="success" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
                   <fa-icon [icon]="['fas','plus-square']"></fa-icon>
                 </ion-button>
               </td>
             </tr>
-            <tr *ngIf="registros.equivalentes!=-1 && productosEquivalentes?.length==0">
+            <tr>
+             <ng-container *ngIf="productosEquivalentes?.length==0; else elseTemplate">
+              <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+             </ng-container>
+             <ng-template #elseTemplate>
+              <tr *ngIf="registros.equivalentes!=-1 && productosEquivalentes?.length==0">
               <td style="text-align: center;" colspan="9">No se encontraron registros</td>
             </tr>
+             </ng-template> 
+            </tr>
+            
           </table>
+
+          <mat-paginator #paginator class="table-paginator" *ngIf="productosEquivalentes.length>0"
+            showFirstLastButtons
+            [length]="totalEquivalentes"
+            [pageSizeOptions]="SizeOptionsEquivalentes" 
+            [pageSize]="configuracion.getPaginacion()"
+            [pageIndex]="filtros.pageIndex"
+            (page)="paginar($event)">
+          </mat-paginator>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngSwitchCase="'intercambios'">
+        <ion-card-content>
+          <form style="background: transparent;margin-top: 0px;">
+            <ion-row>
+              <ion-col size="12" md="8">
+                <ion-item>
+                    <ion-label position="floating">No.</ion-label>
+                    <ion-input autofocus="true" type="text" name="grupo" [(ngModel)]="codigo"></ion-input>
+                </ion-item>
+              </ion-col>
+              
+                <ion-col size="12" md="4" style="text-align: right;align-self: end;">
+                    <ion-button fill="outline" color="dark" [disabled]="loading.intercambios" style="text-transform: capitalize;" (click)="buscarIntercambios()"><fa-icon [icon]="['fas','search']"></fa-icon> Buscar</ion-button>
+                    <ion-button fill="outline"[disabled]="loading.intercambios" style="text-transform: capitalize;" (click)="limpiarIntercambios()"><fa-icon [icon]="['fas','eraser']"></fa-icon> Limpiar</ion-button>
+                </ion-col>
+            </ion-row>
+          </form>
+        
+          <ion-progress-bar type="indeterminate" *ngIf="loading.intercambios"></ion-progress-bar>
+          <table class="customers">
+            <tr>
+              <th>No. Básico</th>
+              <th>No. Original</th>
+              <th>Grupo</th>
+              <th>SubGrupo</th>
+              <th>Descripción</th>
+              <th>Mayoreo</th>
+              <th>Mayoreo+IVA</th>
+              <th>Existencia</th>
+              <th></th>
+            </tr>
+            <tr *ngFor="let item of productosIntercambios">
+              <td>{{item.pro_number}}</td>
+              <td>{{item.pro_number_2}}</td>
+              <td>{{item.pro_categoria}}</td>
+              <td>{{item.pro_sub_categoria}}</td>
+              <td>{{item.pro_descripcion}}</td>
+              <td>{{item.preciou | currencyFormat}}</td>
+              <td>{{item.preciou*1.13 | currencyFormat}}</td>
+              <td>{{item.existencia | quantityFormat}}</td>
+              <td>
+                <ion-button color="dark" (click)="verProducto(item)">
+                  <fa-icon [icon]="['fas','eye']"></fa-icon>
+                </ion-button>
+                <ion-button color="primary" (click)="ventaPerdida(item)" *ngIf="configuracion.getEstatusGestion()">
+                  <fa-icon [icon]="['fas','handshake-slash']"></fa-icon>
+                </ion-button>
+                <ion-button color="success" (click)="agregarProducto(item)" *ngIf="configuracion.getEstatusGestion() && item.preciou>0 && item.existencia>0">
+                  <fa-icon [icon]="['fas','plus-square']"></fa-icon>
+                </ion-button>
+              </td>
+            </tr>
+           
+
+            <tr>
+             <ng-container *ngIf="productosIntercambios?.length==0; else elseTemplate">
+              <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+             </ng-container>
+             <ng-template #elseTemplate>
+              <tr *ngIf="registros.intercambios!=-1 && productosIntercambios?.length==0">
+              <td style="text-align: center;" colspan="9">No se encontraron registros</td>
+            </tr>
+             </ng-template> 
+            </tr>
+
+          </table>
+
+          <mat-paginator #paginator class="table-paginator" *ngIf="productosIntercambios.length>0"
+            showFirstLastButtons
+            [length]="totalIntercambios"
+            [pageSizeOptions]="SizeOptionsIntercambios" 
+            [pageSize]="configuracion.getPaginacion()"
+            [pageIndex]="filtros.pageIndex"
+            (page)="paginar($event)">
+          </mat-paginator>
+
         </ion-card-content>
       </ion-card>
     </div>

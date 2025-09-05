@@ -166,7 +166,7 @@ export class CotizacionDetallePage implements OnInit {
       }
     }
   }
-  
+   
   async cotizar(){
     //Preguntar porque medio cotizar
     const alert = await this.alertController.create({
@@ -276,11 +276,12 @@ export class CotizacionDetallePage implements OnInit {
       cssClass: 'prueba',
       buttons: [
         {
-          text: 'Cancelar',
+          text: 'Cancelar ✘',
           role: 'cancel',
+          cssClass: 'cancel',
         },
         {
-          text: 'OK',
+          text: 'Aceptar ✔',
           handler: (value) => {
             //window.alert(`You selected: ${value.languages.value}`);
             var obj = this.obtenerKeyValue(this.rutas, 'Codigo', value.rutas.value);
@@ -324,11 +325,12 @@ export class CotizacionDetallePage implements OnInit {
       cssClass: 'prueba',
       buttons: [
         {
-          text: 'Cancelar',
+          text: 'Cancelar ✘',
           role: 'cancel',
+          cssClass: 'cancel',
         },
         {
-          text: 'OK',
+          text: 'Aceptar ✔',
           handler: (value) => {
             //window.alert(`You selected: ${value.languages.value}`);
             this.pedido.ped_sucursal = value.sucursales.value;

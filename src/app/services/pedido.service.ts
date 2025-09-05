@@ -110,9 +110,37 @@ export class PedidoService {
     }
   }//fin updatePedido
 
+  async Confirmarpromocionales(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}Confirmarpromocionales`, pedido);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+     
+      return error;
+    }
+  }//fin facturar
+
   
   async updatePedidoDetalle(pedido){
     let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}update-detalle`, pedido);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  } //fin updatePedidoDetalle
+
+
+  //agregando nuevo llamado
+   async AddingPromoData(selectedNo){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}AddingPromoData`, JSON.stringify(selectedNo));
     if(httpResponse.ok){
       return httpResponse.data;
     }else{
@@ -138,6 +166,37 @@ export class PedidoService {
     }
   }//fin facturar
 
+  //agregado JS
+  async promoUpdate(pedido){
+    let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}promoUpdate`, pedido);
+    if(httpResponse.ok){
+      return httpResponse.data;
+    }else{
+      let error  = new  ResultadoHttpEntity();
+      error.ok = false;
+      error.mensaje = httpResponse.msj;
+      
+      return error;
+    }
+  }//fin facturar
+
+
+
+
+    //agregado JS
+    async ValidarPromocion(pedido){
+      let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}promoUpdate`, pedido);
+      if(httpResponse.ok){
+        return httpResponse.data;
+      }else{
+        let error  = new  ResultadoHttpEntity();
+        error.ok = false;
+        error.mensaje = httpResponse.msj;
+        
+        return error;
+      }
+    }//fin facturar
+  
   
   async facturarCotizacion(pedido){
     let httpResponse = await this.httpService.execute(false, "BACKEND", "post", `${this.url}facturar-cotizacion`, pedido);

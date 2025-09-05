@@ -34,44 +34,47 @@ import { DatePipe, registerLocaleData } from '@angular/common';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { PromocionesComponent } from './pages/promociones/promociones/promociones.component';
+import { EncabezadoModule } from "src/app/componentes/encabezado/encabezado.module";
 
 
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PromocionesComponent],
   entryComponents: [],
   imports: [
     FormsModule,
     IonicModule.forRoot(),
-    NgxMaskIonicModule.forRoot(), 
+    NgxMaskIonicModule.forRoot(),
     IonicModule.forRoot({
-      mode: 'ios'
+        mode: 'ios'
     }),
     LazyLoadImageModule.forRoot({
-      preset: intersectionObserverPreset // <-- tell LazyLoadImage that you want to use IntersectionObserver
+        preset: intersectionObserverPreset // <-- tell LazyLoadImage that you want to use IntersectionObserver
     }),
     JwtModule.forRoot({
-      config: {
-        tokenGetter: ConfiguracionService.getBearer,
-        allowedDomains: [environment.ip],
-        disallowedRoutes: ["//authenticate", "//welcome"],
-        authScheme: (request) => {
-          if (request.url.includes("welcome") || request.url.includes("authenticate")) {
-            return "";
-          }
-          return "Bearer ";
+        config: {
+            tokenGetter: ConfiguracionService.getBearer,
+            allowedDomains: [environment.ip],
+            disallowedRoutes: ["//authenticate", "//welcome"],
+            authScheme: (request) => {
+                if (request.url.includes("welcome") || request.url.includes("authenticate")) {
+                    return "";
+                }
+                return "Bearer ";
+            },
         },
-      },
     }),
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule, 
+    AppRoutingModule,
     FontAwesomeModule,
     HttpClientModule,
     ProductoDetallePageModule,
-    MatPaginatorModule
-  ],
+    MatPaginatorModule,
+    EncabezadoModule
+],
   providers: [
     SQLite,
     SQLitePorter,

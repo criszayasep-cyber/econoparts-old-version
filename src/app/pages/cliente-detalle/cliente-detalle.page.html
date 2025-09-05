@@ -8,9 +8,8 @@
 </ion-header>
 
 <ion-content>
-  <div style="padding: 20px;">
-
-    <table style="width: 100%;text-align: center;" class="saldos">
+  <div style="padding: 20px">
+    <table style="width: 100%; text-align: center" class="saldos">
       <tr>
         <td>LIMITE</td>
         <td>SALDO</td>
@@ -18,14 +17,25 @@
       </tr>
       <tr>
         <td>{{cliente.limite | currencyFormat}}</td>
-        <td>{{cliente.saldo | currencyFormat}}</td>
-        <td>{{cliente.limite-cliente.saldo | currencyFormat}}</td>
+        <td>
+          <ion-label color="danger">
+            {{cliente.saldo | currencyFormat}}
+          </ion-label>
+        </td>
+        <td>
+          <ion-label color="success">
+            {{cliente.limite-cliente.saldo | currencyFormat}}
+          </ion-label>
+        </td>
       </tr>
     </table>
-    <br/>
+    <br />
 
-    
-    <ion-segment [(ngModel)]="segment" scrollable (ionChange)="segmentChanged($event)">
+    <ion-segment
+      [(ngModel)]="segment"
+      scrollable
+      (ionChange)="segmentChanged($event)"
+    >
       <ion-segment-button value="first">
         Información general
       </ion-segment-button>
@@ -33,11 +43,11 @@
         Documentos pendientes
       </ion-segment-button>
     </ion-segment>
-    
+
     <div [ngSwitch]="segment">
       <ion-card *ngSwitchCase="'first'">
         <ion-card-content>
-          <table style="width: 100%;" class="resumen" >
+          <table style="width: 100%" class="resumen">
             <tr>
               <td>CODIGO:</td>
               <td>{{cliente.codigo}}</td>
@@ -104,37 +114,56 @@
       <ion-card *ngSwitchCase="'second'">
         <ion-card-content>
           <ion-row>
-            <ion-col size="6" style="align-self: center;">
-              Documentos pendientes.<br/>
+            <ion-col size="6" style="align-self: center">
+              Documentos pendientes.<br />
               Total: {{facturasPendientes.length}}
             </ion-col>
-            <ion-col size="6" style="text-align: right;">
-              <ion-button [disabled]="facturasPendientes.length==0" style="text-transform: capitalize;" (click)="enviarEC()">
-                <fa-icon [icon]="['fas','file-alt']" style="margin-right: 5px;"></fa-icon> 
+            <ion-col size="6" style="text-align: right">
+              <ion-button
+                fill="outline"
+                color="success"
+                [disabled]="facturasPendientes.length==0"
+                style="text-transform: capitalize"
+                (click)="enviarEC()"
+              >
+                <fa-icon
+                  [icon]="['fas','file-alt']"
+                  style="margin-right: 5px"
+                ></fa-icon>
                 Enviar estado de cuenta
               </ion-button>
             </ion-col>
           </ion-row>
-          <ion-progress-bar type="indeterminate" *ngIf="loading.facturas"></ion-progress-bar>
+          <ion-progress-bar
+            type="indeterminate"
+            *ngIf="loading.facturas"
+          ></ion-progress-bar>
           <table class="customers">
             <tr>
-              <th>Tipo<br/>Documento</th>
+              <th>Tipo<br />Documento</th>
               <th>Sucursal</th>
               <th>Vendedor</th>
               <th>SubTipo</th>
               <!--<th>Número</th>-->
-              <th>Número<br/>Externo</th>
+              <th>Número<br />Externo</th>
               <th>Documento</th>
-              <th>Fecha<br/>Documento</th>
-              <th>Fecha<br/>Vencimiento</th>
+              <th>Fecha<br />Documento</th>
+              <th>Fecha<br />Vencimiento</th>
               <!--<th>Descripción</th>-->
-              <th>Importe<br/>Inicial</th>
-              <th>Importe<br/>Pendiente</th>
-              <th>Días<br/>Mora</th>
+              <th>Importe<br />Inicial</th>
+              <th>Importe<br />Pendiente</th>
+              <th>Días<br />Mora</th>
             </tr>
-            <tr *ngFor="let item of facturasPendientes" [ngClass]="{'vencido': validarEstado(item)}">
-              <td style="font-weight: bold;">
-                <fa-icon (click)="opciones($event, item)" [icon]="['fas','ellipsis-v']" style="font-size:18px;margin-right: 5px;"></fa-icon>
+            <tr
+              *ngFor="let item of facturasPendientes"
+              [ngClass]="{'vencido': validarEstado(item)}"
+            >
+              <td style="font-weight: bold">
+                <fa-icon
+                  (click)="opciones($event, item)"
+                  [icon]="['fas','ellipsis-v']"
+                  style="font-size: 18px; margin-right: 5px"
+                ></fa-icon>
                 {{item.tipo_documento}}
               </td>
               <td>{{item.ubicacion}}</td>
@@ -151,12 +180,13 @@
               <td>{{item.dias_mora}}</td>
             </tr>
             <tr *ngIf="registros!=-1 && facturasPendientes.length==0">
-              <td style="text-align: center;" colspan="11">No se encontraron registros</td>
+              <td style="text-align: center" colspan="11">
+                No se encontraron registros
+              </td>
             </tr>
           </table>
         </ion-card-content>
       </ion-card>
     </div>
-
   </div>
 </ion-content>

@@ -5,19 +5,22 @@
 export const environment2 = {
   production: false,
   //ip: "172.16.7.85:82", 
-  ip: "localhost:49220",
-  protocolo: "http",
-  version: "v1.6.2",
+  //ip: "localhost:49220",
+  //protocolo: "http",
+  ip: "192.168.10.8:7057",
+
+  version: "v2.2",
   signature: "46b3dd93-27a3-42cd-8cdd-6b431a7667f5"
 };
 
 export const environment = {
   production: false,
   //ip: "sorteovalvoline.econoparts.com:4433",
-  ip: "localhost:49220",
+  //ip: "localhost:49220",
+  ip: "192.168.10.8:7057",
   protocolo: "http",
   //protocolo: "https",
-  version: "v1.6.3",
+  version: "v2.2",
   signature: "46b3dd93-27a3-42cd-8cdd-6b431a7667f5"
 };
 

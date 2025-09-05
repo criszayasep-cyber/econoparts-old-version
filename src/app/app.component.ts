@@ -1,10 +1,7 @@
 import { Component, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
-
-import { Platform, ActionSheetController, PopoverController, ModalController, MenuController, IonRouterOutlet, ToastController, NavController, AlertController } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { Platform, ModalController, MenuController, IonRouterOutlet, NavController, AlertController } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
-import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { AuthService } from './services/auth/auth.service';
 import { DeviceService } from './services/default/device.service';
@@ -12,7 +9,6 @@ import { ToolsService } from './services/default/tools.service';
 import { DbService } from './services/default/db.service';
 import { ConfiguracionService } from './services/default/configuracion.service';
 import { Network } from '@capacitor/network';
-import { FCMPlugin } from 'plugins/cordova-plugin-fcm-with-dependecy-updated/src/FCMPlugin';
 
 @Component({
   selector: 'app-root',

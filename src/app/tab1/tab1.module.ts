@@ -9,6 +9,7 @@ import { LazyLoadImageModule,intersectionObserverPreset } from 'ng-lazyload-imag
 import { OrdenamientoComponent } from '../componentes/ordenamiento/ordenamiento.component';
 import { EncabezadoModule } from '../componentes/encabezado/encabezado.module';
 import { SharedModule } from '../shared/shared.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     EncabezadoModule,
     FontAwesomeModule,
+    MatPaginatorModule,
     RouterModule.forChild([{ path: '', component: Tab1Page }]),
     LazyLoadImageModule.forRoot({
       preset: intersectionObserverPreset // <-- tell LazyLoadImage that you want to use IntersectionObserver

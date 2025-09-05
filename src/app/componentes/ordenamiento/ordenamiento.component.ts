@@ -21,6 +21,7 @@ export class OrdenamientoComponent implements OnInit {
   ngOnInit() {}
 
   seleccionar(valor){
+    console.log(valor);
     this.popoverCtrl.dismiss({
       item: valor
     });

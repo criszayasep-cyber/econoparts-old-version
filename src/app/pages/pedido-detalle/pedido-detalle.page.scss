@@ -9,8 +9,6 @@ span{
     display: block;
 }
 
-
-
 .customers {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -23,17 +21,22 @@ span{
     padding: 8px;
   }
 
-  .customers tr:nth-child(even){background-color: lightgray;}
-  
-  .customers tr:hover {background-color: #ddd;}
-  
-  .customers th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: gray;
-    color: white;
-  }
+  .customers tr:nth-child(even) {
+  background-color: #faf3c0;
+}
+
+.customers tr:hover {
+  background-color: #fff39b;
+}
+
+.customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #f3d800;
+  color: #282828;
+  font-weight: bold;
+}
 
   table.datos{
     width: 100%;
@@ -67,9 +70,9 @@ span{
 }
 
 .fake-select{
-  border: 1px solid lightgray;
-  border-radius: 10px;
-  padding: 2px;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  padding: 5px;
   width: 100%;
   cursor: pointer;
   -webkit-user-select: none; /* Safari */
@@ -81,7 +84,7 @@ span{
 }
 
 .fake-select::after{
-  content: '🔽';
+  content: '⌵';
   position: absolute;
   right: 14px;
   margin-top: -2px;
@@ -92,7 +95,14 @@ span{
 }
 
 
+.btn-guardar{
+  border-radius: 50rem !important;
+  background-color: antiquewhite !important;
+}
 
+.color{
+  color: #F3D800 !important;
+}
 
 
 /* Styles go here */
@@ -139,10 +149,38 @@ span{
   padding-right: 10px;
 }
 
+.text-uppercase{
+  text-transform: uppercase;
+}
 
 
 ion-picker.prueba .picker-columns .picker-opts{
   --background: yellow;
   font-weight: bold;
-  color: blue !important;
+  color: rgb(0, 0, 0) !important;
 }
+
+.cancel{
+  /* Ejemplo 1: Cambiar el color del texto a un rojo de Ionic */
+  color: yellow !important;
+
+  /* Ejemplo 2: Hacer el texto más delgado o más grueso */
+  font-weight: 600; /* 400 es normal, 700 es negrita */
+
+  /* Ejemplo 3: Poner un borde */
+  border-radius: 8px;
+  margin-right: 5px !important; /* Añadir un poco de espacio */
+}
+
+/* Opcional: Estilo para el botón de aceptar, si le agregaste la clase */
+.cancel {
+  color: #282828 !important;
+  font-weight: 700;
+}
+
+.color{
+  color: #F3D800 !important;
+}
+
+
+

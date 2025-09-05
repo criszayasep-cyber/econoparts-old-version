@@ -63,6 +63,14 @@
     line-height: 1;
 }
 
+.alertPromocionales{
+    --max-width: 400px !important; /* Aumenta el ancho del alert */
+    --width: 70%; /* Para hacerlo más responsivo */
+  }
+
+
+
+
 .descuentoPor6 {
     bottom: 0px;
     top: inherit;
@@ -542,13 +550,32 @@
 
   
 ion-picker.prueba .picker-columns .picker-opts .picker-opt{
-    color: blue !important;
+    color: rgb(0, 0, 0) !important;
     font-size:12px;
     text-align: left;
     padding-left: 25px;
+    border-radius: 15px !important;
   }
+
+  .prueba .picker-wrapper{
+    border-radius: 15px 15px 0px 0px !important;
+  }
+
+  .menuUpdate{
+    color: #282828 !important;
+  }	
+
 
   
 .c-no-margin{
     font-weight: bold;
   }
+
+
+
+/* Opcional: Estilo para el botón de aceptar, si le agregaste la clase */
+.cancel {
+  color: #B81416 !important;
+  font-weight: 700;
+}
+

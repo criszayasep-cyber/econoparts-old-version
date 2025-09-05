@@ -24,18 +24,26 @@
   }
   
   .customers td, .customers th {
-    border: 1px solid #ddd;
+   
     padding: 8px;
   }
   
-  .customers tr:nth-child(even){background-color: lightgray;}
+.customers tr:nth-child(even){background-color: #faf3c0;}
   
-  .customers tr:hover {background-color: #ddd;}
+.customers tr:hover {background-color: #fff39b;}
   
   .customers th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: gray;
-    color: white;
+    background-color: #f3d800;
+    color: #282828;
+    font-weight: bold;
   }
+.clienteName {
+  font-size: 20px !important;
+  margin-bottom: 15px !important;
+  font-weight: bold;
+  color: #282828;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

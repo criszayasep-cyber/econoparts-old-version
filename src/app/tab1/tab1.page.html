@@ -29,7 +29,7 @@
                     </ngx-charts-bar-vertical>
                 </div>
             </ion-col>-->
-            <ion-col size="6">
+            <ion-col size-md="6">
                 <!--<ion-card>
                     <ion-card-header>
                       <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
@@ -59,7 +59,7 @@
                       <ion-badge slot="end">{{kpiAcumulado?.proyeccion | currencyFormat}}K</ion-badge>
                     </ion-item>
                   
-                    <ion-item>
+                    <!-- <ion-item>
                       <ion-icon src="assets/icon/success.svg" style="font-size: 50px;" slot="start"></ion-icon>
                       <ion-label>Efectividad de visitas</ion-label>
                       <ion-badge slot="end">{{kpiAcumulado?.efectividad | percentajeFormat}}</ion-badge>
@@ -69,11 +69,12 @@
                       <ion-icon src="assets/icon/route.svg" style="font-size: 50px;" slot="start"></ion-icon>
                       <ion-label>Cumplimiento de <br/>visitas</ion-label>
                       <ion-badge slot="end">{{kpiAcumulado?.cumplimiento | percentajeFormat}}</ion-badge>
-                    </ion-item>
+                    </ion-item> -->
                   </ion-card>
 
             </ion-col>
-            <ion-col size="6">
+            <ion-col size-md="6">
+
                 <ion-card style="margin-top: 0px;">
                   <ion-card-header>
                       <ion-card-title>KPI del día</ion-card-title>
@@ -106,15 +107,17 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="6">
-            <h3>Clientes a visitar {{hoy | date: 'd/M/y'}}: {{clientes?.length}}</h3>
+          <ion-col size-md="8">
+
+            <h3>Clientes a visitar {{hoy | date: 'd/M/y'}}</h3>
           </ion-col>
-          <ion-col size="6" style="text-align: right;">
+          <ion-col size-md="4" style="text-align: center;">
+
             <ion-button color="dark" (click)="searchCliente()">
               <fa-icon [icon]="['fas','plus-circle']" style="margin-right: 5px;"></fa-icon>
               Agregar cliente a gestión del día
             </ion-button>
-            <ion-button color="dark" (click)="addClienteNuevo()" [disabled]="!configuracion.ConfiguracionService.online">
+            <ion-button color="dark"  (click)="addClienteNuevo()" [disabled]="!configuracion.ConfiguracionService.online">
               <fa-icon [icon]="['fas','address-card']" style="margin-right: 5px;"></fa-icon>
               Gestión cliente nuevo
             </ion-button>
@@ -140,8 +143,13 @@
         <fa-icon  (click)="opciones($event, item, i)" [icon]="['fas','ellipsis-v']" style="font-size:18px;margin-left: 15px;"></fa-icon>
       </td>
     </tr>
-    
   </table>
+  <mat-paginator #paginator class="table-paginator" *ngIf="clientes.length>0"
+            showFirstLastButtons
+            [length]="total"
+            [pageIndex]="filtros.pageIndex"
+            (page)="paginar($event)">
+          </mat-paginator>
     </div>
 
 

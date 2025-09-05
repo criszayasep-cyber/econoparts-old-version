@@ -3,5 +3,8 @@
   "integrations": {
     "cordova": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "server": {
+    "port": 4200
+  }
 }
